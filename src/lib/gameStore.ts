@@ -12,6 +12,7 @@ export interface GameState {
   hostPlayerId: string;
   players: Player[];
   phase: 'lobby' | 'playing';
+  controlMode: 'host' | 'self';
 }
 
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444'];
@@ -28,6 +29,7 @@ export function createSession(hostPlayerId: string): string {
     hostPlayerId,
     players: [],
     phase: 'lobby',
+    controlMode: 'self',
   });
   return code;
 }
@@ -59,20 +61,37 @@ export function addPlayer(
   return { ok: true, player };
 }
 
-export function startGame(code: string, requestingPlayerId: string): boolean {
+export function startGame(code: string, requestingPlayerId: string, controlMode: 'host' | 'self'): boolean {
   const session = sessions.get(code);
   if (!session) return false;
   if (session.hostPlayerId !== requestingPlayerId) return false;
   if (session.players.length < 2) return false;
   session.phase = 'playing';
+  session.controlMode = controlMode;
   return true;
 }
 
-export function updateScore(code: string, playerId: string, delta: number): number | null {
+type UpdateScoreResult =
+  | { ok: true; score: number }
+  | { ok: false; reason: 'not_found' | 'unauthorized' };
+
+export function updateScore(
+  code: string,
+  targetPlayerId: string,
+  requestingPlayerId: string,
+  delta: number
+): UpdateScoreResult {
   const session = sessions.get(code);
-  if (!session) return null;
-  const player = session.players.find((p) => p.id === playerId);
-  if (!player) return null;
+  if (!session) return { ok: false, reason: 'not_found' };
+  const player = session.players.find((p) => p.id === targetPlayerId);
+  if (!player) return { ok: false, reason: 'not_found' };
+
+  const authorized =
+    session.controlMode === 'host'
+      ? requestingPlayerId === session.hostPlayerId
+      : requestingPlayerId === targetPlayerId;
+  if (!authorized) return { ok: false, reason: 'unauthorized' };
+
   player.score = Math.max(0, player.score + delta);
-  return player.score;
+  return { ok: true, score: player.score };
 }

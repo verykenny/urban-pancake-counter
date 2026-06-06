@@ -15,7 +15,7 @@ interface LobbyViewProps {
   localPlayerId: string;
   hostPlayerId: string;
   onJoin: (name: string) => void;
-  onStart: () => void;
+  onStart: (controlMode: 'host' | 'self') => void;
   joining: boolean;
   starting: boolean;
 }
@@ -31,6 +31,7 @@ export default function LobbyView({
   starting,
 }: LobbyViewProps) {
   const [name, setName] = useState('');
+  const [controlMode, setControlMode] = useState<'host' | 'self'>('self');
   const isInLobby = players.some((p) => p.id === localPlayerId);
   const isHost = localPlayerId === hostPlayerId;
   const canStart = isHost && players.length >= 2;
@@ -98,13 +99,37 @@ export default function LobbyView({
           </div>
 
           {isHost ? (
-            <button
-              onClick={onStart}
-              disabled={!canStart || starting}
-              className="rounded-lg bg-indigo-600 px-6 py-2 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
-            >
-              {starting ? 'Starting…' : 'Start game'}
-            </button>
+            <div className="flex flex-col items-center gap-4">
+              <fieldset className="flex flex-col gap-2 text-sm">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="controlMode"
+                    value="self"
+                    checked={controlMode === 'self'}
+                    onChange={() => setControlMode('self')}
+                  />
+                  Players control own score
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="controlMode"
+                    value="host"
+                    checked={controlMode === 'host'}
+                    onChange={() => setControlMode('host')}
+                  />
+                  Host controls all scores
+                </label>
+              </fieldset>
+              <button
+                onClick={() => onStart(controlMode)}
+                disabled={!canStart || starting}
+                className="rounded-lg bg-indigo-600 px-6 py-2 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+              >
+                {starting ? 'Starting…' : 'Start game'}
+              </button>
+            </div>
           ) : (
             <p className="text-gray-500">Waiting for host to start the game…</p>
           )}

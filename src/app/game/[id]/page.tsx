@@ -17,6 +17,7 @@ interface GameState {
   players: Player[];
   hostPlayerId: string;
   phase: 'lobby' | 'playing';
+  controlMode: 'host' | 'self';
 }
 
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -44,8 +45,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       );
     });
 
-    channel.bind('game-started', (data: { players: Player[]; phase: 'playing' }) => {
-      setGameState((prev) => (prev ? { ...prev, players: data.players, phase: data.phase } : prev));
+    channel.bind('game-started', (data: { players: Player[]; phase: 'playing'; controlMode: 'host' | 'self' }) => {
+      setGameState((prev) =>
+        prev ? { ...prev, players: data.players, phase: data.phase, controlMode: data.controlMode } : prev
+      );
     });
 
     channel.bind('score-update', (data: { playerId: string; score: number }) => {
@@ -87,14 +90,14 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     }
   }
 
-  async function handleStart() {
+  async function handleStart(controlMode: 'host' | 'self') {
     setStarting(true);
     setError('');
     try {
       const res = await fetch(`/api/game/${id}/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId }),
+        body: JSON.stringify({ playerId, controlMode }),
       });
       if (!res.ok) setError('Could not start game.');
     } finally {
@@ -122,7 +125,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     const res = await fetch('/api/score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameId: id, playerId: targetPlayerId, delta }),
+      body: JSON.stringify({ gameId: id, playerId: targetPlayerId, requestingPlayerId: playerId, delta }),
     });
     if (!res.ok) setError('Score update failed.');
   }
@@ -135,7 +138,13 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           <p className="text-xs uppercase tracking-widest text-gray-400">Game code</p>
           <p className="font-mono text-3xl font-bold tracking-widest">{id}</p>
         </div>
-        <ScoreBoard players={gameState.players} onScoreChange={handleScoreChange} />
+        <ScoreBoard
+          players={gameState.players}
+          onScoreChange={handleScoreChange}
+          localPlayerId={playerId}
+          hostPlayerId={gameState.hostPlayerId}
+          controlMode={gameState.controlMode}
+        />
         {error && <p className="text-sm text-red-600">{error}</p>}
       </main>
     );

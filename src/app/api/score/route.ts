@@ -3,22 +3,26 @@ import { updateScore } from '@/lib/gameStore';
 import pusher from '@/lib/pusher';
 
 export async function POST(req: NextRequest): Promise<Response> {
-  const { gameId, playerId, delta } = (await req.json().catch(() => ({}))) as {
+  const { gameId, playerId, requestingPlayerId, delta } = (await req.json().catch(() => ({}))) as {
     gameId?: string;
     playerId?: string;
+    requestingPlayerId?: string;
     delta?: number;
   };
 
-  if (!gameId || !playerId || typeof delta !== 'number') {
-    return Response.json({ error: 'gameId, playerId, and delta required' }, { status: 400 });
+  if (!gameId || !playerId || !requestingPlayerId || typeof delta !== 'number') {
+    return Response.json({ error: 'gameId, playerId, requestingPlayerId, and delta required' }, { status: 400 });
   }
 
-  const newScore = updateScore(gameId, playerId, delta);
-  if (newScore === null) {
-    return Response.json({ error: 'not_found' }, { status: 404 });
+  const result = updateScore(gameId, playerId, requestingPlayerId, delta);
+  if (!result.ok) {
+    return Response.json(
+      { error: result.reason },
+      { status: result.reason === 'unauthorized' ? 403 : 404 }
+    );
   }
 
-  await pusher.trigger(`game-${gameId}`, 'score-update', { playerId, score: newScore });
+  await pusher.trigger(`game-${gameId}`, 'score-update', { playerId, score: result.score });
 
-  return Response.json({ ok: true, score: newScore });
+  return Response.json({ ok: true, score: result.score });
 }

@@ -7,11 +7,15 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   const { id } = await params;
-  const { playerId } = (await req.json().catch(() => ({}))) as { playerId?: string };
+  const { playerId, controlMode } = (await req.json().catch(() => ({}))) as {
+    playerId?: string;
+    controlMode?: string;
+  };
 
   if (!playerId) return Response.json({ error: 'playerId required' }, { status: 400 });
 
-  const ok = startGame(id, playerId);
+  const resolvedMode: 'host' | 'self' = controlMode === 'host' ? 'host' : 'self';
+  const ok = startGame(id, playerId, resolvedMode);
   if (!ok) return Response.json({ error: 'forbidden' }, { status: 403 });
 
   const session = getSession(id)!;
@@ -19,6 +23,7 @@ export async function POST(
   await pusher.trigger(`game-${id}`, 'game-started', {
     players: session.players,
     phase: 'playing',
+    controlMode: session.controlMode,
   });
 
   return Response.json({ ok: true });
