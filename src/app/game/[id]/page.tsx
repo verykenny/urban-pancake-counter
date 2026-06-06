@@ -51,6 +51,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       );
     });
 
+    channel.bind('mode-changed', (data: { controlMode: 'host' | 'self' }) => {
+      setGameState((prev) => (prev ? { ...prev, controlMode: data.controlMode } : prev));
+    });
+
     channel.bind('score-update', (data: { playerId: string; score: number }) => {
       setGameState((prev) => {
         if (!prev) return prev;
@@ -121,6 +125,15 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     );
   }
 
+  async function handleModeChange(mode: 'host' | 'self') {
+    const res = await fetch(`/api/game/${id}/mode`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId, controlMode: mode }),
+    });
+    if (!res.ok) setError('Could not update control mode.');
+  }
+
   async function handleScoreChange(targetPlayerId: string, delta: number) {
     const res = await fetch('/api/score', {
       method: 'POST',
@@ -138,6 +151,22 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           <p className="text-xs uppercase tracking-widest text-gray-400">Game code</p>
           <p className="font-mono text-3xl font-bold tracking-widest">{id}</p>
         </div>
+        {playerId === gameState.hostPlayerId && (
+          <div className="flex gap-2 text-sm">
+            <button
+              onClick={() => handleModeChange('self')}
+              className={`rounded-lg px-4 py-1.5 font-medium transition-colors ${gameState.controlMode === 'self' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            >
+              Players control own
+            </button>
+            <button
+              onClick={() => handleModeChange('host')}
+              className={`rounded-lg px-4 py-1.5 font-medium transition-colors ${gameState.controlMode === 'host' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+            >
+              Host controls all
+            </button>
+          </div>
+        )}
         <ScoreBoard
           players={gameState.players}
           onScoreChange={handleScoreChange}

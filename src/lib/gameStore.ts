@@ -71,6 +71,18 @@ export function startGame(code: string, requestingPlayerId: string, controlMode:
   return true;
 }
 
+export function setControlMode(
+  code: string,
+  requestingPlayerId: string,
+  controlMode: 'host' | 'self'
+): boolean {
+  const session = sessions.get(code);
+  if (!session) return false;
+  if (session.hostPlayerId !== requestingPlayerId) return false;
+  session.controlMode = controlMode;
+  return true;
+}
+
 type UpdateScoreResult =
   | { ok: true; score: number }
   | { ok: false; reason: 'not_found' | 'unauthorized' };
