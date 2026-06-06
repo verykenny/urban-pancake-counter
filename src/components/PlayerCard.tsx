@@ -14,6 +14,9 @@ interface PlayerCardProps {
   onDecrement: () => void;
   disabled?: boolean;
   isOwnCard?: boolean;
+  isHost?: boolean;
+  canTransferHost?: boolean;
+  onTransferHost?: () => void;
   canDelegate?: boolean;
   currentDelegate: string | null;
   delegateName: string | null;
@@ -28,6 +31,9 @@ export default function PlayerCard({
   onDecrement,
   disabled,
   isOwnCard,
+  isHost,
+  canTransferHost,
+  onTransferHost,
   canDelegate,
   currentDelegate,
   delegateName,
@@ -43,7 +49,12 @@ export default function PlayerCard({
 
   return (
     <div className="relative flex flex-col items-center gap-4 rounded-2xl border border-gray-200 p-6">
-      <h2 className="text-xl font-semibold">{name}</h2>
+      <div className="flex items-center gap-2">
+        <h2 className="text-xl font-semibold">{name}</h2>
+        {isHost && (
+          <span className="rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">Host</span>
+        )}
+      </div>
 
       {delegateName && (
         <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700">
@@ -69,6 +80,15 @@ export default function PlayerCard({
           +
         </button>
       </div>
+
+      {canTransferHost && (
+        <button
+          onClick={onTransferHost}
+          className="text-xs text-gray-400 hover:text-amber-600 underline underline-offset-2"
+        >
+          Make host
+        </button>
+      )}
 
       {isOwnCard && canDelegate && (
         <div className="relative">

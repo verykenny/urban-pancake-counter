@@ -43,6 +43,7 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 | 16 | Configurable lore target | 🔲 Not started | `features/win-condition.md` |
 | 17 | Session auto-expiry | 🔲 Not started | `features/state-sync.md` |
 | 18 | Spectator mode | 🔲 Not started | — |
+| 19 | Host transfer | 🔲 Not started | `features/host-transfer.md` |
 
 ---
 

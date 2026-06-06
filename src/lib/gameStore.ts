@@ -145,6 +145,20 @@ export async function resetGame(
   return { ok: true, session };
 }
 
+export async function transferHost(
+  code: string,
+  requestingPlayerId: string,
+  newHostPlayerId: string
+): Promise<boolean> {
+  const session = await redis.get<GameState>(key(code));
+  if (!session) return false;
+  if (session.hostPlayerId !== requestingPlayerId) return false;
+  if (!session.players.some((p) => p.id === newHostPlayerId)) return false;
+  session.hostPlayerId = newHostPlayerId;
+  await redis.set(key(code), session, { ex: SESSION_TTL });
+  return true;
+}
+
 type SetDelegationResult =
   | { ok: true }
   | { ok: false; reason: 'not_found' | 'not_allowed' | 'invalid_delegate' };

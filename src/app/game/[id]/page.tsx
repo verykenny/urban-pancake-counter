@@ -85,6 +85,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       setGameState((prev) => (prev ? { ...prev, winner: null, players: data.players } : prev));
     });
 
+    channel.bind('host-transferred', (data: { hostPlayerId: string }) => {
+      setGameState((prev) => (prev ? { ...prev, hostPlayerId: data.hostPlayerId } : prev));
+    });
+
     return () => {
       channel.unbind_all();
       pusher.unsubscribe(`game-${id}`);
@@ -170,6 +174,15 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     if (!res.ok) setError('Could not reset game.');
   }
 
+  async function handleTransferHost(newHostPlayerId: string) {
+    const res = await fetch(`/api/game/${id}/host`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId, newHostPlayerId }),
+    });
+    if (!res.ok) setError('Could not transfer host.');
+  }
+
   async function handleDelegate(playerId: string, delegatePlayerId: string | null) {
     const res = await fetch(`/api/game/${id}/delegation`, {
       method: 'POST',
@@ -228,6 +241,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           hostPlayerId={gameState.hostPlayerId}
           controlMode={gameState.controlMode}
           delegations={gameState.delegations}
+          onTransferHost={handleTransferHost}
           onDelegate={handleDelegate}
           locked={!!gameState.winner}
         />
