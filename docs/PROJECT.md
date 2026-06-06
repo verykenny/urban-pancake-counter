@@ -53,5 +53,6 @@ Third-party services this project relies on. Credentials live in `.env.local` (n
 | Service | Purpose | Account | Notes |
 |---|---|---|---|
 | [Pusher](https://dashboard.pusher.com) | Real-time WebSocket sync | GitHub login (verykenny@gmail.com) | Free Sandbox plan — Channels product |
+| [Upstash](https://console.upstash.com) | Serverless Redis — game session store | GitHub login (verykenny@gmail.com) | Free tier; sessions expire after 24h |
 | [GitHub](https://github.com/verykenny/urban-pancake-counter) | Source control | verykenny | Deploy key added: `~/.ssh/urban_pancake_counter` |
 | [Vercel](https://vercel.com) | Hosting & CI/CD | GitHub login (verykenny@gmail.com) | https://urban-pancake-counter.vercel.app — auto-deploys on push to `main` |
