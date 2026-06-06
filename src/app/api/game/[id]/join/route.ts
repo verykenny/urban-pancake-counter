@@ -35,5 +35,7 @@ export async function POST(
     players: session.players,
     hostPlayerId: session.hostPlayerId,
     phase: session.phase,
+    controlMode: session.controlMode,
+    delegations: session.delegations,
   });
 }

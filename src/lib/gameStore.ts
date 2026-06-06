@@ -13,6 +13,7 @@ export interface GameState {
   players: Player[];
   phase: 'lobby' | 'playing';
   controlMode: 'host' | 'self';
+  delegations: Record<string, string | null>; // delegatorId → delegateId | null
 }
 
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444'];
@@ -30,6 +31,7 @@ export function createSession(hostPlayerId: string): string {
     players: [],
     phase: 'lobby',
     controlMode: 'self',
+    delegations: {},
   });
   return code;
 }
@@ -101,9 +103,33 @@ export function updateScore(
   const authorized =
     session.controlMode === 'host'
       ? requestingPlayerId === session.hostPlayerId
-      : requestingPlayerId === targetPlayerId;
+      : requestingPlayerId === targetPlayerId ||
+        session.delegations[targetPlayerId] === requestingPlayerId;
   if (!authorized) return { ok: false, reason: 'unauthorized' };
 
   player.score = Math.max(0, player.score + delta);
   return { ok: true, score: player.score };
+}
+
+type SetDelegationResult =
+  | { ok: true }
+  | { ok: false; reason: 'not_found' | 'not_allowed' | 'invalid_delegate' };
+
+export function setDelegation(
+  code: string,
+  playerId: string,
+  delegatePlayerId: string | null
+): SetDelegationResult {
+  const session = sessions.get(code);
+  if (!session) return { ok: false, reason: 'not_found' };
+  if (session.controlMode !== 'self') return { ok: false, reason: 'not_allowed' };
+  if (!session.players.some((p) => p.id === playerId)) return { ok: false, reason: 'not_found' };
+  if (
+    delegatePlayerId !== null &&
+    (delegatePlayerId === playerId || !session.players.some((p) => p.id === delegatePlayerId))
+  ) {
+    return { ok: false, reason: 'invalid_delegate' };
+  }
+  session.delegations[playerId] = delegatePlayerId;
+  return { ok: true };
 }

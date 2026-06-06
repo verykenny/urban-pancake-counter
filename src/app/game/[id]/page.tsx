@@ -18,6 +18,7 @@ interface GameState {
   hostPlayerId: string;
   phase: 'lobby' | 'playing';
   controlMode: 'host' | 'self';
+  delegations: Record<string, string | null>;
 }
 
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -33,7 +34,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
     fetch(`/api/game/${id}`)
       .then((r) => r.json())
-      .then((data: GameState) => setGameState(data))
+      .then((data: GameState) => setGameState({ ...data, delegations: data.delegations ?? {} }))
       .catch(() => setError('Failed to load game.'));
 
     const pusher = getPusherClient();
@@ -65,6 +66,14 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           ),
         };
       });
+    });
+
+    channel.bind('delegation-updated', (data: { playerId: string; delegatePlayerId: string | null }) => {
+      setGameState((prev) =>
+        prev
+          ? { ...prev, delegations: { ...prev.delegations, [data.playerId]: data.delegatePlayerId } }
+          : prev
+      );
     });
 
     return () => {
@@ -143,6 +152,15 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     if (!res.ok) setError('Score update failed.');
   }
 
+  async function handleDelegate(playerId: string, delegatePlayerId: string | null) {
+    const res = await fetch(`/api/game/${id}/delegation`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId, delegatePlayerId }),
+    });
+    if (!res.ok) setError('Could not update delegation.');
+  }
+
   if (gameState.phase === 'playing') {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
@@ -173,6 +191,8 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           localPlayerId={playerId}
           hostPlayerId={gameState.hostPlayerId}
           controlMode={gameState.controlMode}
+          delegations={gameState.delegations}
+          onDelegate={handleDelegate}
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
       </main>
