@@ -16,9 +16,10 @@ interface ScoreBoardProps {
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>;
   onDelegate: (playerId: string, delegatePlayerId: string | null) => void;
+  locked?: boolean;
 }
 
-export default function ScoreBoard({ players, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, onDelegate }: ScoreBoardProps) {
+export default function ScoreBoard({ players, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, onDelegate, locked = false }: ScoreBoardProps) {
   return (
     <div className="grid grid-cols-2 gap-6">
       {players.map((player) => {
@@ -34,7 +35,7 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
             score={player.score}
             onIncrement={() => onScoreChange(player.id, 1)}
             onDecrement={() => onScoreChange(player.id, -1)}
-            disabled={!canControl}
+            disabled={!canControl || locked}
             isOwnCard={localPlayerId === player.id}
             canDelegate={controlMode === 'self'}
             currentDelegate={delegations[player.id] ?? null}

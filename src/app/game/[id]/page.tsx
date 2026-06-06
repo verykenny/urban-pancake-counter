@@ -19,6 +19,7 @@ interface GameState {
   phase: 'lobby' | 'playing';
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>;
+  winner: string | null;
 }
 
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -34,7 +35,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
     fetch(`/api/game/${id}`)
       .then((r) => r.json())
-      .then((data: GameState) => setGameState({ ...data, delegations: data.delegations ?? {} }))
+      .then((data: GameState) => setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null }))
       .catch(() => setError('Failed to load game.'));
 
     const pusher = getPusherClient();
@@ -74,6 +75,14 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           ? { ...prev, delegations: { ...prev.delegations, [data.playerId]: data.delegatePlayerId } }
           : prev
       );
+    });
+
+    channel.bind('game-won', (data: { winnerId: string }) => {
+      setGameState((prev) => (prev ? { ...prev, winner: data.winnerId } : prev));
+    });
+
+    channel.bind('game-reset', (data: { players: Player[] }) => {
+      setGameState((prev) => (prev ? { ...prev, winner: null, players: data.players } : prev));
     });
 
     return () => {
@@ -152,6 +161,15 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     if (!res.ok) setError('Score update failed.');
   }
 
+  async function handlePlayAgain() {
+    const res = await fetch(`/api/game/${id}/reset`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ playerId }),
+    });
+    if (!res.ok) setError('Could not reset game.');
+  }
+
   async function handleDelegate(playerId: string, delegatePlayerId: string | null) {
     const res = await fetch(`/api/game/${id}/delegation`, {
       method: 'POST',
@@ -185,6 +203,24 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             </button>
           </div>
         )}
+        {gameState.winner && (
+          <div className="w-full max-w-md rounded-2xl border border-amber-300 bg-amber-50 px-8 py-6 text-center shadow-lg">
+            <p className="text-lg font-semibold text-amber-800">
+              {gameState.players.find((p) => p.id === gameState.winner)?.name ?? 'Someone'} wins!
+            </p>
+            <p className="mt-1 text-sm text-amber-600">Reached 20 lore</p>
+            {playerId === gameState.hostPlayerId ? (
+              <button
+                onClick={handlePlayAgain}
+                className="mt-4 rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+              >
+                Play Again
+              </button>
+            ) : (
+              <p className="mt-4 text-sm text-amber-700">Waiting for host to start a new game…</p>
+            )}
+          </div>
+        )}
         <ScoreBoard
           players={gameState.players}
           onScoreChange={handleScoreChange}
@@ -193,6 +229,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           controlMode={gameState.controlMode}
           delegations={gameState.delegations}
           onDelegate={handleDelegate}
+          locked={!!gameState.winner}
         />
         {error && <p className="text-sm text-red-600">{error}</p>}
       </main>

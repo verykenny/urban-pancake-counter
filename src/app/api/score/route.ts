@@ -16,13 +16,15 @@ export async function POST(req: NextRequest): Promise<Response> {
 
   const result = updateScore(gameId, playerId, requestingPlayerId, delta);
   if (!result.ok) {
-    return Response.json(
-      { error: result.reason },
-      { status: result.reason === 'unauthorized' ? 403 : 404 }
-    );
+    const status = result.reason === 'unauthorized' || result.reason === 'board_locked' ? 403 : 404;
+    return Response.json({ error: result.reason }, { status });
   }
 
   await pusher.trigger(`game-${gameId}`, 'score-update', { playerId, score: result.score });
+
+  if (result.winner !== null) {
+    await pusher.trigger(`game-${gameId}`, 'game-won', { winnerId: result.winner });
+  }
 
   return Response.json({ ok: true, score: result.score });
 }

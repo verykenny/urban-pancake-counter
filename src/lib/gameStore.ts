@@ -14,8 +14,10 @@ export interface GameState {
   phase: 'lobby' | 'playing';
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>; // delegatorId → delegateId | null
+  winner: string | null;
 }
 
+const WIN_SCORE = 20;
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444'];
 
 const sessions = new Map<string, GameState>();
@@ -32,6 +34,7 @@ export function createSession(hostPlayerId: string): string {
     phase: 'lobby',
     controlMode: 'self',
     delegations: {},
+    winner: null,
   });
   return code;
 }
@@ -86,8 +89,8 @@ export function setControlMode(
 }
 
 type UpdateScoreResult =
-  | { ok: true; score: number }
-  | { ok: false; reason: 'not_found' | 'unauthorized' };
+  | { ok: true; score: number; winner: string | null }
+  | { ok: false; reason: 'not_found' | 'unauthorized' | 'board_locked' };
 
 export function updateScore(
   code: string,
@@ -97,6 +100,7 @@ export function updateScore(
 ): UpdateScoreResult {
   const session = sessions.get(code);
   if (!session) return { ok: false, reason: 'not_found' };
+  if (session.winner !== null) return { ok: false, reason: 'board_locked' };
   const player = session.players.find((p) => p.id === targetPlayerId);
   if (!player) return { ok: false, reason: 'not_found' };
 
@@ -108,7 +112,21 @@ export function updateScore(
   if (!authorized) return { ok: false, reason: 'unauthorized' };
 
   player.score = Math.max(0, player.score + delta);
-  return { ok: true, score: player.score };
+  if (player.score >= WIN_SCORE) {
+    session.winner = player.id;
+  }
+  return { ok: true, score: player.score, winner: session.winner };
+}
+
+export function resetGame(code: string, requestingPlayerId: string): boolean {
+  const session = sessions.get(code);
+  if (!session) return false;
+  if (session.hostPlayerId !== requestingPlayerId) return false;
+  session.winner = null;
+  for (const player of session.players) {
+    player.score = 0;
+  }
+  return true;
 }
 
 type SetDelegationResult =
