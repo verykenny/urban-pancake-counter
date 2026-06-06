@@ -12,8 +12,8 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 |---|---|---|---|
 | 1 | Session management | ✅ Done | `features/session-management.md` |
 | 2 | Player identity | ✅ Done | `features/player-identity.md` |
-| 3 | Player setup / lobby | 🔲 Not started | `features/player-setup.md` |
-| 4 | State sync on join | 🔲 Not started | `features/state-sync.md` |
+| 3 | Player setup / lobby | ✅ Done | `features/player-setup.md` |
+| 4 | State sync on join | ✅ Done | `features/state-sync.md` |
 
 ### P1 — Core gameplay
 

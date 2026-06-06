@@ -1,11 +1,11 @@
 import type { NextRequest } from 'next/server';
-import { createSession, setHost } from '@/lib/gameStore';
+import { createSession } from '@/lib/gameStore';
 
 export async function POST(req: NextRequest): Promise<Response> {
   const { playerId } = (await req.json().catch(() => ({}))) as {
     playerId?: string;
   };
-  const code = createSession();
-  if (playerId) setHost(code, playerId);
+  if (!playerId) return Response.json({ error: 'playerId required' }, { status: 400 });
+  const code = createSession(playerId);
   return Response.json({ code }, { status: 201 });
 }
