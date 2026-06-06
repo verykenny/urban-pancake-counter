@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lorcana Lore Tracker
 
-## Getting Started
+Real-time lore score tracker for 2–4 players. Create a session, share the code, and track everyone's lore count together — no account required.
 
-First, run the development server:
+**Live:** https://urban-pancake-counter.vercel.app
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Create or join a game session with a 6-character code
+- Real-time score sync across all connected players (Pusher)
+- Two control modes: players control their own score, or host controls all
+- Score delegation — hand control of your score to another player
+- Host transfer
+- Win detection at 20 lore with a play-again flow
+- Sessions persist for 24 hours (Upstash Redis), then expire automatically
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Tech Stack
 
-## Learn More
+| Layer | Tool |
+|---|---|
+| Framework | Next.js (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Real-time | Pusher Channels |
+| Session store | Upstash Redis |
+| Hosting | Vercel |
 
-To learn more about Next.js, take a look at the following resources:
+## Local Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**Prerequisites:** Node.js 24 (see `.nvmrc`), a Pusher Channels app, and an Upstash Redis database.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Clone the repo and install dependencies:
+   ```bash
+   git clone git@github.com:verykenny/urban-pancake-counter.git
+   cd urban-pancake-counter
+   nvm use
+   npm install
+   ```
 
-## Deploy on Vercel
+2. Copy the environment variable template and fill in your credentials:
+   ```bash
+   cp .env.local.example .env.local
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+   Required variables:
+   ```
+   PUSHER_APP_ID=
+   PUSHER_KEY=
+   PUSHER_SECRET=
+   PUSHER_CLUSTER=
+   NEXT_PUBLIC_PUSHER_KEY=
+   NEXT_PUBLIC_PUSHER_CLUSTER=
+   UPSTASH_REDIS_REST_URL=
+   UPSTASH_REDIS_REST_TOKEN=
+   ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Start the dev server:
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000).
+
+## Project Docs
+
+Feature specs and project status live in [`docs/PROJECT.md`](docs/PROJECT.md).
