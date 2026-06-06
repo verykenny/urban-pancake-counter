@@ -26,6 +26,17 @@ These need to be resolved before or during feature planning:
 
 ---
 
+## External Dependencies & Accounts
+
+Third-party services this project relies on. Credentials live in `.env.local` (never committed).
+
+| Service | Purpose | Account | Notes |
+|---|---|---|---|
+| [Pusher](https://dashboard.pusher.com) | Real-time WebSocket sync | GitHub login (verykenny@gmail.com) | Free Sandbox plan — Channels product |
+| [GitHub](https://github.com/verykenny/urban-pancake-counter) | Source control | verykenny | Deploy key added: `~/.ssh/urban_pancake_counter` |
+
+---
+
 ## Features
 
 | Feature | File |
