@@ -10,7 +10,7 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 
 | # | Feature | Status | Doc |
 |---|---|---|---|
-| 1 | Session management | 🔲 Not started | `features/session-management.md` |
+| 1 | Session management | ✅ Done | `features/session-management.md` |
 | 2 | Player identity | 🔲 Not started | `features/player-identity.md` |
 | 3 | Player setup / lobby | 🔲 Not started | `features/player-setup.md` |
 | 4 | State sync on join | 🔲 Not started | `features/state-sync.md` |
