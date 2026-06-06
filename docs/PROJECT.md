@@ -6,23 +6,43 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 
 ## Status
 
-| Phase | Status |
-|---|---|
-| Project scaffold | ✅ Done |
-| Session management | 🔲 Not started |
-| Player setup | 🔲 Not started |
-| Score tracking (real-time) | 🔲 Not started |
-| Win condition | 🔲 Not started |
+### P0 — Foundation
 
----
+| # | Feature | Status | Doc |
+|---|---|---|---|
+| 1 | Session management | 🔲 Not started | `features/session-management.md` |
+| 2 | Player identity | 🔲 Not started | `features/player-identity.md` |
+| 3 | Player setup / lobby | 🔲 Not started | `features/player-setup.md` |
+| 4 | State sync on join | 🔲 Not started | `features/state-sync.md` |
 
-## Open Decisions
+### P1 — Core gameplay
 
-These need to be resolved before or during feature planning:
+| # | Feature | Status | Doc |
+|---|---|---|---|
+| 5 | Score tracking (real-time) | 🔲 Not started | `features/score-tracking.md` |
+| 6 | Score control mode | 🔲 Not started | `features/score-control-mode.md` |
+| 7 | Score delegation | 🔲 Not started | `features/score-delegation.md` |
+| 8 | Win condition | 🔲 Not started | `features/win-condition.md` |
+| 9 | Public hosting (Vercel) | 🔲 Not started | `features/hosting.md` |
 
-- **Session codes** — how are game sessions created and shared? (see `features/session-management.md`)
-- **Player name entry** — does the host configure all players, or does each player enter their own name on join? (see `features/player-setup.md`)
-- **Win condition behavior** — does the app auto-detect 20 lore and lock the board, or just display scores? (see `features/win-condition.md`)
+### P2 — Required for good UX
+
+| # | Feature | Status | Doc |
+|---|---|---|---|
+| 10 | Mobile-responsive layout | 🔲 Not started | `features/mobile-layout.md` |
+| 11 | Reconnection / state recovery | 🔲 Not started | `features/reconnection.md` |
+| 12 | Session sharing UX | 🔲 Not started | `features/session-sharing.md` |
+
+### P3 — Nice to have
+
+| # | Feature | Status | Doc |
+|---|---|---|---|
+| 13 | QR code for session join | 🔲 Not started | `features/session-sharing.md` |
+| 14 | Player color differentiation | 🔲 Not started | `features/player-setup.md` |
+| 15 | Win animation | 🔲 Not started | `features/win-condition.md` |
+| 16 | Configurable lore target | 🔲 Not started | `features/win-condition.md` |
+| 17 | Session auto-expiry | 🔲 Not started | `features/state-sync.md` |
+| 18 | Spectator mode | 🔲 Not started | — |
 
 ---
 
@@ -34,14 +54,4 @@ Third-party services this project relies on. Credentials live in `.env.local` (n
 |---|---|---|---|
 | [Pusher](https://dashboard.pusher.com) | Real-time WebSocket sync | GitHub login (verykenny@gmail.com) | Free Sandbox plan — Channels product |
 | [GitHub](https://github.com/verykenny/urban-pancake-counter) | Source control | verykenny | Deploy key added: `~/.ssh/urban_pancake_counter` |
-
----
-
-## Features
-
-| Feature | File |
-|---|---|
-| Session management | `features/session-management.md` |
-| Player setup | `features/player-setup.md` |
-| Score tracking | `features/score-tracking.md` |
-| Win condition | `features/win-condition.md` |
+| [Vercel](https://vercel.com) | Hosting & CI/CD | — | Set up when feature #9 is implemented; connect GitHub repo, add Pusher env vars |

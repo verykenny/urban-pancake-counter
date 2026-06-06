@@ -4,19 +4,19 @@ Players need a way to create a game session and share it with others so everyone
 
 ---
 
-## Open Questions
+## Behavior
 
-- **Code format** — short random code (e.g. `XKCD42`, like Jackbox) vs. a UUID in the URL? A short human-readable code is easier to share verbally.
-- **Session creation** — does any player create a session, or only a designated "host"?
-- **Session expiry** — should sessions auto-expire after inactivity? How long?
-- **Max players** — enforce 2–4 at join time, or just display however many connect?
-
-## Proposed Approach (to confirm during planning)
-
-- Host visits `/` and clicks "Create game" → generates a short alphanumeric code → redirects to `/game/[code]`
+- Host visits `/` and clicks "Create game" → generates a short alphanumeric code (6 characters, e.g. `XK4D2R`) → redirects to `/game/[code]`
 - Other players visit `/` and enter the code → redirected to the same `/game/[code]`
-- No auth, no accounts — code is the only key to a session
-- Sessions are in-memory (Pusher channel lifetime); no persistence needed
+- No auth, no accounts — the code is the only key to a session
+- Sessions are backed by an in-memory server store (see `features/state-sync.md`) keyed by game code; Pusher channel lifetime matches the session
+
+## Decisions
+
+- **Code format** — short 6-character alphanumeric (uppercase, no ambiguous chars like `0`/`O`/`I`/`1`). Human-readable and easily shared verbally.
+- **Session creation** — any player can create a session; the first to join is implicitly the host.
+- **Session expiry** — in-memory state is cleaned up after inactivity (see `features/state-sync.md` for details). No database persistence.
+- **Max players** — enforced at 2–4 at join time; fifth joiner is redirected to an error state.
 
 ## Dependencies
 

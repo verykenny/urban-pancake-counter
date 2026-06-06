@@ -1,23 +1,25 @@
-# Feature: Player Setup
+# Feature: Player Setup / Lobby
 
-Once a session exists, players need names and slots assigned before the score board can be shown.
+Once a session exists, players enter their names and wait in a lobby until the host starts the game.
 
 ---
 
-## Open Questions
+## Behavior
 
-- **Who enters names?** Two models to consider:
-  - *Host configures all players* — one person sets up all 2–4 names before anyone joins (simpler, less coordination)
-  - *Each player enters their own name on join* — each device picks a name when connecting (more natural for remote play)
-- **Player count** — is the number of players fixed when the session is created, or does it grow as people join?
-- **Player colors / avatars** — any visual differentiation beyond names?
+- Each player who navigates to `/game/[code]` is prompted to enter their name before seeing the score board
+- The first player to join is assigned the host role (stored against their player identity — see `features/player-identity.md`)
+- As players join, all connected clients see the live player list update in the lobby view
+- The host sees a "Start game" button; other players see a waiting message
+- The game starts when the host clicks "Start game" (minimum 2 players) or all 4 slots are filled
+- Player slots are filled in join order; a fifth joiner is rejected
 
-## Proposed Approach (to confirm during planning)
+## Decisions
 
-- Each player enters their name when joining via the `/game/[code]` page
-- First to join is implicitly the host (for any host-only actions)
-- Player slots fill in join order; session locks once the host starts the game or all slots fill
+- **Who enters names** — each player enters their own name on join. More natural for remote play; allows each device to own its identity.
+- **Player count** — grows dynamically as players join, up to 4. Not fixed at creation time.
+- **Player colors** — each player is assigned a distinct accent color from a fixed palette on join (P3 enhancement). No avatars.
 
 ## Dependencies
 
-- Session management must exist first
+- Session management
+- Player identity
