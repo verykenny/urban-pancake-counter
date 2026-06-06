@@ -18,6 +18,19 @@ The app must be able to distinguish which connected client is which player, so i
 - **Host identity** — the first player to join a session is recorded as host by their UUID in the game store. Host status persists across reconnects (same UUID).
 - **Collision handling** — UUID collisions are astronomically unlikely; no collision detection needed.
 
+## Implementation
+
+**Status: ✅ Done** (commit `40e2d4d`)
+
+| File | Role |
+|---|---|
+| `src/lib/usePlayerId.ts` | React hook — `useState` lazy initializer reads/writes `localStorage['player-id']` |
+| `src/lib/gameStore.ts` | `SessionState.hostPlayerId` added; `setHost()` exported |
+| `src/app/api/game/route.ts` | Accepts `{ playerId }` in POST body; calls `setHost()` after `createSession()` |
+| `src/app/page.tsx` | Calls `usePlayerId()`, passes UUID in create-game body |
+
+**Implementation note:** `useState` lazy initializer is used (not `useEffect`) to avoid the `react-hooks/set-state-in-effect` lint rule. The initializer returns `''` during SSR (`typeof window === 'undefined'`) and the real UUID on the client. Since the UUID is never rendered in the DOM, there is no visible hydration mismatch.
+
 ## Dependencies
 
 - None — can be implemented alongside session management
