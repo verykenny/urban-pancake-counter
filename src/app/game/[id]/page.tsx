@@ -4,6 +4,7 @@ import { use, useEffect, useState } from 'react';
 import { usePlayerId } from '@/lib/usePlayerId';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
+import ScoreBoard from '@/components/ScoreBoard';
 
 interface Player {
   id: string;
@@ -45,6 +46,18 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
     channel.bind('game-started', (data: { players: Player[]; phase: 'playing' }) => {
       setGameState((prev) => (prev ? { ...prev, players: data.players, phase: data.phase } : prev));
+    });
+
+    channel.bind('score-update', (data: { playerId: string; score: number }) => {
+      setGameState((prev) => {
+        if (!prev) return prev;
+        return {
+          ...prev,
+          players: prev.players.map((p) =>
+            p.id === data.playerId ? { ...p, score: data.score } : p
+          ),
+        };
+      });
     });
 
     return () => {
@@ -105,10 +118,25 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     );
   }
 
+  async function handleScoreChange(targetPlayerId: string, delta: number) {
+    const res = await fetch('/api/score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ gameId: id, playerId: targetPlayerId, delta }),
+    });
+    if (!res.ok) setError('Score update failed.');
+  }
+
   if (gameState.phase === 'playing') {
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center p-8">
-        <p className="text-gray-500">Game in progress — scoreboard coming soon.</p>
+      <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
+        <h1 className="text-3xl font-bold">Lorcana Score Tracker</h1>
+        <div className="rounded-xl border border-gray-200 bg-gray-50 px-6 py-3 text-center">
+          <p className="text-xs uppercase tracking-widest text-gray-400">Game code</p>
+          <p className="font-mono text-3xl font-bold tracking-widest">{id}</p>
+        </div>
+        <ScoreBoard players={gameState.players} onScoreChange={handleScoreChange} />
+        {error && <p className="text-sm text-red-600">{error}</p>}
       </main>
     );
   }

@@ -13,7 +13,7 @@ export default function PlayerCard({ name, score, onIncrement, onDecrement }: Pl
       <h2 className="text-xl font-semibold">{name}</h2>
       <span className="text-6xl font-bold">{score}</span>
       <div className="flex gap-3">
-        <button onClick={onDecrement} className="rounded-lg bg-gray-100 px-4 py-2 text-lg font-bold hover:bg-gray-200">−</button>
+        <button onClick={onDecrement} disabled={score === 0} className="rounded-lg bg-gray-100 px-4 py-2 text-lg font-bold hover:bg-gray-200 disabled:opacity-40 disabled:cursor-not-allowed">−</button>
         <button onClick={onIncrement} className="rounded-lg bg-indigo-600 px-4 py-2 text-lg font-bold text-white hover:bg-indigo-700">+</button>
       </div>
     </div>

@@ -1,10 +1,24 @@
-import { NextRequest, NextResponse } from "next/server";
-import pusher from "@/lib/pusher";
+import type { NextRequest } from 'next/server';
+import { updateScore } from '@/lib/gameStore';
+import pusher from '@/lib/pusher';
 
-export async function POST(req: NextRequest) {
-  const { gameId, playerId, score } = await req.json();
+export async function POST(req: NextRequest): Promise<Response> {
+  const { gameId, playerId, delta } = (await req.json().catch(() => ({}))) as {
+    gameId?: string;
+    playerId?: string;
+    delta?: number;
+  };
 
-  await pusher.trigger(`game-${gameId}`, "score-update", { playerId, score });
+  if (!gameId || !playerId || typeof delta !== 'number') {
+    return Response.json({ error: 'gameId, playerId, and delta required' }, { status: 400 });
+  }
 
-  return NextResponse.json({ ok: true });
+  const newScore = updateScore(gameId, playerId, delta);
+  if (newScore === null) {
+    return Response.json({ error: 'not_found' }, { status: 404 });
+  }
+
+  await pusher.trigger(`game-${gameId}`, 'score-update', { playerId, score: newScore });
+
+  return Response.json({ ok: true, score: newScore });
 }

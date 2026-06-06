@@ -67,3 +67,12 @@ export function startGame(code: string, requestingPlayerId: string): boolean {
   session.phase = 'playing';
   return true;
 }
+
+export function updateScore(code: string, playerId: string, delta: number): number | null {
+  const session = sessions.get(code);
+  if (!session) return null;
+  const player = session.players.find((p) => p.id === playerId);
+  if (!player) return null;
+  player.score = Math.max(0, player.score + delta);
+  return player.score;
+}
