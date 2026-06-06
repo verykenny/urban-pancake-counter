@@ -134,7 +134,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   if (error && !gameState) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
-        <p className="text-red-600">{error}</p>
+        <p className="text-error">{error}</p>
       </main>
     );
   }
@@ -142,7 +142,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   if (!gameState || !playerId) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
-        <p className="text-gray-400">Loading…</p>
+        <p className="text-star-dim animate-pulse">Loading…</p>
       </main>
     );
   }
@@ -183,76 +183,127 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     if (!res.ok) setError('Could not transfer host.');
   }
 
-  async function handleDelegate(playerId: string, delegatePlayerId: string | null) {
+  async function handleDelegate(targetPlayerId: string, delegatePlayerId: string | null) {
     const res = await fetch(`/api/game/${id}/delegation`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ playerId, delegatePlayerId }),
+      body: JSON.stringify({ playerId: targetPlayerId, delegatePlayerId }),
     });
     if (!res.ok) setError('Could not update delegation.');
   }
 
   if (gameState.phase === 'playing') {
+    const winnerPlayer = gameState.players.find((p) => p.id === gameState.winner);
+
     return (
-      <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
-        <h1 className="text-3xl font-bold">Lorcana Score Tracker</h1>
-        <div className="rounded-xl border border-gray-200 bg-gray-50 px-6 py-3 text-center">
-          <p className="text-xs uppercase tracking-widest text-gray-400">Game code</p>
-          <p className="font-mono text-3xl font-bold tracking-widest">{id}</p>
+      <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
+        {/* Ambient glow */}
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="h-96 w-96 rounded-full bg-purple-900/20 blur-3xl" />
         </div>
+
+        <h1
+          className="z-10 font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase"
+          style={{ textShadow: '0 0 24px rgba(212,164,42,0.45)' }}
+        >
+          Lorcana Lore Tracker
+        </h1>
+
+        {/* Game code */}
+        <div
+          className="z-10 rounded-2xl border border-gold/30 bg-ink-dark px-8 py-4 text-center"
+          style={{ boxShadow: '0 0 24px rgba(212,164,42,0.08)' }}
+        >
+          <p className="text-xs uppercase tracking-widest text-star-silver">Game code</p>
+          <p className="font-mono text-3xl font-bold tracking-[0.3em] text-gold">{id}</p>
+        </div>
+
+        {/* Control mode toggle (host only) */}
         {playerId === gameState.hostPlayerId && (
-          <div className="flex gap-2 text-sm">
+          <div className="z-10 flex bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
             <button
               onClick={() => handleModeChange('self')}
-              className={`rounded-lg px-4 py-1.5 font-medium transition-colors ${gameState.controlMode === 'self' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
+                gameState.controlMode === 'self'
+                  ? 'bg-ink-border text-star-white shadow-sm'
+                  : 'text-star-dim hover:text-star-silver'
+              }`}
             >
               Players control own
             </button>
             <button
               onClick={() => handleModeChange('host')}
-              className={`rounded-lg px-4 py-1.5 font-medium transition-colors ${gameState.controlMode === 'host' ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
+                gameState.controlMode === 'host'
+                  ? 'bg-ink-border text-star-white shadow-sm'
+                  : 'text-star-dim hover:text-star-silver'
+              }`}
             >
               Host controls all
             </button>
           </div>
         )}
+
+        {/* Winner overlay */}
         {gameState.winner && (
-          <div className="w-full max-w-md rounded-2xl border border-amber-300 bg-amber-50 px-8 py-6 text-center shadow-lg">
-            <p className="text-lg font-semibold text-amber-800">
-              {gameState.players.find((p) => p.id === gameState.winner)?.name ?? 'Someone'} wins!
+          <div
+            className="relative z-10 w-full max-w-md rounded-2xl border border-gold/40 bg-gold-bg px-8 py-8 text-center overflow-hidden"
+            style={{ boxShadow: '0 0 48px rgba(212,164,42,0.25)' }}
+          >
+            {/* Animated pulse ring */}
+            <div className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-gold/25 animate-pulse" />
+
+            <p
+              className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold"
+              style={{ textShadow: '0 0 20px rgba(212,164,42,0.5)' }}
+            >
+              {winnerPlayer?.name ?? 'Someone'} wins!
             </p>
-            <p className="mt-1 text-sm text-amber-600">Reached 20 lore</p>
+            <p className="mt-1 text-sm text-star-silver">Reached 20 lore</p>
+
             {playerId === gameState.hostPlayerId ? (
               <button
                 onClick={handlePlayAgain}
-                className="mt-4 rounded-lg bg-indigo-600 px-6 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition-colors"
+                className="mt-6 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)]"
               >
                 Play Again
               </button>
             ) : (
-              <p className="mt-4 text-sm text-amber-700">Waiting for host to start a new game…</p>
+              <p className="mt-4 text-sm text-star-dim animate-pulse">Waiting for host to start a new game…</p>
             )}
           </div>
         )}
-        <ScoreBoard
-          players={gameState.players}
-          onScoreChange={handleScoreChange}
-          localPlayerId={playerId}
-          hostPlayerId={gameState.hostPlayerId}
-          controlMode={gameState.controlMode}
-          delegations={gameState.delegations}
-          onTransferHost={handleTransferHost}
-          onDelegate={handleDelegate}
-          locked={!!gameState.winner}
-        />
-        {error && <p className="text-sm text-red-600">{error}</p>}
+
+        <div className="z-10 w-full max-w-2xl">
+          <ScoreBoard
+            players={gameState.players}
+            onScoreChange={handleScoreChange}
+            localPlayerId={playerId}
+            hostPlayerId={gameState.hostPlayerId}
+            controlMode={gameState.controlMode}
+            delegations={gameState.delegations}
+            onTransferHost={handleTransferHost}
+            onDelegate={handleDelegate}
+            locked={!!gameState.winner}
+          />
+        </div>
+
+        {error && (
+          <p className="z-10 fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+            {error}
+          </p>
+        )}
       </main>
     );
   }
 
   return (
     <>
-      {error && <p className="fixed top-4 left-1/2 -translate-x-1/2 rounded-lg bg-red-100 px-4 py-2 text-sm text-red-700">{error}</p>}
+      {error && (
+        <p className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+          {error}
+        </p>
+      )}
       <LobbyView
         gameCode={id}
         players={gameState.players}

@@ -6,6 +6,7 @@ interface Player {
   id: string;
   name: string;
   score: number;
+  color: string;
 }
 
 interface ScoreBoardProps {
@@ -22,7 +23,7 @@ interface ScoreBoardProps {
 
 export default function ScoreBoard({ players, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, onDelegate, onTransferHost, locked = false }: ScoreBoardProps) {
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
       {players.map((player) => {
         const canControl =
           controlMode === 'host'
@@ -34,6 +35,7 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
             key={player.id}
             name={player.name}
             score={player.score}
+            color={player.color}
             onIncrement={() => onScoreChange(player.id, 1)}
             onDecrement={() => onScoreChange(player.id, -1)}
             disabled={!canControl || locked}

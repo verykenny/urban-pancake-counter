@@ -47,22 +47,38 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
-      <h1 className="text-4xl font-bold">Lorcana Score Tracker</h1>
-      <p className="text-gray-500">Create a new game or enter a code to join.</p>
+    <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
+      {/* Ambient glow */}
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+        <div className="h-96 w-96 rounded-full bg-purple-900/20 blur-3xl" />
+      </div>
+
+      <h1
+        className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-gold uppercase z-10"
+        style={{ textShadow: '0 0 24px rgba(212,164,42,0.45)' }}
+      >
+        Lorcana Lore Tracker
+      </h1>
+
+      <p className="text-star-silver text-sm tracking-wide z-10">
+        Create a new game or enter a code to join.
+      </p>
+
       <button
         onClick={handleCreate}
         disabled={loading}
-        className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+        className="z-10 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Create game
       </button>
-      <div className="flex items-center gap-4">
-        <hr className="w-24 border-gray-300" />
-        <span className="text-sm text-gray-400">or join with a code</span>
-        <hr className="w-24 border-gray-300" />
+
+      <div className="z-10 flex items-center gap-4 w-full max-w-xs">
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold-muted to-transparent" />
+        <span className="text-xs text-star-dim tracking-wider whitespace-nowrap">or join with a code</span>
+        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold-muted to-transparent" />
       </div>
-      <form onSubmit={handleJoin} className="flex flex-col items-center gap-3">
+
+      <form onSubmit={handleJoin} className="z-10 flex flex-col items-center gap-3">
         <div className="flex gap-3">
           <input
             type="text"
@@ -70,17 +86,17 @@ export default function Home() {
             onChange={(e) => setJoinCode(e.target.value)}
             placeholder="Game code"
             maxLength={6}
-            className="rounded-lg border border-gray-300 px-4 py-2 uppercase focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 uppercase text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
           />
           <button
             type="submit"
             disabled={loading}
-            className="rounded-lg bg-indigo-600 px-5 py-2 font-semibold text-white hover:bg-indigo-700 disabled:opacity-50"
+            className="rounded-xl border border-gold px-5 py-2.5 font-semibold text-gold hover:bg-gold/10 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Join
           </button>
         </div>
-        {error && <p className="text-sm text-red-600">{error}</p>}
+        {error && <p className="text-sm text-error">{error}</p>}
       </form>
     </main>
   );
