@@ -100,6 +100,14 @@ Before planning or building any feature, read the relevant file in `docs/feature
 
 ---
 
+## Git Workflow
+
+- **Never push directly to `main`.** All changes must go through a pull request.
+- When making changes, create a new branch (`git checkout -b <descriptive-branch-name>`), commit changes there, push the branch to the remote, and open a PR.
+- The user reviews and merges PRs — do not merge them yourself.
+
+---
+
 ## Constraints
 
 - No database. Scores live in React state and broadcast via Pusher. Session ends → scores gone.
