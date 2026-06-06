@@ -23,7 +23,7 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 | 6 | Score control mode | ✅ Done | `features/score-control-mode.md` |
 | 7 | Score delegation | ✅ Done | `features/score-delegation.md` |
 | 8 | Win condition | ✅ Done | `features/win-condition.md` |
-| 9 | Public hosting (Vercel) | 🔲 Not started | `features/hosting.md` |
+| 9 | Public hosting (Vercel) | ✅ Done | `features/hosting.md` |
 
 ### P2 — Required for good UX
 
@@ -54,4 +54,4 @@ Third-party services this project relies on. Credentials live in `.env.local` (n
 |---|---|---|---|
 | [Pusher](https://dashboard.pusher.com) | Real-time WebSocket sync | GitHub login (verykenny@gmail.com) | Free Sandbox plan — Channels product |
 | [GitHub](https://github.com/verykenny/urban-pancake-counter) | Source control | verykenny | Deploy key added: `~/.ssh/urban_pancake_counter` |
-| [Vercel](https://vercel.com) | Hosting & CI/CD | — | Set up when feature #9 is implemented; connect GitHub repo, add Pusher env vars |
+| [Vercel](https://vercel.com) | Hosting & CI/CD | GitHub login (verykenny@gmail.com) | https://urban-pancake-counter.vercel.app — auto-deploys on push to `main` |
