@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { addPlayer, getSession } from '@/lib/gameStore';
+import { addPlayer } from '@/lib/gameStore';
 import pusher from '@/lib/pusher';
 
 export async function POST(
@@ -16,26 +16,24 @@ export async function POST(
     return Response.json({ error: 'playerId and name required' }, { status: 400 });
   }
 
-  const result = addPlayer(id, playerId, name.trim());
+  const result = await addPlayer(id, playerId, name.trim());
 
   if (!result.ok) {
     const status = result.reason === 'not_found' ? 404 : result.reason === 'full' ? 409 : 400;
     return Response.json({ error: result.reason }, { status });
   }
 
-  const session = getSession(id)!;
-
   await pusher.trigger(`game-${id}`, 'player-joined', {
-    players: session.players,
-    hostPlayerId: session.hostPlayerId,
+    players: result.session.players,
+    hostPlayerId: result.session.hostPlayerId,
   });
 
   return Response.json({
     player: result.player,
-    players: session.players,
-    hostPlayerId: session.hostPlayerId,
-    phase: session.phase,
-    controlMode: session.controlMode,
-    delegations: session.delegations,
+    players: result.session.players,
+    hostPlayerId: result.session.hostPlayerId,
+    phase: result.session.phase,
+    controlMode: result.session.controlMode,
+    delegations: result.session.delegations,
   });
 }

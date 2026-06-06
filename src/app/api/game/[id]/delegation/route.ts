@@ -15,7 +15,7 @@ export async function POST(
   if (!playerId) return Response.json({ error: 'playerId required' }, { status: 400 });
   if (delegatePlayerId === undefined) return Response.json({ error: 'delegatePlayerId required' }, { status: 400 });
 
-  const result = setDelegation(id, playerId, delegatePlayerId);
+  const result = await setDelegation(id, playerId, delegatePlayerId);
 
   if (!result.ok) {
     if (result.reason === 'not_allowed') {

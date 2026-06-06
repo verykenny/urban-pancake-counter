@@ -14,7 +14,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     return Response.json({ error: 'gameId, playerId, requestingPlayerId, and delta required' }, { status: 400 });
   }
 
-  const result = updateScore(gameId, playerId, requestingPlayerId, delta);
+  const result = await updateScore(gameId, playerId, requestingPlayerId, delta);
   if (!result.ok) {
     const status = result.reason === 'unauthorized' || result.reason === 'board_locked' ? 403 : 404;
     return Response.json({ error: result.reason }, { status });

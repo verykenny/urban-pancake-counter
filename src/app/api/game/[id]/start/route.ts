@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { startGame, getSession } from '@/lib/gameStore';
+import { startGame } from '@/lib/gameStore';
 import pusher from '@/lib/pusher';
 
 export async function POST(
@@ -15,15 +15,13 @@ export async function POST(
   if (!playerId) return Response.json({ error: 'playerId required' }, { status: 400 });
 
   const resolvedMode: 'host' | 'self' = controlMode === 'host' ? 'host' : 'self';
-  const ok = startGame(id, playerId, resolvedMode);
-  if (!ok) return Response.json({ error: 'forbidden' }, { status: 403 });
-
-  const session = getSession(id)!;
+  const result = await startGame(id, playerId, resolvedMode);
+  if (!result.ok) return Response.json({ error: 'forbidden' }, { status: 403 });
 
   await pusher.trigger(`game-${id}`, 'game-started', {
-    players: session.players,
+    players: result.session.players,
     phase: 'playing',
-    controlMode: session.controlMode,
+    controlMode: result.session.controlMode,
   });
 
   return Response.json({ ok: true });

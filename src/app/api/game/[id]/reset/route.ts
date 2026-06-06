@@ -1,5 +1,5 @@
 import type { NextRequest } from 'next/server';
-import { resetGame, getSession } from '@/lib/gameStore';
+import { resetGame } from '@/lib/gameStore';
 import pusher from '@/lib/pusher';
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }): Promise<Response> {
@@ -10,15 +10,13 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ id:
     return Response.json({ error: 'playerId required' }, { status: 400 });
   }
 
-  const ok = resetGame(id, playerId);
-  if (!ok) {
-    const session = getSession(id);
-    if (!session) return Response.json({ error: 'not_found' }, { status: 404 });
-    return Response.json({ error: 'unauthorized' }, { status: 403 });
+  const result = await resetGame(id, playerId);
+  if (!result.ok) {
+    const status = result.reason === 'not_found' ? 404 : 403;
+    return Response.json({ error: result.reason }, { status });
   }
 
-  const session = getSession(id)!;
-  await pusher.trigger(`game-${id}`, 'game-reset', { players: session.players });
+  await pusher.trigger(`game-${id}`, 'game-reset', { players: result.session.players });
 
   return Response.json({ ok: true });
 }

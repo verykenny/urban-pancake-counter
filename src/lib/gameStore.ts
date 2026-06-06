@@ -1,4 +1,5 @@
 import { generateCode } from './generateCode';
+import redis from './redis';
 
 export interface Player {
   id: string;
@@ -13,21 +14,24 @@ export interface GameState {
   players: Player[];
   phase: 'lobby' | 'playing';
   controlMode: 'host' | 'self';
-  delegations: Record<string, string | null>; // delegatorId → delegateId | null
+  delegations: Record<string, string | null>;
   winner: string | null;
 }
 
 const WIN_SCORE = 20;
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444'];
+const SESSION_TTL = 86400; // 24 hours in seconds
 
-const sessions = new Map<string, GameState>();
+function key(code: string): string {
+  return `session:${code}`;
+}
 
-export function createSession(hostPlayerId: string): string {
+export async function createSession(hostPlayerId: string): Promise<string> {
   let code = generateCode();
-  while (sessions.has(code)) {
+  while ((await redis.exists(key(code))) === 1) {
     code = generateCode();
   }
-  sessions.set(code, {
+  const state: GameState = {
     createdAt: Date.now(),
     hostPlayerId,
     players: [],
@@ -35,24 +39,24 @@ export function createSession(hostPlayerId: string): string {
     controlMode: 'self',
     delegations: {},
     winner: null,
-  });
+  };
+  await redis.set(key(code), state, { ex: SESSION_TTL });
   return code;
 }
 
-export function sessionExists(code: string): boolean {
-  return sessions.has(code);
+export async function getSession(code: string): Promise<GameState | null> {
+  return redis.get<GameState>(key(code));
 }
 
-export function getSession(code: string): GameState | undefined {
-  return sessions.get(code);
-}
-
-export function addPlayer(
+export async function addPlayer(
   code: string,
   playerId: string,
   name: string
-): { ok: true; player: Player } | { ok: false; reason: 'not_found' | 'full' | 'already_joined' } {
-  const session = sessions.get(code);
+): Promise<
+  | { ok: true; player: Player; session: GameState }
+  | { ok: false; reason: 'not_found' | 'full' | 'already_joined' }
+> {
+  const session = await redis.get<GameState>(key(code));
   if (!session) return { ok: false, reason: 'not_found' };
   if (session.players.some((p) => p.id === playerId)) return { ok: false, reason: 'already_joined' };
   if (session.players.length >= 4) return { ok: false, reason: 'full' };
@@ -63,28 +67,35 @@ export function addPlayer(
     color: COLORS[session.players.length],
   };
   session.players.push(player);
-  return { ok: true, player };
+  await redis.set(key(code), session, { ex: SESSION_TTL });
+  return { ok: true, player, session };
 }
 
-export function startGame(code: string, requestingPlayerId: string, controlMode: 'host' | 'self'): boolean {
-  const session = sessions.get(code);
-  if (!session) return false;
-  if (session.hostPlayerId !== requestingPlayerId) return false;
-  if (session.players.length < 2) return false;
-  session.phase = 'playing';
-  session.controlMode = controlMode;
-  return true;
-}
-
-export function setControlMode(
+export async function startGame(
   code: string,
   requestingPlayerId: string,
   controlMode: 'host' | 'self'
-): boolean {
-  const session = sessions.get(code);
+): Promise<{ ok: true; session: GameState } | { ok: false }> {
+  const session = await redis.get<GameState>(key(code));
+  if (!session) return { ok: false };
+  if (session.hostPlayerId !== requestingPlayerId) return { ok: false };
+  if (session.players.length < 2) return { ok: false };
+  session.phase = 'playing';
+  session.controlMode = controlMode;
+  await redis.set(key(code), session, { ex: SESSION_TTL });
+  return { ok: true, session };
+}
+
+export async function setControlMode(
+  code: string,
+  requestingPlayerId: string,
+  controlMode: 'host' | 'self'
+): Promise<boolean> {
+  const session = await redis.get<GameState>(key(code));
   if (!session) return false;
   if (session.hostPlayerId !== requestingPlayerId) return false;
   session.controlMode = controlMode;
+  await redis.set(key(code), session, { ex: SESSION_TTL });
   return true;
 }
 
@@ -92,13 +103,13 @@ type UpdateScoreResult =
   | { ok: true; score: number; winner: string | null }
   | { ok: false; reason: 'not_found' | 'unauthorized' | 'board_locked' };
 
-export function updateScore(
+export async function updateScore(
   code: string,
   targetPlayerId: string,
   requestingPlayerId: string,
   delta: number
-): UpdateScoreResult {
-  const session = sessions.get(code);
+): Promise<UpdateScoreResult> {
+  const session = await redis.get<GameState>(key(code));
   if (!session) return { ok: false, reason: 'not_found' };
   if (session.winner !== null) return { ok: false, reason: 'board_locked' };
   const player = session.players.find((p) => p.id === targetPlayerId);
@@ -115,30 +126,35 @@ export function updateScore(
   if (player.score >= WIN_SCORE) {
     session.winner = player.id;
   }
+  await redis.set(key(code), session, { ex: SESSION_TTL });
   return { ok: true, score: player.score, winner: session.winner };
 }
 
-export function resetGame(code: string, requestingPlayerId: string): boolean {
-  const session = sessions.get(code);
-  if (!session) return false;
-  if (session.hostPlayerId !== requestingPlayerId) return false;
+export async function resetGame(
+  code: string,
+  requestingPlayerId: string
+): Promise<{ ok: true; session: GameState } | { ok: false; reason: 'not_found' | 'unauthorized' }> {
+  const session = await redis.get<GameState>(key(code));
+  if (!session) return { ok: false, reason: 'not_found' };
+  if (session.hostPlayerId !== requestingPlayerId) return { ok: false, reason: 'unauthorized' };
   session.winner = null;
   for (const player of session.players) {
     player.score = 0;
   }
-  return true;
+  await redis.set(key(code), session, { ex: SESSION_TTL });
+  return { ok: true, session };
 }
 
 type SetDelegationResult =
   | { ok: true }
   | { ok: false; reason: 'not_found' | 'not_allowed' | 'invalid_delegate' };
 
-export function setDelegation(
+export async function setDelegation(
   code: string,
   playerId: string,
   delegatePlayerId: string | null
-): SetDelegationResult {
-  const session = sessions.get(code);
+): Promise<SetDelegationResult> {
+  const session = await redis.get<GameState>(key(code));
   if (!session) return { ok: false, reason: 'not_found' };
   if (session.controlMode !== 'self') return { ok: false, reason: 'not_allowed' };
   if (!session.players.some((p) => p.id === playerId)) return { ok: false, reason: 'not_found' };
@@ -149,5 +165,6 @@ export function setDelegation(
     return { ok: false, reason: 'invalid_delegate' };
   }
   session.delegations[playerId] = delegatePlayerId;
+  await redis.set(key(code), session, { ex: SESSION_TTL });
   return { ok: true };
 }

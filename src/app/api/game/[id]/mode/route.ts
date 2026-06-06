@@ -15,7 +15,7 @@ export async function POST(
   if (!playerId) return Response.json({ error: 'playerId required' }, { status: 400 });
 
   const resolvedMode: 'host' | 'self' = controlMode === 'host' ? 'host' : 'self';
-  const ok = setControlMode(id, playerId, resolvedMode);
+  const ok = await setControlMode(id, playerId, resolvedMode);
   if (!ok) return Response.json({ error: 'forbidden' }, { status: 403 });
 
   await pusher.trigger(`game-${id}`, 'mode-changed', { controlMode: resolvedMode });

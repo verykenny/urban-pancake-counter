@@ -6,7 +6,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   const { id } = await params;
-  const session = getSession(id);
+  const session = await getSession(id);
   if (session) {
     return Response.json({
       players: session.players,
