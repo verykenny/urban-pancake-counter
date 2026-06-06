@@ -22,7 +22,7 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 | 5 | Score tracking (real-time) | ✅ Done | `features/score-tracking.md` |
 | 6 | Score control mode | ✅ Done | `features/score-control-mode.md` |
 | 7 | Score delegation | ✅ Done | `features/score-delegation.md` |
-| 8 | Win condition | 🔲 Not started | `features/win-condition.md` |
+| 8 | Win condition | ✅ Done | `features/win-condition.md` |
 | 9 | Public hosting (Vercel) | 🔲 Not started | `features/hosting.md` |
 
 ### P2 — Required for good UX
