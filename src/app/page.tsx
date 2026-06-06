@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { usePlayerId } from '@/lib/usePlayerId';
 
 export default function Home() {
   const router = useRouter();
+  const playerId = usePlayerId();
   const [joinCode, setJoinCode] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -13,7 +15,11 @@ export default function Home() {
     setLoading(true);
     setError('');
     try {
-      const res = await fetch('/api/game', { method: 'POST' });
+      const res = await fetch('/api/game', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ playerId }),
+      });
       const { code } = (await res.json()) as { code: string };
       router.push(`/game/${code}`);
     } catch {
