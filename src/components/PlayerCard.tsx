@@ -93,14 +93,14 @@ export default function PlayerCard({
         <button
           onClick={onDecrement}
           disabled={disabled || score === 0}
-          className="rounded-xl border border-ink-border bg-ink-mid px-5 py-2.5 text-lg font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex h-14 w-14 items-center justify-center rounded-xl border border-ink-border bg-ink-mid text-2xl font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           −
         </button>
         <button
           onClick={onIncrement}
           disabled={disabled}
-          className="rounded-xl bg-gold px-5 py-2.5 text-lg font-bold text-ink-deep hover:bg-gold-bright hover:shadow-[0_0_14px_rgba(212,164,42,0.4)] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex h-14 w-14 items-center justify-center rounded-xl bg-gold text-2xl font-bold text-ink-deep hover:bg-gold-bright hover:shadow-[0_0_14px_rgba(212,164,42,0.4)] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           +
         </button>

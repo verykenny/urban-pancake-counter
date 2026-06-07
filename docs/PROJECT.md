@@ -29,9 +29,9 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 
 | # | Feature | Status | Doc |
 |---|---|---|---|
-| 10 | Mobile-responsive layout | 🔲 Not started | `features/mobile-layout.md` |
-| 11 | Reconnection / state recovery | 🔲 Not started | `features/reconnection.md` |
-| 12 | Session sharing UX | 🔲 Not started | `features/session-sharing.md` |
+| 10 | Mobile-responsive layout | ✅ Done | `features/mobile-layout.md` |
+| 11 | Reconnection / state recovery | ✅ Done | `features/reconnection.md` |
+| 12 | Session sharing UX | ✅ Done | `features/session-sharing.md` |
 
 ### P3 — Nice to have
 
