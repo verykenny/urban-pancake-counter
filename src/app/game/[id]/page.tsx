@@ -41,6 +41,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   const [joining, setJoining] = useState(false);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState('');
+  const [codeCopied, setCodeCopied] = useState(false);
   const [connectionState, setConnectionState] = useState('connected');
   const prevConn = useRef('connected');
   const prevWinner = useRef<string | null>(null);
@@ -282,19 +283,43 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
         </div>
 
-        <div className="z-10 flex w-full items-center">
-          <span className="w-12 shrink-0 sm:hidden" aria-hidden="true" />
-          <h1 className="flex-1 text-center font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
-            Lorcana Lore Tracker
-          </h1>
-          <span className="w-12 shrink-0 sm:hidden" aria-hidden="true" />
+        {/* Mobile compact header — code chip replaces title + subtitle */}
+        <div className="z-10 w-full sm:hidden flex flex-col items-start gap-1.5">
+          <button
+            type="button"
+            onClick={async () => {
+              if (!navigator.clipboard) return;
+              try {
+                await navigator.clipboard.writeText(id);
+                setCodeCopied(true);
+                setTimeout(() => setCodeCopied(false), 1500);
+              } catch { /* clipboard unavailable */ }
+            }}
+            className="flex items-center gap-3 rounded-xl border border-gold/30 bg-ink-dark px-4 py-2.5 shadow-code transition-opacity duration-150 active:opacity-70"
+            aria-label={`Game code: ${id}. Tap to copy.`}
+          >
+            <div className="text-left">
+              <p className="text-[10px] uppercase tracking-widest text-star-silver leading-none">Game code</p>
+              <p className="font-mono text-base font-bold tracking-[0.2em] text-gold leading-tight mt-0.5">
+                {codeCopied ? '✓ Copied' : id}
+              </p>
+            </div>
+          </button>
+          <p className="text-[10px] uppercase tracking-widest text-star-dim pl-1">
+            First to {gameState.loreTarget} lore
+          </p>
         </div>
 
-        {/* Game code — inline on desktop; on mobile it moves into the menu */}
+        {/* Desktop: full title */}
+        <h1 className="z-10 hidden sm:block text-center font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
+          Lorcana Lore Tracker
+        </h1>
+
+        {/* Desktop: game code chip with copy + QR */}
         <div className="hidden flex-col items-center gap-3 sm:flex">
           <GameCode code={id} />
         </div>
-        <p className="z-10 text-xs uppercase tracking-widest text-star-dim sm:-mt-4">
+        <p className="z-10 hidden sm:block text-xs uppercase tracking-widest text-star-dim sm:-mt-4">
           First to {gameState.loreTarget} lore
         </p>
 
