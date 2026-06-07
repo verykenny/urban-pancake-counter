@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useEffect, useRef, useState } from 'react';
+import confetti from 'canvas-confetti';
 import { usePlayerId } from '@/lib/usePlayerId';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
@@ -21,6 +22,7 @@ interface GameState {
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>;
   winner: string | null;
+  loreTarget: number;
 }
 
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
@@ -32,6 +34,20 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   const [error, setError] = useState('');
   const [connectionState, setConnectionState] = useState('connected');
   const prevConn = useRef('connected');
+  const prevWinner = useRef<string | null>(null);
+
+  const winner = gameState?.winner ?? null;
+  useEffect(() => {
+    if (winner && !prevWinner.current) {
+      confetti({
+        particleCount: 140,
+        spread: 80,
+        origin: { y: 0.4 },
+        colors: ['#d4a42a', '#f0c040', '#ede8ff'],
+      });
+    }
+    prevWinner.current = winner;
+  }, [winner]);
 
   useEffect(() => {
     if (!id) return;
@@ -45,7 +61,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         return r.json();
       })
       .then((data: GameState | null) => {
-        if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null });
+        if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null, loreTarget: data.loreTarget ?? 20 });
       })
       .catch(() => setError('Failed to load game.'));
 
@@ -59,7 +75,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         fetch(`/api/game/${id}`)
           .then((r) => (r.ok ? r.json() : null))
           .then((data: GameState | null) => {
-            if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null });
+            if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null, loreTarget: data.loreTarget ?? 20 });
           })
           .catch(() => {});
       }
@@ -75,9 +91,9 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       );
     });
 
-    channel.bind('game-started', (data: { players: Player[]; phase: 'playing'; controlMode: 'host' | 'self' }) => {
+    channel.bind('game-started', (data: { players: Player[]; phase: 'playing'; controlMode: 'host' | 'self'; loreTarget: number }) => {
       setGameState((prev) =>
-        prev ? { ...prev, players: data.players, phase: data.phase, controlMode: data.controlMode } : prev
+        prev ? { ...prev, players: data.players, phase: data.phase, controlMode: data.controlMode, loreTarget: data.loreTarget ?? prev.loreTarget } : prev
       );
     });
 
@@ -145,14 +161,14 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     }
   }
 
-  async function handleStart(controlMode: 'host' | 'self') {
+  async function handleStart(controlMode: 'host' | 'self', loreTarget: number) {
     setStarting(true);
     setError('');
     try {
       const res = await fetch(`/api/game/${id}/start`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, controlMode }),
+        body: JSON.stringify({ playerId, controlMode, loreTarget }),
       });
       if (!res.ok) setError('Could not start game.');
     } finally {
@@ -247,6 +263,9 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Game code */}
         <GameCode code={id} />
+        <p className="z-10 -mt-4 text-xs uppercase tracking-widest text-star-dim">
+          First to {gameState.loreTarget} lore
+        </p>
 
         {/* Control mode toggle (host only) */}
         {playerId === gameState.hostPlayerId && (
@@ -289,7 +308,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             >
               {winnerPlayer?.name ?? 'Someone'} wins!
             </p>
-            <p className="mt-1 text-sm text-star-silver">Reached 20 lore</p>
+            <p className="mt-1 text-sm text-star-silver">Reached {gameState.loreTarget} lore</p>
 
             {playerId === gameState.hostPlayerId ? (
               <button
@@ -342,6 +361,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         hostPlayerId={gameState.hostPlayerId}
         onJoin={handleJoin}
         onStart={handleStart}
+        onTransferHost={handleTransferHost}
         joining={joining}
         starting={starting}
       />

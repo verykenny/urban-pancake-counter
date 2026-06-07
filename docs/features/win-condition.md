@@ -18,10 +18,10 @@ Lorcana ends when a player reaches 20 lore. The app should handle this moment cl
 - **Restart** — "Play again" is host-only and resets to 0 without re-entering the lobby.
 - **Lore target** — fixed at 20 for now. Configurable target (P3 enhancement) deferred — some play to different numbers but it's an edge case.
 
-## P3 Enhancements
+## P3 Enhancements (shipped)
 
-- **Configurable lore target** — host sets target (default 20) at game start, before the lobby closes.
-- **Win animation** — confetti or screen flash on win declaration, client-side only (CSS or `canvas-confetti`).
+- **Configurable lore target** ✅ — host sets the target (default 20) via a number input in the lobby before starting; stored on `GameState.loreTarget`, sent in the `game-started` payload and the `GET /api/game/[id]` response, and used for the win check in `updateScore`.
+- **Win animation** ✅ — gold-themed `canvas-confetti` burst fired client-side when `winner` transitions from null to set.
 
 ## Dependencies
 

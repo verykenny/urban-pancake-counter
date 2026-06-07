@@ -16,7 +16,8 @@ interface LobbyViewProps {
   localPlayerId: string;
   hostPlayerId: string;
   onJoin: (name: string) => void;
-  onStart: (controlMode: 'host' | 'self') => void;
+  onStart: (controlMode: 'host' | 'self', loreTarget: number) => void;
+  onTransferHost: (newHostPlayerId: string) => void;
   joining: boolean;
   starting: boolean;
 }
@@ -28,11 +29,13 @@ export default function LobbyView({
   hostPlayerId,
   onJoin,
   onStart,
+  onTransferHost,
   joining,
   starting,
 }: LobbyViewProps) {
   const [name, setName] = useState('');
   const [controlMode, setControlMode] = useState<'host' | 'self'>('self');
+  const [loreTarget, setLoreTarget] = useState(20);
   const isInLobby = players.some((p) => p.id === localPlayerId);
   const isHost = localPlayerId === hostPlayerId;
   const canStart = isHost && players.length >= 2;
@@ -95,6 +98,15 @@ export default function LobbyView({
                 {p.id === hostPlayerId && (
                   <span className="text-xs font-bold uppercase tracking-widest text-gold">host</span>
                 )}
+                {isHost && p.id !== localPlayerId && (
+                  <button
+                    type="button"
+                    onClick={() => onTransferHost(p.id)}
+                    className="text-xs text-star-dim hover:text-gold underline underline-offset-2 transition-colors duration-200"
+                  >
+                    Make host
+                  </button>
+                )}
               </div>
             ))}
             {players.length < 4 && (
@@ -132,8 +144,20 @@ export default function LobbyView({
                 </button>
               </div>
 
+              <label className="flex items-center gap-3 text-sm text-star-silver">
+                Lore target
+                <input
+                  type="number"
+                  min={1}
+                  max={200}
+                  value={loreTarget}
+                  onChange={(e) => setLoreTarget(Number(e.target.value))}
+                  className="w-20 min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-3 py-2 text-center text-star-white focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
+                />
+              </label>
+
               <button
-                onClick={() => onStart(controlMode)}
+                onClick={() => onStart(controlMode, loreTarget)}
                 disabled={!canStart || starting}
                 className="rounded-xl bg-gradient-to-r from-gold to-gold-bright px-8 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
               >

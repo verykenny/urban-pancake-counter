@@ -16,9 +16,15 @@ export interface GameState {
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>;
   winner: string | null;
+  loreTarget: number;
 }
 
 const WIN_SCORE = 20;
+
+function clampLoreTarget(value: unknown): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) return WIN_SCORE;
+  return Math.min(200, Math.max(1, Math.round(value)));
+}
 const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444'];
 const SESSION_TTL = 86400; // 24 hours in seconds
 
@@ -39,6 +45,7 @@ export async function createSession(hostPlayerId: string): Promise<string> {
     controlMode: 'self',
     delegations: {},
     winner: null,
+    loreTarget: WIN_SCORE,
   };
   await redis.set(key(code), state, { ex: SESSION_TTL });
   return code;
@@ -74,7 +81,8 @@ export async function addPlayer(
 export async function startGame(
   code: string,
   requestingPlayerId: string,
-  controlMode: 'host' | 'self'
+  controlMode: 'host' | 'self',
+  loreTarget?: number
 ): Promise<{ ok: true; session: GameState } | { ok: false }> {
   const session = await redis.get<GameState>(key(code));
   if (!session) return { ok: false };
@@ -82,6 +90,7 @@ export async function startGame(
   if (session.players.length < 2) return { ok: false };
   session.phase = 'playing';
   session.controlMode = controlMode;
+  session.loreTarget = clampLoreTarget(loreTarget);
   await redis.set(key(code), session, { ex: SESSION_TTL });
   return { ok: true, session };
 }
@@ -123,7 +132,7 @@ export async function updateScore(
   if (!authorized) return { ok: false, reason: 'unauthorized' };
 
   player.score = Math.max(0, player.score + delta);
-  if (player.score >= WIN_SCORE) {
+  if (player.score >= (session.loreTarget ?? WIN_SCORE)) {
     session.winner = player.id;
   }
   await redis.set(key(code), session, { ex: SESSION_TTL });

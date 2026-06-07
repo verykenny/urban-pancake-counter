@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 
 interface GameCodeProps {
   code: string;
@@ -8,6 +9,8 @@ interface GameCodeProps {
 
 export default function GameCode({ code }: GameCodeProps) {
   const [copied, setCopied] = useState(false);
+  const [showQr, setShowQr] = useState(false);
+  const [origin] = useState(() => (typeof window !== 'undefined' ? window.location.origin : ''));
 
   async function handleCopy() {
     if (!navigator.clipboard) return;
@@ -29,13 +32,29 @@ export default function GameCode({ code }: GameCodeProps) {
         <p className="text-xs uppercase tracking-widest text-star-silver">Game code</p>
         <p className="font-mono text-3xl font-bold tracking-[0.3em] text-gold">{code}</p>
       </div>
-      <button
-        type="button"
-        onClick={handleCopy}
-        className="min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-5 text-sm font-medium text-star-silver transition-all duration-200 hover:bg-ink-border hover:text-star-white"
-      >
-        {copied ? 'Copied!' : 'Copy code'}
-      </button>
+
+      <div className="flex gap-3">
+        <button
+          type="button"
+          onClick={handleCopy}
+          className="min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-5 text-sm font-medium text-star-silver transition-all duration-200 hover:bg-ink-border hover:text-star-white"
+        >
+          {copied ? 'Copied!' : 'Copy code'}
+        </button>
+        <button
+          type="button"
+          onClick={() => setShowQr((v) => !v)}
+          className="min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-5 text-sm font-medium text-star-silver transition-all duration-200 hover:bg-ink-border hover:text-star-white"
+        >
+          {showQr ? 'Hide QR' : 'Show QR'}
+        </button>
+      </div>
+
+      {showQr && origin && (
+        <div className="rounded-xl bg-star-white p-3">
+          <QRCodeSVG value={`${origin}/game/${code}`} size={160} />
+        </div>
+      )}
     </div>
   );
 }
