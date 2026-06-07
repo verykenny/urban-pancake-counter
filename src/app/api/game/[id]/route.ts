@@ -14,6 +14,7 @@ export async function GET(
       phase: session.phase,
       controlMode: session.controlMode,
       delegations: session.delegations,
+      winner: session.winner,
     });
   }
   return Response.json({ exists: false }, { status: 404 });

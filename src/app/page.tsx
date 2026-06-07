@@ -78,20 +78,20 @@ export default function Home() {
         <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold-muted to-transparent" />
       </div>
 
-      <form onSubmit={handleJoin} className="z-10 flex flex-col items-center gap-3">
-        <div className="flex gap-3">
+      <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
+        <div className="flex w-full flex-col gap-3 sm:flex-row">
           <input
             type="text"
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value)}
             placeholder="Game code"
             maxLength={6}
-            className="rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 uppercase text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
+            className="w-full min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 uppercase text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
           />
           <button
             type="submit"
             disabled={loading}
-            className="rounded-xl border border-gold px-5 py-2.5 font-semibold text-gold hover:bg-gold/10 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="min-h-[44px] rounded-xl border border-gold px-5 py-2.5 font-semibold text-gold hover:bg-gold/10 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Join
           </button>

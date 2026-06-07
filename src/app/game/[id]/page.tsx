@@ -1,10 +1,11 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import { use, useEffect, useRef, useState } from 'react';
 import { usePlayerId } from '@/lib/usePlayerId';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
 import ScoreBoard from '@/components/ScoreBoard';
+import GameCode from '@/components/GameCode';
 
 interface Player {
   id: string;
@@ -29,16 +30,43 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   const [joining, setJoining] = useState(false);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState('');
+  const [connectionState, setConnectionState] = useState('connected');
+  const prevConn = useRef('connected');
 
   useEffect(() => {
     if (!id) return;
 
     fetch(`/api/game/${id}`)
-      .then((r) => r.json())
-      .then((data: GameState) => setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null }))
+      .then((r) => {
+        if (!r.ok) {
+          setError("This game has expired or doesn't exist.");
+          return null;
+        }
+        return r.json();
+      })
+      .then((data: GameState | null) => {
+        if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null });
+      })
       .catch(() => setError('Failed to load game.'));
 
     const pusher = getPusherClient();
+    prevConn.current = pusher.connection.state;
+
+    const handleConnState = (s: { previous: string; current: string }) => {
+      setConnectionState(s.current);
+      const wasDown = ['unavailable', 'disconnected', 'connecting'].includes(prevConn.current);
+      if (s.current === 'connected' && wasDown) {
+        fetch(`/api/game/${id}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((data: GameState | null) => {
+            if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null });
+          })
+          .catch(() => {});
+      }
+      prevConn.current = s.current;
+    };
+    pusher.connection.bind('state_change', handleConnState);
+
     const channel = pusher.subscribe(`game-${id}`);
 
     channel.bind('player-joined', (data: { players: Player[]; hostPlayerId: string }) => {
@@ -90,6 +118,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     });
 
     return () => {
+      pusher.connection.unbind('state_change', handleConnState);
       channel.unbind_all();
       pusher.unsubscribe(`game-${id}`);
     };
@@ -192,6 +221,13 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     if (!res.ok) setError('Could not update delegation.');
   }
 
+  const reconnecting = connectionState === 'unavailable' || connectionState === 'disconnected';
+  const reconnectingBanner = reconnecting ? (
+    <p className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
+      Reconnecting…
+    </p>
+  ) : null;
+
   if (gameState.phase === 'playing') {
     const winnerPlayer = gameState.players.find((p) => p.id === gameState.winner);
 
@@ -210,17 +246,11 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         </h1>
 
         {/* Game code */}
-        <div
-          className="z-10 rounded-2xl border border-gold/30 bg-ink-dark px-8 py-4 text-center"
-          style={{ boxShadow: '0 0 24px rgba(212,164,42,0.08)' }}
-        >
-          <p className="text-xs uppercase tracking-widest text-star-silver">Game code</p>
-          <p className="font-mono text-3xl font-bold tracking-[0.3em] text-gold">{id}</p>
-        </div>
+        <GameCode code={id} />
 
         {/* Control mode toggle (host only) */}
         {playerId === gameState.hostPlayerId && (
-          <div className="z-10 flex bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
+          <div className="z-10 flex flex-col sm:flex-row bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
             <button
               onClick={() => handleModeChange('self')}
               className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
@@ -293,6 +323,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             {error}
           </p>
         )}
+        {reconnectingBanner}
       </main>
     );
   }
@@ -314,6 +345,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         joining={joining}
         starting={starting}
       />
+      {reconnectingBanner}
     </>
   );
 }

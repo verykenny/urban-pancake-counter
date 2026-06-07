@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import GameCode from './GameCode';
 
 interface Player {
   id: string;
@@ -57,18 +58,12 @@ export default function LobbyView({
       </h1>
 
       {/* Game code */}
-      <div
-        className="z-10 rounded-2xl border border-gold/30 bg-ink-dark px-8 py-4 text-center"
-        style={{ boxShadow: '0 0 24px rgba(212,164,42,0.08)' }}
-      >
-        <p className="text-xs uppercase tracking-widest text-star-silver">Game code</p>
-        <p className="font-mono text-3xl font-bold tracking-[0.3em] text-gold">{gameCode}</p>
-      </div>
+      <GameCode code={gameCode} />
 
       {!isInLobby ? (
-        <form onSubmit={handleJoin} className="z-10 flex flex-col items-center gap-3">
+        <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
           <p className="text-star-silver text-sm">Enter your name to join the lobby.</p>
-          <div className="flex gap-3">
+          <div className="flex w-full flex-col gap-3 sm:flex-row">
             <input
               type="text"
               value={name}
@@ -76,12 +71,12 @@ export default function LobbyView({
               placeholder="Your name"
               maxLength={20}
               autoFocus
-              className="rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
+              className="w-full min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
             />
             <button
               type="submit"
               disabled={joining || !name.trim()}
-              className="rounded-xl bg-gradient-to-r from-gold to-gold-bright px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
+              className="min-h-[44px] rounded-xl bg-gradient-to-r from-gold to-gold-bright px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {joining ? 'Joining…' : 'Join'}
             </button>
@@ -112,7 +107,7 @@ export default function LobbyView({
           {isHost ? (
             <div className="flex flex-col items-center gap-4">
               {/* Pill-switcher control mode */}
-              <div className="flex bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
+              <div className="flex flex-col sm:flex-row bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
                 <button
                   type="button"
                   onClick={() => setControlMode('self')}
