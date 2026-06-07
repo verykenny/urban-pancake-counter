@@ -24,11 +24,8 @@ export default function GameCode({ code }: GameCodeProps) {
   }
 
   return (
-    <div className="z-10 flex flex-col items-center gap-3">
-      <div
-        className="rounded-2xl border border-gold/30 bg-ink-dark px-8 py-4 text-center"
-        style={{ boxShadow: '0 0 24px rgba(212,164,42,0.08)' }}
-      >
+    <div className="game-code z-10 flex flex-col items-center gap-3">
+      <div className="rounded-2xl border border-gold/30 bg-ink-dark px-8 py-4 text-center shadow-code">
         <p className="text-xs uppercase tracking-widest text-star-silver">Game code</p>
         <p className="font-mono text-3xl font-bold tracking-[0.3em] text-gold">{code}</p>
       </div>

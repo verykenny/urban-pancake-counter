@@ -16,6 +16,35 @@
   --star-dim: #5a4f78;
 
   --error: #e05070;
+
+  /* Decorative purple wash (was the literal `purple-900`); exact Tailwind value
+     so the migration is pixel-stable. */
+  --ambient: oklch(38.1% 0.176 304.987);
+
+  /* Semantic aliases — Features 10 & 11 (Phase 3) theme by overriding these,
+     never the concrete ink/gold palette values. */
+  --surface: var(--ink-dark);
+  --surface-raised: var(--ink-mid);
+  --border: var(--ink-border);
+  --text: var(--star-white);
+  --text-muted: var(--star-silver);
+  --accent: var(--gold);
+  --accent-strong: var(--gold-bright);
+  --danger: var(--error);
+
+  /* Radius scale */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Border widths (--border-thick consumed by Feature 11 high-contrast) */
+  --border-thin: 1px;
+  --border-thick: 3px;
+
+  /* Fluid score sizes — consumed by Feature 02 mobile layout */
+  --score-size-hero: clamp(4.5rem, 22vw, 9rem);
+  --score-size-mini: clamp(2rem, 9vw, 3.5rem);
 }
 
 @theme inline {
@@ -40,6 +69,18 @@
   --color-star-dim: var(--star-dim);
 
   --color-error: var(--error);
+  --color-ambient: var(--ambient);
+
+  /* Box-shadow / glow utilities (migrated from inline rgba literals) */
+  --shadow-card: 0 4px 32px rgba(74, 44, 138, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-code: 0 0 24px rgba(212, 164, 42, 0.08);
+  --shadow-winner: 0 0 48px rgba(212, 164, 42, 0.25);
+  --shadow-glow: 0 0 14px rgba(212, 164, 42, 0.4);
+  --shadow-glow-strong: 0 0 18px rgba(212, 164, 42, 0.5);
+
+  /* Text-shadow glow utilities */
+  --text-shadow-glow: 0 0 24px rgba(212, 164, 42, 0.45);
+  --text-shadow-glow-strong: 0 0 20px rgba(212, 164, 42, 0.5);
 }
 
 body {

@@ -54,13 +54,10 @@ export default function LobbyView({
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-purple-900/20 blur-3xl" />
+        <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
       </div>
 
-      <h1
-        className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase z-10"
-        style={{ textShadow: '0 0 24px rgba(212,164,42,0.45)' }}
-      >
+      <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase z-10 text-shadow-glow">
         Lorcana Lore Tracker
       </h1>
 
@@ -83,7 +80,7 @@ export default function LobbyView({
             <button
               type="submit"
               disabled={joining || !name.trim()}
-              className="min-h-[44px] rounded-xl bg-gradient-to-r from-gold to-gold-bright px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
+              className="min-h-[44px] rounded-xl bg-gradient-to-r from-gold to-gold-bright px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {joining ? 'Joining…' : 'Join'}
             </button>
@@ -182,7 +179,7 @@ export default function LobbyView({
               <button
                 onClick={() => onStart(controlMode, loreTarget)}
                 disabled={!canStart || starting}
-                className="rounded-xl bg-gradient-to-r from-gold to-gold-bright px-8 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
+                className="rounded-xl bg-gradient-to-r from-gold to-gold-bright px-8 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {starting ? 'Starting…' : 'Start game'}
               </button>
