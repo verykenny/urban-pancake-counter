@@ -7,7 +7,7 @@ Players keep the app open on their phones for the length of a game. Without inte
 ## Behavior
 
 - While the user is on the game route (`/game/[id]` — lobby and active play), the screen is kept awake.
-- The lock is re-acquired automatically when the page becomes visible again (the OS releases a wake lock whenever the tab/app is backgrounded or the device is locked, so returning to the tab must re-request it).
+- The lock is re-acquired automatically in two situations: (1) when the page becomes visible again after being backgrounded, and (2) when the browser/OS releases the sentinel mid-session (iOS releases the sentinel when it would normally dim the screen — the `release` event on the sentinel triggers a fresh re-request so the screen stays on).
 - The lock is released when the user leaves the game route (component unmount).
 - Where the API is unavailable or the request is denied (older browsers, low battery, no user activation), it silently does nothing — pure progressive enhancement, never an error or blocking prompt.
 
