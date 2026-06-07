@@ -13,6 +13,7 @@ interface Player {
   name: string;
   score: number;
   color: string;
+  avatarName: string | null;
 }
 
 interface GameState {
@@ -140,14 +141,14 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     };
   }, [id]);
 
-  async function handleJoin(name: string) {
+  async function handleJoin(name: string, avatarName: string | null) {
     setJoining(true);
     setError('');
     try {
       const res = await fetch(`/api/game/${id}/join`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ playerId, name }),
+        body: JSON.stringify({ playerId, name, avatarName }),
       });
       if (!res.ok) {
         const { error: err } = (await res.json()) as { error: string };

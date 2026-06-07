@@ -44,7 +44,7 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 | 17 | Session auto-expiry | ✅ Done (Redis TTL) | `features/state-sync.md` |
 | 18 | Spectator mode | 🚫 Won't do | — |
 | 19 | Host transfer | ✅ Done | `features/host-transfer.md` |
-| 20 | Avatar selection | 🔲 Not started | `features/avatar-selection.md` |
+| 20 | Avatar selection | ✅ Done (initials) | `features/avatar-selection.md` |
 
 **Notes:**
 - **17 (auto-expiry)** is satisfied by the Upstash Redis TTL (`SESSION_TTL = 86400`, refreshed on every write). The 60-minute in-memory cleanup from the original spec is obsolete now that state lives in Redis; 24h is kept so paused games survive.
