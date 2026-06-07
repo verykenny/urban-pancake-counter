@@ -30,10 +30,11 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
       : localPlayerId === player.id || delegations[player.id] === localPlayerId;
   }
 
-  function fullCard(player: Player) {
+  function fullCard(player: Player, extraClass = '') {
     return (
       <PlayerCard
         key={player.id}
+        className={extraClass}
         name={player.name}
         score={player.score}
         color={player.color}
@@ -57,35 +58,46 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
   const ownPlayer = players.find((p) => p.id === localPlayerId);
   const otherPlayers = players.filter((p) => p.id !== localPlayerId);
 
+  const opponentCards = otherPlayers.map((player) => (
+    <MiniPlayerCard
+      key={player.id}
+      name={player.name}
+      score={player.score}
+      color={player.color}
+      avatarName={player.avatarName}
+      isHost={player.id === hostPlayerId}
+      canControl={canControl(player)}
+      locked={locked}
+      onIncrement={() => onScoreChange(player.id, 1)}
+      onDecrement={() => onScoreChange(player.id, -1)}
+    />
+  ));
+
   return (
-    <>
-      {/* Tablet / desktop — uniform grid */}
-      <div className="hidden sm:grid sm:grid-cols-2 gap-6">
+    <div className="score-board flex flex-1 flex-col">
+      {/* Tablet / desktop (and narrow landscape via globals.css) — uniform grid */}
+      <div className="score-grid hidden sm:grid sm:grid-cols-2 gap-6">
         {players.map((player) => fullCard(player))}
       </div>
 
-      {/* Mobile — own card hero + compact others row */}
-      <div className="flex flex-col gap-4 sm:hidden">
-        {ownPlayer && fullCard(ownPlayer)}
-        {otherPlayers.length > 0 && (
-          <div className="flex gap-3">
-            {otherPlayers.map((player) => (
-              <MiniPlayerCard
-                key={player.id}
-                name={player.name}
-                score={player.score}
-                color={player.color}
-                avatarName={player.avatarName}
-                isHost={player.id === hostPlayerId}
-                canControl={canControl(player)}
-                locked={locked}
-                onIncrement={() => onScoreChange(player.id, 1)}
-                onDecrement={() => onScoreChange(player.id, -1)}
-              />
-            ))}
+      {/* Mobile portrait — own card hero (~60%) + opponents row (~40%) */}
+      {ownPlayer ? (
+        <div className="score-stack flex flex-1 flex-col gap-4 sm:hidden">
+          <div className="score-panel flex min-h-0 flex-[3]">
+            {fullCard(ownPlayer, 'h-full w-full justify-center')}
           </div>
-        )}
-      </div>
-    </>
+          {opponentCards.length > 0 && (
+            <div className="opponents-row flex min-h-0 flex-[2] gap-3 overflow-x-auto snap-x snap-mandatory">
+              {opponentCards}
+            </div>
+          )}
+        </div>
+      ) : (
+        /* Local player not yet in players[] (stale mid-join) — uniform grid fallback */
+        <div className="score-stack grid grid-cols-1 gap-4 sm:hidden">
+          {players.map((player) => fullCard(player))}
+        </div>
+      )}
+    </div>
   );
 }
