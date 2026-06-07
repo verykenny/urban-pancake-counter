@@ -282,9 +282,13 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
         </div>
 
-        <h1 className="z-10 max-sm:px-14 text-center font-[family-name:var(--font-display)] text-base sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
-          Lorcana Lore Tracker
-        </h1>
+        <div className="z-10 flex w-full items-center">
+          <span className="w-12 shrink-0 sm:hidden" aria-hidden="true" />
+          <h1 className="flex-1 text-center font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
+            Lorcana Lore Tracker
+          </h1>
+          <span className="w-12 shrink-0 sm:hidden" aria-hidden="true" />
+        </div>
 
         {/* Game code — inline on desktop; on mobile it moves into the menu */}
         <div className="hidden flex-col items-center gap-3 sm:flex">

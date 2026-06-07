@@ -76,9 +76,13 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Game menu"
-        className="game-menu-trigger fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-ink-border bg-ink-mid text-2xl leading-none text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+        className="game-menu-trigger fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-ink-border bg-ink-mid text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
       >
-        ⋮
+        <svg width="4" height="18" viewBox="0 0 4 18" fill="currentColor" aria-hidden="true">
+          <circle cx="2" cy="2" r="2" />
+          <circle cx="2" cy="9" r="2" />
+          <circle cx="2" cy="16" r="2" />
+        </svg>
       </button>
 
       {open && (
