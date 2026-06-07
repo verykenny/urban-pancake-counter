@@ -64,7 +64,7 @@ export default function Home() {
       <button
         onClick={handleCreate}
         disabled={loading}
-        className="z-10 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong disabled:opacity-40 disabled:cursor-not-allowed"
+        className="z-10 rounded-xl bg-gold px-6 py-3 font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Create game
       </button>

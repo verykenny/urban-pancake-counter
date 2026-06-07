@@ -316,7 +316,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             {playerId === gameState.hostPlayerId ? (
               <button
                 onClick={handlePlayAgain}
-                className="mt-6 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong"
+                className="mt-6 rounded-xl bg-gold px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow"
               >
                 Play Again
               </button>
