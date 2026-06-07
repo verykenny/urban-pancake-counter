@@ -188,6 +188,9 @@ export default function LobbyView({
                   onBlur={handleLoreTargetBlur}
                   className="w-20 min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-3 py-2 text-center text-star-white focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
                 />
+                {loreTarget === 20 && (
+                  <span className="text-xs text-star-dim">(standard)</span>
+                )}
               </label>
 
               <button

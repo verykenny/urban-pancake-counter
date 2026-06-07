@@ -57,10 +57,6 @@ export default function Home() {
         Lorcana Lore Tracker
       </h1>
 
-      <p className="text-star-silver text-sm tracking-wide z-10">
-        Create a new game or enter a code to join.
-      </p>
-
       <button
         onClick={handleCreate}
         disabled={loading}
