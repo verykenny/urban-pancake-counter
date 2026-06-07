@@ -44,6 +44,8 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   const [connectionState, setConnectionState] = useState('connected');
   const prevConn = useRef('connected');
   const prevWinner = useRef<string | null>(null);
+  const pendingDeltas = useRef<Record<string, number>>({});
+  const debounceTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
 
   const winner = gameState?.winner ?? null;
   useEffect(() => {
@@ -211,7 +213,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     if (!res.ok) setError('Could not update control mode.');
   }
 
-  async function handleScoreChange(targetPlayerId: string, delta: number) {
+  function handleScoreChange(targetPlayerId: string, delta: number) {
     vibrate(10);
     setGameState((prev) => {
       if (!prev) return prev;
@@ -222,12 +224,18 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         ),
       };
     });
-    const res = await fetch('/api/score', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ gameId: id, playerId: targetPlayerId, requestingPlayerId: playerId, delta }),
-    });
-    if (!res.ok) setError('Score update failed.');
+    pendingDeltas.current[targetPlayerId] = (pendingDeltas.current[targetPlayerId] ?? 0) + delta;
+    clearTimeout(debounceTimers.current[targetPlayerId]);
+    debounceTimers.current[targetPlayerId] = setTimeout(async () => {
+      const totalDelta = pendingDeltas.current[targetPlayerId];
+      pendingDeltas.current[targetPlayerId] = 0;
+      const res = await fetch('/api/score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ gameId: id, playerId: targetPlayerId, requestingPlayerId: playerId, delta: totalDelta }),
+      });
+      if (!res.ok) setError('Score update failed.');
+    }, 400);
   }
 
   async function handlePlayAgain() {
