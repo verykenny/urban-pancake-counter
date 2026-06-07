@@ -254,13 +254,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       <main className="relative flex min-h-screen flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-96 w-96 rounded-full bg-purple-900/20 blur-3xl" />
+          <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
         </div>
 
-        <h1
-          className="z-10 font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase"
-          style={{ textShadow: '0 0 24px rgba(212,164,42,0.45)' }}
-        >
+        <h1 className="z-10 font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
           Lorcana Lore Tracker
         </h1>
 
@@ -298,17 +295,11 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Winner overlay */}
         {gameState.winner && (
-          <div
-            className="relative z-10 w-full max-w-md rounded-2xl border border-gold/40 bg-gold-bg px-8 py-8 text-center overflow-hidden"
-            style={{ boxShadow: '0 0 48px rgba(212,164,42,0.25)' }}
-          >
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-gold/40 bg-gold-bg px-8 py-8 text-center overflow-hidden shadow-winner">
             {/* Animated pulse ring */}
             <div className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-gold/25 animate-pulse" />
 
-            <p
-              className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold"
-              style={{ textShadow: '0 0 20px rgba(212,164,42,0.5)' }}
-            >
+            <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold text-shadow-glow-strong">
               {winnerPlayer?.name ?? 'Someone'} wins!
             </p>
             <p className="mt-1 text-sm text-star-silver">Reached {gameState.loreTarget} lore</p>
@@ -316,7 +307,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             {playerId === gameState.hostPlayerId ? (
               <button
                 onClick={handlePlayAgain}
-                className="mt-6 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)]"
+                className="mt-6 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong"
               >
                 Play Again
               </button>

@@ -50,13 +50,10 @@ export default function Home() {
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-purple-900/20 blur-3xl" />
+        <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
       </div>
 
-      <h1
-        className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-gold uppercase z-10"
-        style={{ textShadow: '0 0 24px rgba(212,164,42,0.45)' }}
-      >
+      <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-gold uppercase z-10 text-shadow-glow">
         Lorcana Lore Tracker
       </h1>
 
@@ -67,7 +64,7 @@ export default function Home() {
       <button
         onClick={handleCreate}
         disabled={loading}
-        className="z-10 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-[0_0_18px_rgba(212,164,42,0.5)] disabled:opacity-40 disabled:cursor-not-allowed"
+        className="z-10 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Create game
       </button>

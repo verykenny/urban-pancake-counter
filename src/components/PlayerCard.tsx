@@ -56,10 +56,7 @@ export default function PlayerCard({
   const colorGlow = `${color}66`; // ~40% opacity
 
   return (
-    <div
-      className="relative flex flex-col items-center gap-4 rounded-2xl border border-ink-border bg-ink-dark p-6 overflow-hidden"
-      style={{ boxShadow: '0 4px 32px rgba(74,44,138,0.35), inset 0 1px 0 rgba(255,255,255,0.04)' }}
-    >
+    <div className="player-card relative flex flex-col items-center gap-4 rounded-2xl border border-ink-border bg-ink-dark p-6 overflow-hidden shadow-card">
       {/* Top color accent strip */}
       <div
         className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
@@ -79,7 +76,7 @@ export default function PlayerCard({
 
       {/* Delegate badge */}
       {delegateName && (
-        <span className="rounded-full border border-ink-border bg-purple-900/30 px-3 py-0.5 text-xs text-star-silver">
+        <span className="rounded-full border border-ink-border bg-ambient/30 px-3 py-0.5 text-xs text-star-silver">
           Delegated to {delegateName}
         </span>
       )}
@@ -104,7 +101,7 @@ export default function PlayerCard({
         <button
           onClick={onIncrement}
           disabled={disabled}
-          className="flex h-16 w-16 sm:h-14 sm:w-14 items-center justify-center rounded-xl bg-gold text-2xl font-bold text-ink-deep hover:bg-gold-bright hover:shadow-[0_0_14px_rgba(212,164,42,0.4)] transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex h-16 w-16 sm:h-14 sm:w-14 items-center justify-center rounded-xl bg-gold text-2xl font-bold text-ink-deep hover:bg-gold-bright hover:shadow-glow transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
         >
           +
         </button>

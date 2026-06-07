@@ -28,7 +28,7 @@ export default function MiniPlayerCard({
   const colorGlow = `${color}66`;
 
   return (
-    <div className="relative flex flex-1 min-w-0 flex-col items-center gap-1 rounded-xl border border-ink-border bg-ink-dark p-3 overflow-hidden">
+    <div className="opponent-card relative flex flex-1 min-w-0 flex-col items-center gap-1 rounded-xl border border-ink-border bg-ink-dark p-3 overflow-hidden">
       {/* Top color accent strip */}
       <div
         className="absolute top-0 left-0 right-0 h-0.5"
