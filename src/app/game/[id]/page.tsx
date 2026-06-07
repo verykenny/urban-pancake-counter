@@ -3,6 +3,7 @@
 import { use, useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { usePlayerId } from '@/lib/usePlayerId';
+import { useWakeLock } from '@/lib/useWakeLock';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
 import ScoreBoard from '@/components/ScoreBoard';
@@ -29,6 +30,7 @@ interface GameState {
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const playerId = usePlayerId();
+  useWakeLock();
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [joining, setJoining] = useState(false);
   const [starting, setStarting] = useState(false);
@@ -249,14 +251,14 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     const winnerPlayer = gameState.players.find((p) => p.id === gameState.winner);
 
     return (
-      <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
+      <main className="relative flex min-h-screen flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="h-96 w-96 rounded-full bg-purple-900/20 blur-3xl" />
         </div>
 
         <h1
-          className="z-10 font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase"
+          className="z-10 font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase"
           style={{ textShadow: '0 0 24px rgba(212,164,42,0.45)' }}
         >
           Lorcana Lore Tracker
