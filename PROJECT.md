@@ -103,15 +103,16 @@ What works today and must keep working:
 
 ## 3. Prioritized Roadmap
 
-All items `[ ] Pending`. Phases are the intended implementation order; items inside a phase
-can ship as independent PRs.
+Phases are the intended implementation order; items inside a phase can ship as independent
+PRs. **Phase 1 shipped to `main` on 2026-06-07; Phases 2–4 pending.**
 
-### Phase 1 — UI Cleanup & Mobile Baseline (High priority)
+### Phase 1 — UI Cleanup & Mobile Baseline (High priority) — ✅ Complete (2026-06-07)
 
-- [ ] **01 — Simplify UI / Navigation** → [`specs/01-ui-navigation.md`](specs/01-ui-navigation.md)
-- [ ] **02 — Mobile-First Responsive Layout** → [`specs/02-mobile-layout.md`](specs/02-mobile-layout.md)
-- [ ] **03 — Aesthetic & UI Polish (Design Tokens)** → [`specs/03-ui-tokens.md`](specs/03-ui-tokens.md)
-- [ ] **04 — Screen Wake Lock API** → [`specs/04-screen-wake-lock.md`](specs/04-screen-wake-lock.md) *(already shipped on `fix-wakelock-ios`; spec = harden + document)*
+- [x] **01 — Simplify UI / Navigation** → [`specs/01-ui-navigation.md`](specs/01-ui-navigation.md) — `GameMenu` drawer; host control-mode toggle and (on mobile) the Game Code moved into it
+- [x] **02 — Mobile-First Responsive Layout** → [`specs/02-mobile-layout.md`](specs/02-mobile-layout.md) — 60/40 hero split, `100dvh` lock, fluid scores, 44px touch targets
+- [x] **03 — Aesthetic & UI Polish (Design Tokens)** → [`specs/03-ui-tokens.md`](specs/03-ui-tokens.md) — semantic/shadow/glow tokens; all inline `rgba`/`purple-900` literals migrated
+- [x] **04 — Screen Wake Lock API** → [`specs/04-screen-wake-lock.md`](specs/04-screen-wake-lock.md) — hardened: scoped to active play (`phase === 'playing' && !winner`)
+- [x] **Haptic feedback** (net-new) → `src/lib/haptics.ts` — vibration on score tap + win, with a device-local opt-out in the menu
 
 ### Phase 2 — Core Gameplay Enhancements (Medium-High priority)
 

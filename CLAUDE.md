@@ -115,3 +115,10 @@ Before planning or building any feature, read the relevant file in `specs/` (in-
 - No card management. Third-party software handles cards; this app is score-only.
 - 2–4 players per session. No spectator mode, no auth.
 - Git remote uses a project-scoped SSH key: `~/.ssh/urban_pancake_counter`. If push fails, verify the key is loaded (`ssh-add ~/.ssh/urban_pancake_counter`).
+
+---
+
+## Lessons Learned
+
+- Device-local UI state (themes, haptics, history) → `localStorage`, never Redis/Pusher.
+- Shell defaults to Node 12 — source nvm before any npm command.
