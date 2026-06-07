@@ -2,12 +2,15 @@
 
 import { useState } from 'react';
 import GameCode from './GameCode';
+import Avatar from './Avatar';
+import { CHAMPIONS } from '@/lib/champions';
 
 interface Player {
   id: string;
   name: string;
   score: number;
   color: string;
+  avatarName: string | null;
 }
 
 interface LobbyViewProps {
@@ -15,7 +18,7 @@ interface LobbyViewProps {
   players: Player[];
   localPlayerId: string;
   hostPlayerId: string;
-  onJoin: (name: string) => void;
+  onJoin: (name: string, avatarName: string | null) => void;
   onStart: (controlMode: 'host' | 'self', loreTarget: number) => void;
   onTransferHost: (newHostPlayerId: string) => void;
   joining: boolean;
@@ -34,6 +37,7 @@ export default function LobbyView({
   starting,
 }: LobbyViewProps) {
   const [name, setName] = useState('');
+  const [champion, setChampion] = useState<string | null>(null);
   const [controlMode, setControlMode] = useState<'host' | 'self'>('self');
   const [loreTarget, setLoreTarget] = useState(20);
   const isInLobby = players.some((p) => p.id === localPlayerId);
@@ -43,7 +47,7 @@ export default function LobbyView({
   function handleJoin(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = name.trim();
-    if (trimmed) onJoin(trimmed);
+    if (trimmed) onJoin(trimmed, champion);
   }
 
   return (
@@ -84,6 +88,23 @@ export default function LobbyView({
               {joining ? 'Joining…' : 'Join'}
             </button>
           </div>
+
+          <p className="mt-2 text-xs uppercase tracking-widest text-star-silver">Choose your champion</p>
+          <div className="grid w-full grid-cols-4 gap-3 max-h-48 overflow-y-auto sm:grid-cols-6">
+            {CHAMPIONS.map((c) => (
+              <button
+                key={c}
+                type="button"
+                onClick={() => setChampion((prev) => (prev === c ? null : c))}
+                title={c}
+                className={`flex items-center justify-center rounded-full transition-all duration-150 ${
+                  champion === c ? 'ring-2 ring-gold' : 'opacity-80 hover:opacity-100'
+                }`}
+              >
+                <Avatar name={c} avatarName={c} color="#3a2a60" size={48} />
+              </button>
+            ))}
+          </div>
         </form>
       ) : (
         <div className="z-10 flex flex-col items-center gap-6">
@@ -94,6 +115,7 @@ export default function LobbyView({
                 className="flex items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 py-3"
                 style={{ borderLeftColor: p.color, borderLeftWidth: '3px' }}
               >
+                <Avatar name={p.name} avatarName={p.avatarName} color={p.color} size={32} />
                 <span className="font-medium flex-1 text-star-white">{p.name}</span>
                 {p.id === hostPlayerId && (
                   <span className="text-xs font-bold uppercase tracking-widest text-gold">host</span>

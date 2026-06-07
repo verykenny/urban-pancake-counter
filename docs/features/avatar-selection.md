@@ -4,6 +4,24 @@ Players choose a Lorcana character avatar when entering their name in the lobby.
 
 ---
 
+## ✅ Shipped — resolved decision (initials placeholder)
+
+The licensing question below was resolved by **not displaying any card art**. Instead:
+
+- The picker shows a grid of champion **monogram tiles** built from a static list of
+  character names in `src/lib/champions.ts` (text only — no images, no `lorcana-api.com`
+  fetch, no copyright/trademark exposure to card art).
+- Selection is optional. The chosen champion is stored as `avatarName: string | null` on the
+  `Player` record (not `avatarUrl`).
+- Avatars render via `src/components/Avatar.tsx`: a circle bordered in the player's color
+  containing the champion's initials, falling back to the player-name initial when no
+  champion is selected.
+- Used in the lobby picker, lobby player rows, and the `PlayerCard` header.
+
+The sections below are the original spec, retained for context.
+
+---
+
 ## Behavior
 
 - The lobby join form (name entry step) gains an avatar picker below the name input

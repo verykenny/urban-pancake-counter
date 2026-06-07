@@ -7,16 +7,17 @@ export async function POST(
   { params }: { params: Promise<{ id: string }> }
 ): Promise<Response> {
   const { id } = await params;
-  const { playerId, name } = (await req.json().catch(() => ({}))) as {
+  const { playerId, name, avatarName } = (await req.json().catch(() => ({}))) as {
     playerId?: string;
     name?: string;
+    avatarName?: string | null;
   };
 
   if (!playerId || !name?.trim()) {
     return Response.json({ error: 'playerId and name required' }, { status: 400 });
   }
 
-  const result = await addPlayer(id, playerId, name.trim());
+  const result = await addPlayer(id, playerId, name.trim(), avatarName ?? null);
 
   if (!result.ok) {
     const status = result.reason === 'not_found' ? 404 : result.reason === 'full' ? 409 : 400;

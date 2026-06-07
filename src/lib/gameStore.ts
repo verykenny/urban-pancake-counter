@@ -6,6 +6,7 @@ export interface Player {
   name: string;
   score: number;
   color: string;
+  avatarName: string | null;
 }
 
 export interface GameState {
@@ -58,7 +59,8 @@ export async function getSession(code: string): Promise<GameState | null> {
 export async function addPlayer(
   code: string,
   playerId: string,
-  name: string
+  name: string,
+  avatarName: string | null = null
 ): Promise<
   | { ok: true; player: Player; session: GameState }
   | { ok: false; reason: 'not_found' | 'full' | 'already_joined' }
@@ -72,6 +74,7 @@ export async function addPlayer(
     name,
     score: 0,
     color: COLORS[session.players.length],
+    avatarName,
   };
   session.players.push(player);
   await redis.set(key(code), session, { ex: SESSION_TTL });
