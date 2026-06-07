@@ -50,6 +50,15 @@ export default function LobbyView({
     if (trimmed) onJoin(trimmed, champion);
   }
 
+  function handleLoreTargetChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const raw = Number(e.target.value);
+    if (!Number.isNaN(raw)) setLoreTarget(raw);
+  }
+
+  function handleLoreTargetBlur() {
+    setLoreTarget((v) => Math.min(200, Math.max(1, v || 1)));
+  }
+
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
       {/* Ambient glow */}
@@ -80,7 +89,7 @@ export default function LobbyView({
             <button
               type="submit"
               disabled={joining || !name.trim()}
-              className="min-h-[44px] rounded-xl bg-gradient-to-r from-gold to-gold-bright px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong disabled:opacity-40 disabled:cursor-not-allowed"
+              className="min-h-[44px] rounded-xl bg-gold px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {joining ? 'Joining…' : 'Join'}
             </button>
@@ -110,9 +119,13 @@ export default function LobbyView({
             {players.map((p) => (
               <div
                 key={p.id}
-                className="flex items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 py-3"
-                style={{ borderLeftColor: p.color, borderLeftWidth: '3px' }}
+                className="relative flex items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 py-3 overflow-hidden"
               >
+                {/* Top color accent strip — matches PlayerCard pattern */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-0.5 rounded-t-xl"
+                  style={{ background: p.color }}
+                />
                 <Avatar avatarName={p.avatarName} color={p.color} size={32} />
                 <span className="font-medium flex-1 text-star-white">{p.name}</span>
                 {p.id === hostPlayerId && (
@@ -171,7 +184,8 @@ export default function LobbyView({
                   min={1}
                   max={200}
                   value={loreTarget}
-                  onChange={(e) => setLoreTarget(Number(e.target.value))}
+                  onChange={handleLoreTargetChange}
+                  onBlur={handleLoreTargetBlur}
                   className="w-20 min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-3 py-2 text-center text-star-white focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
                 />
               </label>
@@ -179,7 +193,7 @@ export default function LobbyView({
               <button
                 onClick={() => onStart(controlMode, loreTarget)}
                 disabled={!canStart || starting}
-                className="rounded-xl bg-gradient-to-r from-gold to-gold-bright px-8 py-3 font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong disabled:opacity-40 disabled:cursor-not-allowed"
+                className="rounded-xl bg-gold px-8 py-3 font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {starting ? 'Starting…' : 'Start game'}
               </button>
