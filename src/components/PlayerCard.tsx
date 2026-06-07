@@ -96,14 +96,14 @@ export default function PlayerCard({
         <button
           onClick={onDecrement}
           disabled={disabled || score === 0}
-          className={`flex items-center justify-center rounded-xl border border-ink-border bg-ink-mid font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-20 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
+          className={`flex items-center justify-center rounded-xl border border-ink-border bg-ink-mid font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >
           −
         </button>
         <button
           onClick={onIncrement}
           disabled={disabled}
-          className={`flex items-center justify-center rounded-xl bg-gold font-bold text-ink-deep hover:bg-gold-bright hover:shadow-glow transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-20 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
+          className={`flex items-center justify-center rounded-xl bg-gold font-bold text-ink-deep hover:bg-gold-bright hover:shadow-glow transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >
           +
         </button>
