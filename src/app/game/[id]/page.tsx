@@ -269,14 +269,17 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           Lorcana Lore Tracker
         </h1>
 
-        {/* Game code */}
-        <GameCode code={id} />
-        <p className="z-10 -mt-4 text-xs uppercase tracking-widest text-star-dim">
+        {/* Game code — inline on desktop; on mobile it moves into the menu */}
+        <div className="hidden flex-col items-center gap-3 sm:flex">
+          <GameCode code={id} />
+        </div>
+        <p className="z-10 text-xs uppercase tracking-widest text-star-dim sm:-mt-4">
           First to {gameState.loreTarget} lore
         </p>
 
         {/* Secondary actions live in the menu (host control mode, future toggles) */}
         <GameMenu
+          gameCode={id}
           isHost={playerId === gameState.hostPlayerId}
           controlMode={gameState.controlMode}
           onModeChange={handleModeChange}
