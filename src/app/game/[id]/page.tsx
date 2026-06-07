@@ -212,7 +212,16 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   }
 
   async function handleScoreChange(targetPlayerId: string, delta: number) {
-    vibrate(10); // local initiator only — remote clients update via Pusher, not here
+    vibrate(10);
+    setGameState((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        players: prev.players.map((p) =>
+          p.id === targetPlayerId ? { ...p, score: p.score + delta } : p
+        ),
+      };
+    });
     const res = await fetch('/api/score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
