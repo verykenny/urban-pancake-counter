@@ -117,7 +117,6 @@ PRs. **Phase 1 shipped to `main` on 2026-06-07; Phases 2–4 pending.**
 ### Phase 2 — Core Gameplay Enhancements (Medium-High priority)
 
 - [ ] **05 — Pre-Game Player Reordering** → [`specs/05-player-reordering.md`](specs/05-player-reordering.md)
-- [ ] **06 — Quick-Tap Lore Modifiers (`+2`/`+3`)** → [`specs/06-lore-modifiers.md`](specs/06-lore-modifiers.md)
 - [ ] **07 — Lore Race Tracker Progress Bar** → [`specs/07-progress-bar.md`](specs/07-progress-bar.md)
 - [ ] **08 — Turn Tracker & Stopwatch Timer** → [`specs/08-turn-timer.md`](specs/08-turn-timer.md)
 
