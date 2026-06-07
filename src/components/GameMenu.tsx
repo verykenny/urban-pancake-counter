@@ -153,7 +153,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
 
             {hapticsSupported() && (
               <section className="game-menu-section flex flex-col gap-2">
-                <h3 className="text-xs uppercase tracking-widest text-star-dim">Display</h3>
+                <h3 className="text-xs uppercase tracking-widest text-star-dim">Feedback</h3>
                 <button
                   type="button"
                   role="menuitemcheckbox"
@@ -173,6 +173,14 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
                 </button>
               </section>
             )}
+            <section className="game-menu-section flex flex-col gap-2 border-t border-ink-border pt-4">
+              <a
+                href="/"
+                className="flex min-h-[44px] items-center rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+              >
+                Leave game
+              </a>
+            </section>
           </div>
         </>
       )}
