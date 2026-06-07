@@ -58,7 +58,7 @@ export default function PlayerCard({
   const colorGlow = `${color}66`; // ~40% opacity
 
   return (
-    <div className={`player-card relative flex flex-col items-center gap-4 rounded-2xl border border-ink-border bg-ink-dark p-6 overflow-hidden shadow-card ${className ?? ''}`}>
+    <div className={`player-card relative flex flex-col items-center gap-4 rounded-2xl border border-ink-border bg-ink-dark p-6 shadow-card ${className ?? ''}`}>
       {/* Top color accent strip */}
       <div
         className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"

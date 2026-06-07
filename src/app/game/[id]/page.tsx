@@ -267,7 +267,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
   const reconnecting = connectionState === 'unavailable' || connectionState === 'disconnected';
   const reconnectingBanner = reconnecting ? (
-    <p className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
+    <p role="status" aria-live="polite" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
       Reconnecting…
     </p>
   ) : null;
@@ -316,12 +316,17 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             {playerId === gameState.hostPlayerId ? (
               <button
                 onClick={handlePlayAgain}
-                className="mt-6 rounded-xl bg-gradient-to-r from-gold to-gold-bright px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:shadow-glow-strong"
+                className="mt-6 rounded-xl bg-gold px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow"
               >
-                Play Again
+                Play again
               </button>
             ) : (
-              <p className="mt-4 text-sm text-star-dim animate-pulse">Waiting for host to start a new game…</p>
+              <div className="mt-4 flex flex-col items-center gap-3">
+                <p className="text-sm text-star-dim animate-pulse">Waiting for host to start a new game…</p>
+                <a href="/" className="text-xs text-star-dim hover:text-star-silver underline underline-offset-2 transition-colors duration-200">
+                  Leave game
+                </a>
+              </div>
             )}
           </div>
         )}
@@ -341,7 +346,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {error && (
-          <p className="z-[60] fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+          <p role="alert" aria-live="assertive" className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
             {error}
           </p>
         )}
@@ -353,7 +358,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   return (
     <>
       {error && (
-        <p className="fixed top-4 left-1/2 -translate-x-1/2 z-50 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+        <p role="alert" aria-live="assertive" className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
           {error}
         </p>
       )}
