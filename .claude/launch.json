@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "bash",
+      "runtimeArgs": ["-c", "source \"$HOME/.nvm/nvm.sh\" && nvm use >/dev/null && exec npm run dev"],
+      "port": 3000
+    }
+  ]
+}
