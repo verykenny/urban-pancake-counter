@@ -37,14 +37,18 @@ Lorcana lore score tracker for 2–4 players. Players join a shared real-time se
 
 | # | Feature | Status | Doc |
 |---|---|---|---|
-| 13 | QR code for session join | 🔲 Not started | `features/session-sharing.md` |
-| 14 | Player color differentiation | 🔲 Not started | `features/player-setup.md` |
-| 15 | Win animation | 🔲 Not started | `features/win-condition.md` |
-| 16 | Configurable lore target | 🔲 Not started | `features/win-condition.md` |
-| 17 | Session auto-expiry | 🔲 Not started | `features/state-sync.md` |
-| 18 | Spectator mode | 🔲 Not started | — |
-| 19 | Host transfer | 🔲 Not started | `features/host-transfer.md` |
-| 20 | Avatar selection | 🔲 Not started | `features/avatar-selection.md` |
+| 13 | QR code for session join | ✅ Done | `features/session-sharing.md` |
+| 14 | Player color differentiation | ✅ Done | `features/player-setup.md` |
+| 15 | Win animation | ✅ Done | `features/win-condition.md` |
+| 16 | Configurable lore target | ✅ Done | `features/win-condition.md` |
+| 17 | Session auto-expiry | ✅ Done (Redis TTL) | `features/state-sync.md` |
+| 18 | Spectator mode | 🚫 Won't do | — |
+| 19 | Host transfer | ✅ Done | `features/host-transfer.md` |
+| 20 | Avatar selection | ✅ Done (initials) | `features/avatar-selection.md` |
+
+**Notes:**
+- **17 (auto-expiry)** is satisfied by the Upstash Redis TTL (`SESSION_TTL = 86400`, refreshed on every write). The 60-minute in-memory cleanup from the original spec is obsolete now that state lives in Redis; 24h is kept so paused games survive.
+- **18 (spectator mode)** is **won't-do** — it conflicts with the "No spectator mode" constraint in `CLAUDE.md`.
 
 ---
 

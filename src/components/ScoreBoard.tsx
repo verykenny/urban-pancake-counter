@@ -7,6 +7,7 @@ interface Player {
   name: string;
   score: number;
   color: string;
+  avatarName: string | null;
 }
 
 interface ScoreBoardProps {
@@ -36,6 +37,7 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
             name={player.name}
             score={player.score}
             color={player.color}
+            avatarName={player.avatarName}
             onIncrement={() => onScoreChange(player.id, 1)}
             onDecrement={() => onScoreChange(player.id, -1)}
             disabled={!canControl || locked}

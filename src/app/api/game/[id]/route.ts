@@ -15,6 +15,7 @@ export async function GET(
       controlMode: session.controlMode,
       delegations: session.delegations,
       winner: session.winner,
+      loreTarget: session.loreTarget,
     });
   }
   return Response.json({ exists: false }, { status: 404 });
