@@ -8,6 +8,7 @@ import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
 import ScoreBoard from '@/components/ScoreBoard';
 import GameCode from '@/components/GameCode';
+import GameMenu from '@/components/GameMenu';
 
 interface Player {
   id: string;
@@ -242,7 +243,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
   const reconnecting = connectionState === 'unavailable' || connectionState === 'disconnected';
   const reconnectingBanner = reconnecting ? (
-    <p className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
+    <p className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
       Reconnecting…
     </p>
   ) : null;
@@ -257,7 +258,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
         </div>
 
-        <h1 className="z-10 font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
+        <h1 className="z-10 max-sm:px-14 text-center font-[family-name:var(--font-display)] text-base sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
           Lorcana Lore Tracker
         </h1>
 
@@ -267,31 +268,12 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           First to {gameState.loreTarget} lore
         </p>
 
-        {/* Control mode toggle (host only) */}
-        {playerId === gameState.hostPlayerId && (
-          <div className="z-10 flex flex-col sm:flex-row bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
-            <button
-              onClick={() => handleModeChange('self')}
-              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
-                gameState.controlMode === 'self'
-                  ? 'bg-ink-border text-star-white shadow-sm'
-                  : 'text-star-dim hover:text-star-silver'
-              }`}
-            >
-              Players control own
-            </button>
-            <button
-              onClick={() => handleModeChange('host')}
-              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
-                gameState.controlMode === 'host'
-                  ? 'bg-ink-border text-star-white shadow-sm'
-                  : 'text-star-dim hover:text-star-silver'
-              }`}
-            >
-              Host controls all
-            </button>
-          </div>
-        )}
+        {/* Secondary actions live in the menu (host control mode, future toggles) */}
+        <GameMenu
+          isHost={playerId === gameState.hostPlayerId}
+          controlMode={gameState.controlMode}
+          onModeChange={handleModeChange}
+        />
 
         {/* Winner overlay */}
         {gameState.winner && (
@@ -332,7 +314,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {error && (
-          <p className="z-10 fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+          <p className="z-[60] fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
             {error}
           </p>
         )}
