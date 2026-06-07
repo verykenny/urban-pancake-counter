@@ -2,14 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { hapticsEnabled, hapticsSupported, setHapticsEnabled, vibrate } from '@/lib/haptics';
+import GameCode from '@/components/GameCode';
 
 interface GameMenuProps {
+  gameCode: string;
   isHost: boolean;
   controlMode: 'host' | 'self';
   onModeChange: (mode: 'host' | 'self') => void;
 }
 
-export default function GameMenu({ isHost, controlMode, onModeChange }: GameMenuProps) {
+export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }: GameMenuProps) {
   const [open, setOpen] = useState(false);
   const [hapticsOn, setHapticsOn] = useState(hapticsEnabled);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -103,6 +105,14 @@ export default function GameMenu({ isHost, controlMode, onModeChange }: GameMenu
                 ✕
               </button>
             </div>
+
+            {/* Session code lives here on mobile; it stays inline on desktop */}
+            <section className="game-menu-section flex flex-col items-center gap-2 sm:hidden">
+              <h3 className="self-start text-xs uppercase tracking-widest text-star-dim">
+                Session
+              </h3>
+              <GameCode code={gameCode} />
+            </section>
 
             <section className="game-menu-section flex flex-col gap-2">
               <h3 className="text-xs uppercase tracking-widest text-star-dim">Game</h3>
