@@ -3,19 +3,57 @@
 import { useEffect, useRef, useState } from 'react';
 import { hapticsEnabled, hapticsSupported, setHapticsEnabled, vibrate } from '@/lib/haptics';
 import GameCode from '@/components/GameCode';
+import Avatar from '@/components/Avatar';
+
+interface Player {
+  id: string;
+  name: string;
+  color: string;
+  avatarName: string | null;
+}
 
 interface GameMenuProps {
   gameCode: string;
   isHost: boolean;
   controlMode: 'host' | 'self';
   onModeChange: (mode: 'host' | 'self') => void;
+  players: Player[];
+  localPlayerId: string;
+  delegations: Record<string, string | null>;
+  onTransferHost: (newHostPlayerId: string) => void;
+  onDelegate: (delegatePlayerId: string | null) => void;
 }
 
-export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }: GameMenuProps) {
+export default function GameMenu({
+  gameCode,
+  isHost,
+  controlMode,
+  onModeChange,
+  players,
+  localPlayerId,
+  delegations,
+  onTransferHost,
+  onDelegate,
+}: GameMenuProps) {
   const [open, setOpen] = useState(false);
   const [hapticsOn, setHapticsOn] = useState(hapticsEnabled);
+  const [confirmTransferTarget, setConfirmTransferTarget] = useState<string | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
+
+  function handleClose() {
+    setOpen(false);
+    setConfirmTransferTarget(null);
+  }
+
+  const otherPlayers = players.filter((p) => p.id !== localPlayerId);
+  const isInGame = players.some((p) => p.id === localPlayerId);
+  const myDelegateId = delegations[localPlayerId] ?? null;
+  const myDelegateName = players.find((p) => p.id === myDelegateId)?.name ?? null;
+  const confirmTarget = players.find((p) => p.id === confirmTransferTarget);
+
+  const showPlayersSection =
+    (isHost && otherPlayers.length > 0) || (controlMode === 'self' && isInGame && otherPlayers.length > 0);
 
   useEffect(() => {
     if (!open) return;
@@ -31,7 +69,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
 
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') {
-        setOpen(false);
+        handleClose();
         return;
       }
       if (e.key === 'Tab') {
@@ -59,6 +97,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
       document.body.style.overflow = prevOverflow;
       trigger?.focus();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   function modeButtonClass(active: boolean) {
@@ -90,7 +129,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
           <div
             className="fixed inset-0 z-40 bg-ink-deep/60"
             aria-hidden="true"
-            onClick={() => setOpen(false)}
+            onClick={handleClose}
           />
           <div
             ref={drawerRef}
@@ -102,7 +141,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
               <h2 className="font-[family-name:var(--font-display)] text-lg text-gold">Menu</h2>
               <button
                 type="button"
-                onClick={() => setOpen(false)}
+                onClick={handleClose}
                 aria-label="Close menu"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-star-silver transition-colors duration-200 hover:bg-ink-mid hover:text-star-white"
               >
@@ -110,7 +149,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
               </button>
             </div>
 
-            {/* Session code lives here on mobile; it stays inline on desktop */}
+            {/* Session code — mobile only */}
             <section className="game-menu-section flex flex-col items-center gap-2 sm:hidden">
               <h3 className="self-start text-xs uppercase tracking-widest text-star-dim">
                 Session
@@ -118,6 +157,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
               <GameCode code={gameCode} />
             </section>
 
+            {/* Game settings */}
             <section className="game-menu-section flex flex-col gap-2">
               <h3 className="text-xs uppercase tracking-widest text-star-dim">Game</h3>
               {isHost ? (
@@ -128,7 +168,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
                     aria-checked={controlMode === 'self'}
                     onClick={() => {
                       onModeChange('self');
-                      setOpen(false);
+                      handleClose();
                     }}
                     className={modeButtonClass(controlMode === 'self')}
                   >
@@ -140,7 +180,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
                     aria-checked={controlMode === 'host'}
                     onClick={() => {
                       onModeChange('host');
-                      setOpen(false);
+                      handleClose();
                     }}
                     className={modeButtonClass(controlMode === 'host')}
                   >
@@ -155,6 +195,109 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
               )}
             </section>
 
+            {/* Players — host transfer + delegation */}
+            {showPlayersSection && (
+              <section className="game-menu-section flex flex-col gap-3">
+                <h3 className="text-xs uppercase tracking-widest text-star-dim">Players</h3>
+
+                {/* Host transfer */}
+                {isHost && otherPlayers.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    {confirmTransferTarget ? (
+                      <div className="rounded-xl border border-gold/30 bg-gold-bg p-4 flex flex-col gap-3">
+                        <div className="flex items-center gap-2">
+                          <Avatar avatarName={confirmTarget?.avatarName ?? null} color={confirmTarget?.color ?? '#d4a42a'} size={28} />
+                          <div>
+                            <p className="text-sm font-medium text-star-white">
+                              Transfer host to {confirmTarget?.name}?
+                            </p>
+                            <p className="text-xs text-star-silver mt-0.5">
+                              You'll lose host controls for this session.
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              onTransferHost(confirmTransferTarget);
+                              handleClose();
+                            }}
+                            className="flex-1 min-h-[40px] rounded-lg bg-gold px-3 text-sm font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright"
+                          >
+                            Transfer host
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setConfirmTransferTarget(null)}
+                            className="flex-1 min-h-[40px] rounded-lg border border-ink-border bg-ink-mid px-3 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border"
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        <p className="text-xs text-star-silver">Transfer host to:</p>
+                        {otherPlayers.map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setConfirmTransferTarget(p.id)}
+                            className="flex min-h-[44px] items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                          >
+                            <Avatar avatarName={p.avatarName} color={p.color} size={24} />
+                            {p.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Delegation — only in self-control mode */}
+                {controlMode === 'self' && isInGame && otherPlayers.length > 0 && (
+                  <div className="flex flex-col gap-2">
+                    <p className="text-xs text-star-silver">
+                      {myDelegateName
+                        ? `${myDelegateName} is controlling your score.`
+                        : 'Let another player control your score:'}
+                    </p>
+                    {myDelegateName ? (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          onDelegate(null);
+                          handleClose();
+                        }}
+                        className="flex min-h-[44px] items-center justify-center rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                      >
+                        Reclaim control
+                      </button>
+                    ) : (
+                      <div className="flex flex-col gap-1">
+                        {otherPlayers.map((p) => (
+                          <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => {
+                              onDelegate(p.id);
+                              handleClose();
+                            }}
+                            className="flex min-h-[44px] items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                          >
+                            <Avatar avatarName={p.avatarName} color={p.color} size={24} />
+                            {p.name}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </section>
+            )}
+
+            {/* Haptics */}
             {hapticsSupported() && (
               <section className="game-menu-section flex flex-col gap-2">
                 <h3 className="text-xs uppercase tracking-widest text-star-dim">Feedback</h3>
@@ -177,6 +320,7 @@ export default function GameMenu({ gameCode, isHost, controlMode, onModeChange }
                 </button>
               </section>
             )}
+
             <section className="game-menu-section flex flex-col gap-2 border-t border-ink-border pt-4">
               <a
                 href="/"
