@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { hapticsEnabled, hapticsSupported, setHapticsEnabled, vibrate } from '@/lib/haptics';
 
 interface GameMenuProps {
   isHost: boolean;
@@ -10,6 +11,7 @@ interface GameMenuProps {
 
 export default function GameMenu({ isHost, controlMode, onModeChange }: GameMenuProps) {
   const [open, setOpen] = useState(false);
+  const [hapticsOn, setHapticsOn] = useState(hapticsEnabled);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
 
@@ -138,6 +140,29 @@ export default function GameMenu({ isHost, controlMode, onModeChange }: GameMenu
                 </p>
               )}
             </section>
+
+            {hapticsSupported() && (
+              <section className="game-menu-section flex flex-col gap-2">
+                <h3 className="text-xs uppercase tracking-widest text-star-dim">Display</h3>
+                <button
+                  type="button"
+                  role="menuitemcheckbox"
+                  aria-checked={hapticsOn}
+                  onClick={() => {
+                    const next = !hapticsOn;
+                    setHapticsOn(next);
+                    setHapticsEnabled(next);
+                    if (next) vibrate(10);
+                  }}
+                  className="flex min-h-[44px] items-center justify-between rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border"
+                >
+                  <span>Haptic feedback</span>
+                  <span className={hapticsOn ? 'font-semibold text-gold' : 'text-star-dim'}>
+                    {hapticsOn ? 'On' : 'Off'}
+                  </span>
+                </button>
+              </section>
+            )}
           </div>
         </>
       )}

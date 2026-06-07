@@ -4,6 +4,7 @@ import { use, useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { usePlayerId } from '@/lib/usePlayerId';
 import { useWakeLock } from '@/lib/useWakeLock';
+import { vibrate } from '@/lib/haptics';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
 import ScoreBoard from '@/components/ScoreBoard';
@@ -53,6 +54,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         origin: { y: 0.4 },
         colors: ['#d4a42a', '#f0c040', '#ede8ff'],
       });
+      vibrate([60, 40, 60]);
     }
     prevWinner.current = winner;
   }, [winner]);
@@ -210,6 +212,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   }
 
   async function handleScoreChange(targetPlayerId: string, delta: number) {
+    vibrate(10); // local initiator only — remote clients update via Pusher, not here
     const res = await fetch('/api/score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
