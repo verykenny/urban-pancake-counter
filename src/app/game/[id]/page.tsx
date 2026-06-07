@@ -251,7 +251,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     const winnerPlayer = gameState.players.find((p) => p.id === gameState.winner);
 
     return (
-      <main className="relative flex min-h-screen flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
+      <main className="relative flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
@@ -317,7 +317,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           </div>
         )}
 
-        <div className="z-10 w-full max-w-2xl">
+        <div className="z-10 flex w-full max-w-2xl flex-1 flex-col sm:flex-none">
           <ScoreBoard
             players={gameState.players}
             onScoreChange={handleScoreChange}
