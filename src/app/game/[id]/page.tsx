@@ -267,7 +267,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
   const reconnecting = connectionState === 'unavailable' || connectionState === 'disconnected';
   const reconnectingBanner = reconnecting ? (
-    <p className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
+    <p className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
       Reconnecting…
     </p>
   ) : null;
@@ -345,7 +345,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {error && (
-          <p className="z-[60] fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+          <p className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
             {error}
           </p>
         )}
