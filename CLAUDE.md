@@ -32,7 +32,7 @@ Always run `nvm use` before `npm run dev` to avoid Node version errors.
 
 ## Environment Variables
 
-Fill in `.env.local` with values from the Pusher dashboard (see `docs/PROJECT.md` for account info):
+Fill in `.env.local` with values from the Pusher dashboard (see `PROJECT.md` for account info):
 
 ```
 PUSHER_APP_ID=
@@ -79,8 +79,9 @@ Never commit `.env.local`.
 | `src/app/api/score/route.ts` | API route — broadcasts score updates |
 | `src/components/PlayerCard.tsx` | Single player score panel |
 | `src/components/ScoreBoard.tsx` | Grid of PlayerCards |
-| `docs/PROJECT.md` | Status tracker, open decisions, external accounts |
-| `docs/features/` | One file per feature — open questions and proposed approach |
+| `PROJECT.md` | Master tracker — v2 roadmap, migration context, v1 status, external accounts |
+| `specs/` | One file per in-flight v2 feature — user story, integration, technical logic |
+| `completed-feature-docs/` | Archived specs for shipped v1 features |
 
 ---
 
@@ -96,7 +97,7 @@ Never commit `.env.local`.
 
 ## Project Docs
 
-Before planning or building any feature, read the relevant file in `docs/features/`. Each file has open questions that must be resolved before implementation begins. Update `docs/PROJECT.md` status when a feature is complete.
+Before planning or building any feature, read the relevant file in `specs/` (in-flight v2 work) or `completed-feature-docs/` (shipped v1 reference). Each spec has open questions and integration notes that must be resolved before implementation begins. Update the roadmap status in `PROJECT.md` when a feature is complete.
 
 ---
 

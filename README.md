@@ -64,4 +64,6 @@ Real-time lore score tracker for 2–4 players. Create a session, share the code
 
 ## Project Docs
 
-Feature specs and project status live in [`docs/PROJECT.md`](docs/PROJECT.md).
+Project status, the v2 roadmap, and migration context live in [`PROJECT.md`](PROJECT.md).
+In-flight feature specs are in [`specs/`](specs/); shipped v1 specs are archived in
+[`completed-feature-docs/`](completed-feature-docs/).
