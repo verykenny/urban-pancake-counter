@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-07T00:00:00Z",
+  "title": "Design System: Lorcana Lore Tracker",
+  "extensions": {
+    "colorMeta": {
+      "ink-deep":     { "role": "neutral",   "displayName": "Void Deep",     "canonical": "oklch(8% 0.04 290)",  "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(36% 0.10 290)", "oklch(55% 0.07 290)", "oklch(78% 0.04 290)"] },
+      "ink-dark":     { "role": "neutral",   "displayName": "Void Dark",     "canonical": "oklch(12% 0.06 290)", "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(36% 0.10 290)", "oklch(55% 0.07 290)", "oklch(78% 0.04 290)"] },
+      "ink-mid":      { "role": "neutral",   "displayName": "Void Mid",      "canonical": "oklch(18% 0.09 290)", "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(36% 0.10 290)", "oklch(55% 0.07 290)", "oklch(78% 0.04 290)"] },
+      "ink-border":   { "role": "neutral",   "displayName": "Void Border",   "canonical": "oklch(26% 0.11 290)", "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(36% 0.10 290)", "oklch(55% 0.07 290)", "oklch(78% 0.04 290)"] },
+      "gold":         { "role": "primary",   "displayName": "Void Flame",    "canonical": "oklch(70% 0.14 85)",  "tonalRamp": ["oklch(15% 0.05 85)", "oklch(25% 0.08 85)", "oklch(35% 0.10 85)", "oklch(45% 0.12 85)", "oklch(55% 0.13 85)", "oklch(70% 0.14 85)", "oklch(82% 0.12 85)", "oklch(93% 0.05 85)"] },
+      "gold-bright":  { "role": "primary",   "displayName": "Bright Flame",  "canonical": "oklch(82% 0.12 85)",  "tonalRamp": ["oklch(15% 0.05 85)", "oklch(25% 0.08 85)", "oklch(35% 0.10 85)", "oklch(45% 0.12 85)", "oklch(55% 0.13 85)", "oklch(70% 0.14 85)", "oklch(82% 0.12 85)", "oklch(93% 0.05 85)"] },
+      "gold-muted":   { "role": "secondary", "displayName": "Gold Muted",    "canonical": "oklch(38% 0.09 75)",  "tonalRamp": ["oklch(15% 0.04 75)", "oklch(25% 0.06 75)", "oklch(38% 0.09 75)", "oklch(50% 0.10 75)", "oklch(62% 0.11 75)", "oklch(72% 0.10 75)", "oklch(83% 0.07 75)", "oklch(93% 0.03 75)"] },
+      "star-white":   { "role": "neutral",   "displayName": "Star White",    "canonical": "oklch(94% 0.03 290)", "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(36% 0.10 290)", "oklch(64% 0.07 290)", "oklch(94% 0.03 290)"] },
+      "star-silver":  { "role": "neutral",   "displayName": "Star Silver",   "canonical": "oklch(64% 0.07 290)", "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(36% 0.10 290)", "oklch(64% 0.07 290)", "oklch(94% 0.03 290)"] },
+      "star-dim":     { "role": "neutral",   "displayName": "Star Dim",      "canonical": "oklch(40% 0.06 290)", "tonalRamp": ["oklch(5% 0.03 290)", "oklch(8% 0.04 290)", "oklch(12% 0.06 290)", "oklch(18% 0.09 290)", "oklch(26% 0.11 290)", "oklch(40% 0.06 290)", "oklch(64% 0.07 290)", "oklch(94% 0.03 290)"] },
+      "ambient":      { "role": "tertiary",  "displayName": "Ambient",       "canonical": "oklch(38.1% 0.176 305)", "tonalRamp": ["oklch(10% 0.08 305)", "oklch(18% 0.12 305)", "oklch(28% 0.15 305)", "oklch(38% 0.18 305)", "oklch(50% 0.16 305)", "oklch(62% 0.13 305)", "oklch(74% 0.09 305)", "oklch(88% 0.04 305)"] },
+      "error":        { "role": "error",     "displayName": "Danger Rose",   "canonical": "oklch(62% 0.18 10)",  "tonalRamp": ["oklch(15% 0.07 10)", "oklch(25% 0.10 10)", "oklch(38% 0.14 10)", "oklch(50% 0.17 10)", "oklch(62% 0.18 10)", "oklch(72% 0.15 10)", "oklch(82% 0.10 10)", "oklch(93% 0.04 10)"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display / Title", "purpose": "Game title only. Never used on UI labels, buttons, data." },
+      "score":   { "displayName": "Score Numeral",   "purpose": "Live score value on PlayerCard. The dominant typographic element at all times." },
+      "body":    { "displayName": "Body / UI",       "purpose": "All interface text: player names, instructions, status messages, lobby copy." },
+      "label":   { "displayName": "Label / Badge",   "purpose": "Short uppercase identifiers: HOST badge, DELEGATE TO, OR divider. Max 4 words." }
+    },
+    "shadows": [
+      { "name": "card-ambient",    "value": "0 4px 32px rgba(74,44,138,0.35), inset 0 1px 0 rgba(255,255,255,0.04)", "purpose": "All PlayerCard surfaces. Purple-tinted outer; white inset top edge." },
+      { "name": "gold-glow",       "value": "0 0 14px rgba(212,164,42,0.4)",                                         "purpose": "Primary button hover; active score numeral glow." },
+      { "name": "gold-glow-strong","value": "0 0 18px rgba(212,164,42,0.5)",                                         "purpose": "Winner state, final CTA." },
+      { "name": "code-ambient",    "value": "0 0 24px rgba(212,164,42,0.08)",                                        "purpose": "Game code display. Very low intensity warm wash." },
+      { "name": "winner-halo",     "value": "0 0 48px rgba(212,164,42,0.25)",                                        "purpose": "Winning player card at end-of-game. Extended diffuse halo." },
+      { "name": "avatar-glow",     "value": "0 0 12px <playerColor>55",                                             "purpose": "Avatar border glow. Color is dynamic (player's assigned hex at 33% opacity)." }
+    ],
+    "motion": [
+      { "name": "ease-state",  "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "All interactive state transitions (hover, focus, active). 200ms." },
+      { "name": "score-pop",   "value": "cubic-bezier(0, 0, 0.2, 1)",   "purpose": "Score numeral change. 150ms scale pop on increment; reduced motion: instant." },
+      { "name": "winner-fade", "value": "cubic-bezier(0.4, 0, 0.2, 1)", "purpose": "Winner halo fade-in. 400ms. Reduced motion: instant opacity switch." }
+    ],
+    "breakpoints": [
+      { "name": "sm",  "value": "640px",  "note": "Score controls switch from oversized (own-card tap) to standard size." },
+      { "name": "landscape-narrow", "value": "orientation: landscape and max-width: 639px", "note": "Narrow landscape phones: switch from vertical 60/40 score stack to side-by-side grid." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary action: Create game, submit score, confirm. Gold fill, ink-deep text.",
+      "html": "<button class=\"ds-btn-primary\">Create game</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; background: #d4a42a; color: #0d0a1a; font-family: Geist, system-ui, sans-serif; font-size: 1rem; font-weight: 700; padding: 12px 24px; border: none; border-radius: 12px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: #f0c040; box-shadow: 0 0 14px rgba(212,164,42,0.4); } .ds-btn-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212,164,42,0.5); } .ds-btn-primary:disabled { opacity: 0.3; cursor: not-allowed; box-shadow: none; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action: Join game, cancel. Transparent with gold border.",
+      "html": "<button class=\"ds-btn-ghost\">Join</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; background: transparent; color: #d4a42a; font-family: Geist, system-ui, sans-serif; font-size: 1rem; font-weight: 600; padding: 10px 20px; border: 1px solid #d4a42a; border-radius: 12px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4,0,0.2,1); } .ds-btn-ghost:hover { background: rgba(212,164,42,0.1); } .ds-btn-ghost:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212,164,42,0.4); } .ds-btn-ghost:disabled { opacity: 0.3; cursor: not-allowed; }"
+    },
+    {
+      "name": "Score Increment Button",
+      "kind": "button",
+      "refersTo": "button-score-increment",
+      "description": "Own-card score control: +1. Oversized touch target on mobile.",
+      "html": "<button class=\"ds-btn-score-inc\">+</button>",
+      "css": ".ds-btn-score-inc { display: flex; align-items: center; justify-content: center; background: #d4a42a; color: #0d0a1a; font-family: Geist, system-ui, sans-serif; font-size: 1.875rem; font-weight: 700; width: 112px; height: 80px; border: none; border-radius: 12px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4,0,0.2,1), box-shadow 0.2s cubic-bezier(0.4,0,0.2,1); } .ds-btn-score-inc:hover { background: #f0c040; box-shadow: 0 0 14px rgba(212,164,42,0.4); } .ds-btn-score-inc:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212,164,42,0.5); } .ds-btn-score-inc:disabled { opacity: 0.3; cursor: not-allowed; } @media (min-width: 640px) { .ds-btn-score-inc { width: 64px; height: 64px; font-size: 1.5rem; } }"
+    },
+    {
+      "name": "Score Decrement Button",
+      "kind": "button",
+      "refersTo": "button-score-decrement",
+      "description": "Own-card score control: -1. Void Mid fill, silver text.",
+      "html": "<button class=\"ds-btn-score-dec\">−</button>",
+      "css": ".ds-btn-score-dec { display: flex; align-items: center; justify-content: center; background: #241a40; color: #9d91c0; font-family: Geist, system-ui, sans-serif; font-size: 1.875rem; font-weight: 700; width: 112px; height: 80px; border: 1px solid #3a2a60; border-radius: 12px; cursor: pointer; transition: background 0.2s cubic-bezier(0.4,0,0.2,1); } .ds-btn-score-dec:hover { background: #3a2a60; } .ds-btn-score-dec:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(212,164,42,0.4); } .ds-btn-score-dec:disabled { opacity: 0.3; cursor: not-allowed; } @media (min-width: 640px) { .ds-btn-score-dec { width: 64px; height: 64px; font-size: 1.5rem; } }"
+    },
+    {
+      "name": "Game Code Input",
+      "kind": "input",
+      "refersTo": "input-game-code",
+      "description": "6-character game code entry. Void Mid bg, gold focus ring.",
+      "html": "<input class=\"ds-input-code\" type=\"text\" placeholder=\"Game code\" maxlength=\"6\" />",
+      "css": ".ds-input-code { width: 100%; min-height: 44px; background: #241a40; color: #ede8ff; font-family: Geist Mono, monospace; font-size: 1rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 16px; border: 1px solid #3a2a60; border-radius: 12px; outline: none; box-sizing: border-box; transition: border-color 0.2s, box-shadow 0.2s; } .ds-input-code::placeholder { color: #5a4f78; } .ds-input-code:focus { border-color: rgba(212,164,42,0.6); box-shadow: 0 0 0 2px rgba(212,164,42,0.4); }"
+    },
+    {
+      "name": "Player Card",
+      "kind": "card",
+      "refersTo": "card-player",
+      "description": "Score display surface for one player. Top accent strip in player color; score numeral in player color.",
+      "html": "<div class=\"ds-card-player\"><div class=\"ds-card-player__strip\" style=\"background:#7e57c2\"></div><div class=\"ds-card-player__body\"><span class=\"ds-card-player__name\">Merida</span><span class=\"ds-card-player__score\" style=\"color:#7e57c2\">12</span><div class=\"ds-card-player__controls\"><button class=\"ds-btn-score-dec\">−</button><button class=\"ds-btn-score-inc\">+</button></div></div></div>",
+      "css": ".ds-card-player { position: relative; display: flex; flex-direction: column; align-items: center; gap: 16px; background: #16102b; border: 1px solid #3a2a60; border-radius: 24px; padding: 24px; overflow: hidden; box-shadow: 0 4px 32px rgba(74,44,138,0.35), inset 0 1px 0 rgba(255,255,255,0.04); } .ds-card-player__strip { position: absolute; top: 0; left: 0; right: 0; height: 4px; border-radius: 24px 24px 0 0; } .ds-card-player__body { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 4px; } .ds-card-player__name { font-family: Geist, system-ui, sans-serif; font-size: 1.125rem; font-weight: 600; color: #ede8ff; } .ds-card-player__score { font-family: Geist, system-ui, sans-serif; font-size: clamp(4.5rem, 22vw, 9rem); font-weight: 800; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; } .ds-card-player__controls { display: flex; gap: 12px; }"
+    },
+    {
+      "name": "Host Badge",
+      "kind": "chip",
+      "refersTo": "chip-badge",
+      "description": "Identity marker on PlayerCard indicating the game host.",
+      "html": "<span class=\"ds-badge-host\">Host</span>",
+      "css": ".ds-badge-host { display: inline-flex; align-items: center; background: rgba(212,164,42,0.15); color: #d4a42a; font-family: Geist, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 2px 12px; border-radius: 9999px; }"
+    },
+    {
+      "name": "Avatar",
+      "kind": "custom",
+      "refersTo": "card-player",
+      "description": "Circular player identifier. Ink Mid bg, player-color border with soft glow, Lorcana inkwell SVG.",
+      "html": "<span class=\"ds-avatar\" style=\"--player-color:#7e57c2\"><svg width=\"26\" height=\"28\" viewBox=\"0 0 36 51\" xmlns=\"http://www.w3.org/2000/svg\" style=\"color:var(--player-color);fill-rule:evenodd;clip-rule:evenodd\"><g transform=\"matrix(1,0,0,1,-667.223,-730.659)\"><g transform=\"matrix(1,0,0,1,0.0725875,4.84594)\"><path d=\"M684.751,776.316C679.531,766.153 669.424,759.951 667.532,758.854C667.459,758.814 667.41,758.741 667.399,758.659C667.388,758.576 667.417,758.494 667.477,758.436C683.783,742.652 684.746,725.813 684.746,725.813C684.917,727.005 686.442,743.26 702.414,758.679C702.414,758.679 690.568,765.125 684.819,776.449L684.751,776.316Z\" fill=\"currentColor\"/></g></g></svg></span>",
+      "css": ".ds-avatar { display: flex; flex-shrink: 0; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 9999px; background: #241a40; border: 2px solid var(--player-color, #d4a42a); box-shadow: 0 0 12px color-mix(in srgb, var(--player-color, #d4a42a) 33%, transparent); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Enchanted Ledger",
+    "overview": "This is a record-keeper's instrument from inside the Lorcana world. Every design decision stems from a single premise: a player should be able to glance at the screen mid-game, read the scores immediately, and look away. The darkness is not atmosphere for its own sake; it is the condition under which this app is actually used: dim rooms, card-game tables, ambient light from above. Gold on void is the highest-contrast pairing available, and that is why it is the only pairing that matters here.\n\nThe design rejects warmth, friendliness, and decoration. There are no gradients for pleasure, no rounded-corner cuteness, no animation that doesn't mark a meaningful event. The interface earns the word 'enchanted' through restraint, not through effect: the score numerals float in darkness, massive and immediate, and the controls are exactly large enough to hit without looking. Everything else disappears.\n\nThe 'Void and Flame' palette character is the emotional spine. The ink palette is cold and deep, purple-shifted rather than warm-black. Gold cuts through it like fire; it is not an accent but a primary signal — every time it appears it means 'this matters.' The system holds this polarity without compromise.",
+    "keyCharacteristics": [
+      "Scores dominate at all breakpoints; layout subordinates everything else to the numeral",
+      "Single accent color (gold) used exclusively for primary actions and winner states",
+      "Typography pairing: Cinzel (display/ceremonial) + Geist (UI/data); never mixed within a functional element",
+      "Elevation through glow and shadow, not raised surfaces or blur",
+      "Motion marks state, not decoration; 200ms maximum on all transitions",
+      "Tap targets are oversized for own-card controls, recognizing the use context"
+    ],
+    "rules": [
+      { "name": "The One Flame Rule",          "body": "Gold (#d4a42a) appears on ≤15% of any screen surface. Its high chroma is its signal value; saturation everywhere is signal nowhere.",              "section": "colors" },
+      { "name": "The Cold Void Rule",          "body": "Background surfaces are never warm. No amber, cream, or brown tones in the neutral ramp. The only warmth in the palette is gold.",              "section": "colors" },
+      { "name": "The Cinzel Quarantine Rule",  "body": "Cinzel is the game-world font. Geist is the UI font. They must not appear in the same functional element.",                                     "section": "typography" },
+      { "name": "The Score Primacy Rule",      "body": "The score numeral is the largest typographic element on the game screen at all times. No heading, badge, or label may visually compete with it.", "section": "typography" },
+      { "name": "The Emit, Don't Raise Rule",  "body": "Shadows mark light emission, not physical elevation. Flat-colored drop shadows are prohibited.",                                                  "section": "elevation" }
+    ],
+    "dos": [
+      "Do size own-card score buttons at 112×80px (mobile) so they can be hit with a thumb during play without looking at the screen.",
+      "Do use tabular-nums on every score numeral to prevent layout shift when numbers change.",
+      "Do use --score-size-hero (clamp(4.5rem, 22vw, 9rem)) for scores so they remain dominant across all screen widths.",
+      "Do use player-assigned colors exclusively for the score numeral, the top accent strip on PlayerCard, and the Avatar border/glow.",
+      "Do apply prefers-reduced-motion alternatives to all score animations and state transitions.",
+      "Do use Cinzel only for the game title. All other UI text uses Geist.",
+      "Do verify contrast on star-silver text against ink-dark at every new use.",
+      "Do keep gold to ≤15% of screen surface area.",
+      "Do use position: fixed or the popover API for any dropdown to escape overflow clipping on card containers."
+    ],
+    "donts": [
+      "Don't use warm neutral backgrounds (cream, sand, paper, parchment).",
+      "Don't use gradient text (background-clip: text). A solid gold on void is harder.",
+      "Don't add a colored border-left or border-right stripe greater than 1px as an accent on cards or list items.",
+      "Don't use Cinzel for labels, button text, badge text, or score numbers.",
+      "Don't use glassmorphism or backdrop-blur as a default surface treatment.",
+      "Don't build decorative animations. No page-load choreography, no staggered card entrances.",
+      "Don't build the interface to look like a generic SaaS dashboard: white cards, metric grids, clean serif headings.",
+      "Don't make the UI feel like a mobile game: neon fills, aggressive gradients, casino-style reward animations.",
+      "Don't use star-dim (#5a4f78) for any body text or labeling that needs to pass AA.",
+      "Don't place interactive controls where the score numeral belongs."
+    ]
+  }
+}
