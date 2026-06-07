@@ -298,12 +298,17 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           First to {gameState.loreTarget} lore
         </p>
 
-        {/* Secondary actions live in the menu (host control mode, future toggles) */}
+        {/* Secondary actions live in the menu (host control mode, players, future toggles) */}
         <GameMenu
           gameCode={id}
           isHost={playerId === gameState.hostPlayerId}
           controlMode={gameState.controlMode}
           onModeChange={handleModeChange}
+          players={gameState.players}
+          localPlayerId={playerId}
+          delegations={gameState.delegations}
+          onTransferHost={handleTransferHost}
+          onDelegate={(delegatePlayerId) => handleDelegate(playerId, delegatePlayerId)}
         />
 
         {/* Winner overlay */}
@@ -343,8 +348,6 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             hostPlayerId={gameState.hostPlayerId}
             controlMode={gameState.controlMode}
             delegations={gameState.delegations}
-            onTransferHost={handleTransferHost}
-            onDelegate={handleDelegate}
             locked={!!gameState.winner}
           />
         </div>

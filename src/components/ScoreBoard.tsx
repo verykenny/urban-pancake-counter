@@ -18,12 +18,10 @@ interface ScoreBoardProps {
   hostPlayerId: string;
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>;
-  onDelegate: (playerId: string, delegatePlayerId: string | null) => void;
-  onTransferHost: (newHostPlayerId: string) => void;
   locked?: boolean;
 }
 
-export default function ScoreBoard({ players, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, onDelegate, onTransferHost, locked = false }: ScoreBoardProps) {
+export default function ScoreBoard({ players, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, locked = false }: ScoreBoardProps) {
   function canControl(player: Player) {
     return controlMode === 'host'
       ? localPlayerId === hostPlayerId
@@ -44,13 +42,7 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
         disabled={!canControl(player) || locked}
         isOwnCard={localPlayerId === player.id}
         isHost={player.id === hostPlayerId}
-        canTransferHost={localPlayerId === hostPlayerId && player.id !== localPlayerId}
-        onTransferHost={() => onTransferHost(player.id)}
-        canDelegate={controlMode === 'self'}
-        currentDelegate={delegations[player.id] ?? null}
         delegateName={players.find((p) => p.id === delegations[player.id])?.name ?? null}
-        otherPlayers={players.filter((p) => p.id !== player.id)}
-        onDelegate={(delegatePlayerId) => onDelegate(player.id, delegatePlayerId)}
       />
     );
   }
