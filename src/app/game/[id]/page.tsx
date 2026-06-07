@@ -4,10 +4,12 @@ import { use, useEffect, useRef, useState } from 'react';
 import confetti from 'canvas-confetti';
 import { usePlayerId } from '@/lib/usePlayerId';
 import { useWakeLock } from '@/lib/useWakeLock';
+import { vibrate } from '@/lib/haptics';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
 import ScoreBoard from '@/components/ScoreBoard';
 import GameCode from '@/components/GameCode';
+import GameMenu from '@/components/GameMenu';
 
 interface Player {
   id: string;
@@ -30,8 +32,12 @@ interface GameState {
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const playerId = usePlayerId();
-  useWakeLock();
   const [gameState, setGameState] = useState<GameState | null>(null);
+  // Hold the wake lock only during active play — releases in the lobby, in the
+  // post-win idle state (phase stays 'playing' after a win, so gate on winner
+  // too), and when leaving the route (the hook releases on `active` flipping
+  // false via its effect cleanup).
+  useWakeLock(gameState?.phase === 'playing' && !gameState?.winner);
   const [joining, setJoining] = useState(false);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState('');
@@ -48,6 +54,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         origin: { y: 0.4 },
         colors: ['#d4a42a', '#f0c040', '#ede8ff'],
       });
+      vibrate([60, 40, 60]);
     }
     prevWinner.current = winner;
   }, [winner]);
@@ -205,6 +212,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   }
 
   async function handleScoreChange(targetPlayerId: string, delta: number) {
+    vibrate(10); // local initiator only — remote clients update via Pusher, not here
     const res = await fetch('/api/score', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -242,7 +250,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
   const reconnecting = connectionState === 'unavailable' || connectionState === 'disconnected';
   const reconnectingBanner = reconnecting ? (
-    <p className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
+    <p className="fixed bottom-4 left-1/2 z-[60] -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
       Reconnecting…
     </p>
   ) : null;
@@ -251,13 +259,13 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     const winnerPlayer = gameState.players.find((p) => p.id === gameState.winner);
 
     return (
-      <main className="relative flex min-h-screen flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
+      <main className="relative flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
           <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
         </div>
 
-        <h1 className="z-10 font-[family-name:var(--font-display)] text-xl sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
+        <h1 className="z-10 max-sm:px-14 text-center font-[family-name:var(--font-display)] text-base sm:text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
           Lorcana Lore Tracker
         </h1>
 
@@ -267,31 +275,12 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           First to {gameState.loreTarget} lore
         </p>
 
-        {/* Control mode toggle (host only) */}
-        {playerId === gameState.hostPlayerId && (
-          <div className="z-10 flex flex-col sm:flex-row bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
-            <button
-              onClick={() => handleModeChange('self')}
-              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
-                gameState.controlMode === 'self'
-                  ? 'bg-ink-border text-star-white shadow-sm'
-                  : 'text-star-dim hover:text-star-silver'
-              }`}
-            >
-              Players control own
-            </button>
-            <button
-              onClick={() => handleModeChange('host')}
-              className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
-                gameState.controlMode === 'host'
-                  ? 'bg-ink-border text-star-white shadow-sm'
-                  : 'text-star-dim hover:text-star-silver'
-              }`}
-            >
-              Host controls all
-            </button>
-          </div>
-        )}
+        {/* Secondary actions live in the menu (host control mode, future toggles) */}
+        <GameMenu
+          isHost={playerId === gameState.hostPlayerId}
+          controlMode={gameState.controlMode}
+          onModeChange={handleModeChange}
+        />
 
         {/* Winner overlay */}
         {gameState.winner && (
@@ -317,7 +306,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           </div>
         )}
 
-        <div className="z-10 w-full max-w-2xl">
+        <div className="z-10 flex w-full max-w-2xl flex-1 flex-col sm:flex-none">
           <ScoreBoard
             players={gameState.players}
             onScoreChange={handleScoreChange}
@@ -332,7 +321,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         </div>
 
         {error && (
-          <p className="z-10 fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
+          <p className="z-[60] fixed top-4 left-1/2 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
             {error}
           </p>
         )}

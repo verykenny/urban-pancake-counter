@@ -28,7 +28,7 @@ export default function MiniPlayerCard({
   const colorGlow = `${color}66`;
 
   return (
-    <div className="opponent-card relative flex flex-1 min-w-0 flex-col items-center gap-1 rounded-xl border border-ink-border bg-ink-dark p-3 overflow-hidden">
+    <div className="opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center justify-center gap-1 rounded-xl border border-ink-border bg-ink-dark p-3 overflow-hidden">
       {/* Top color accent strip */}
       <div
         className="absolute top-0 left-0 right-0 h-0.5"
@@ -44,7 +44,7 @@ export default function MiniPlayerCard({
       )}
 
       <span
-        className="text-3xl font-extrabold tabular-nums"
+        className="text-[length:var(--score-size-mini)] font-extrabold tabular-nums leading-none"
         style={{ color, textShadow: `0 0 12px ${colorGlow}` }}
       >
         {score}
@@ -55,14 +55,14 @@ export default function MiniPlayerCard({
           <button
             onClick={onDecrement}
             disabled={locked || score === 0}
-            className="flex h-9 w-9 items-center justify-center rounded-lg border border-ink-border bg-ink-mid text-lg font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-ink-border bg-ink-mid text-lg font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             −
           </button>
           <button
             onClick={onIncrement}
             disabled={locked}
-            className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold text-lg font-bold text-ink-deep hover:bg-gold-bright transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex h-11 w-11 items-center justify-center rounded-lg bg-gold text-lg font-bold text-ink-deep hover:bg-gold-bright transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             +
           </button>

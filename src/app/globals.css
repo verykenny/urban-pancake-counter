@@ -89,3 +89,14 @@ body {
   color: var(--star-white);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Narrow landscape phones (<640px wide): the tall 60/40 split has no vertical
+   room, so use the side-by-side grid instead. */
+@media (orientation: landscape) and (max-width: 639px) {
+  .score-stack {
+    display: none;
+  }
+  .score-grid {
+    display: grid;
+  }
+}
