@@ -68,7 +68,7 @@ export default function PlayerCard({
 
       {/* Name + host badge */}
       <div className="flex items-center gap-2 mt-1">
-        <Avatar name={name} avatarName={avatarName} color={color} size={48} />
+        <Avatar avatarName={avatarName} color={color} size={48} />
         <h2 className="text-lg font-semibold text-star-white">{name}</h2>
         {isHost && (
           <span className="rounded-full bg-gold/15 px-3 py-0.5 text-xs font-bold uppercase tracking-widest text-gold">

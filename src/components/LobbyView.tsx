@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import GameCode from './GameCode';
 import Avatar from './Avatar';
-import { CHAMPIONS } from '@/lib/champions';
+import { INK_COLORS } from '@/lib/inkColors';
 
 interface Player {
   id: string;
@@ -89,19 +89,20 @@ export default function LobbyView({
             </button>
           </div>
 
-          <p className="mt-2 text-xs uppercase tracking-widest text-star-silver">Choose your champion</p>
-          <div className="grid w-full grid-cols-4 gap-3 max-h-48 overflow-y-auto sm:grid-cols-6">
-            {CHAMPIONS.map((c) => (
+          <p className="mt-2 text-xs uppercase tracking-widest text-star-silver">Choose your ink</p>
+          <div className="grid w-full grid-cols-6 gap-3">
+            {INK_COLORS.map((ink) => (
               <button
-                key={c}
+                key={ink.key}
                 type="button"
-                onClick={() => setChampion((prev) => (prev === c ? null : c))}
-                title={c}
-                className={`flex items-center justify-center rounded-full transition-all duration-150 ${
-                  champion === c ? 'ring-2 ring-gold' : 'opacity-80 hover:opacity-100'
+                onClick={() => setChampion((prev) => (prev === ink.key ? null : ink.key))}
+                title={ink.label}
+                className={`flex flex-col items-center gap-1 rounded-xl p-2 transition-all duration-150 ${
+                  champion === ink.key ? 'ring-2 ring-gold bg-ink-mid' : 'opacity-70 hover:opacity-100'
                 }`}
               >
-                <Avatar name={c} avatarName={c} color="#3a2a60" size={48} />
+                <Avatar avatarName={ink.key} color={ink.hex} size={48} />
+                <span className="text-[10px] text-star-dim">{ink.label}</span>
               </button>
             ))}
           </div>
@@ -115,7 +116,7 @@ export default function LobbyView({
                 className="flex items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 py-3"
                 style={{ borderLeftColor: p.color, borderLeftWidth: '3px' }}
               >
-                <Avatar name={p.name} avatarName={p.avatarName} color={p.color} size={32} />
+                <Avatar avatarName={p.avatarName} color={p.color} size={32} />
                 <span className="font-medium flex-1 text-star-white">{p.name}</span>
                 {p.id === hostPlayerId && (
                   <span className="text-xs font-bold uppercase tracking-widest text-gold">host</span>

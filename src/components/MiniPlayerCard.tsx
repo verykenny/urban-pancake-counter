@@ -35,7 +35,7 @@ export default function MiniPlayerCard({
         style={{ background: color }}
       />
 
-      <Avatar name={name} avatarName={avatarName} color={color} size={28} />
+      <Avatar avatarName={avatarName} color={color} size={28} />
 
       <span className="max-w-full truncate text-xs font-medium text-star-silver">{name}</span>
 
