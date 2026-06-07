@@ -31,8 +31,12 @@ interface GameState {
 export default function GamePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const playerId = usePlayerId();
-  useWakeLock();
   const [gameState, setGameState] = useState<GameState | null>(null);
+  // Hold the wake lock only during active play — releases in the lobby, in the
+  // post-win idle state (phase stays 'playing' after a win, so gate on winner
+  // too), and when leaving the route (the hook releases on `active` flipping
+  // false via its effect cleanup).
+  useWakeLock(gameState?.phase === 'playing' && !gameState?.winner);
   const [joining, setJoining] = useState(false);
   const [starting, setStarting] = useState(false);
   const [error, setError] = useState('');
