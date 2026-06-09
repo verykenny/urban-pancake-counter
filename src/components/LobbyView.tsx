@@ -135,7 +135,7 @@ export default function LobbyView({
                   <button
                     type="button"
                     onClick={() => onTransferHost(p.id)}
-                    className="text-xs text-star-dim hover:text-gold underline underline-offset-2 transition-colors duration-200"
+                    className="min-h-[44px] inline-flex items-center text-xs text-star-dim hover:text-gold underline underline-offset-2 transition-colors duration-200"
                   >
                     Make host
                   </button>
@@ -186,7 +186,7 @@ export default function LobbyView({
                   value={loreTarget}
                   onChange={handleLoreTargetChange}
                   onBlur={handleLoreTargetBlur}
-                  className="w-20 min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-3 py-2 text-center text-star-white focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
+                  className="w-20 min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-3 py-2 text-center text-star-white focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 {loreTarget === 20 && (
                   <span className="text-xs text-star-dim">(standard)</span>

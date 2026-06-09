@@ -65,11 +65,7 @@ export default function Home() {
         Create game
       </button>
 
-      <div className="z-10 flex items-center gap-4 w-full max-w-xs">
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold-muted to-transparent" />
-        <span className="text-xs text-star-dim tracking-wider whitespace-nowrap">or join with a code</span>
-        <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gold-muted to-transparent" />
-      </div>
+      <p className="z-10 text-xs text-star-dim tracking-wider">or join with a code</p>
 
       <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
         <div className="flex w-full flex-col gap-3 sm:flex-row">

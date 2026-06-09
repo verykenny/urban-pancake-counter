@@ -38,6 +38,9 @@ export default function GameCode({ code }: GameCodeProps) {
         >
           {copied ? 'Copied!' : 'Copy code'}
         </button>
+        <span role="status" aria-live="polite" className="sr-only">
+          {copied ? 'Copied to clipboard' : ''}
+        </span>
         <button
           type="button"
           onClick={() => setShowQr((v) => !v)}
