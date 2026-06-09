@@ -32,7 +32,7 @@ export default function Avatar({ avatarName, color, size }: AvatarProps) {
     <span
       role="img"
       aria-label={avatarName ? `${avatarName} ink` : 'player'}
-      className="flex shrink-0 items-center justify-center rounded-full bg-ink-mid"
+      className="flex shrink-0 items-center justify-center rounded-full bg-raised"
       style={{
         width: size,
         height: size,

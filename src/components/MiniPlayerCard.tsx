@@ -28,7 +28,7 @@ export default function MiniPlayerCard({
   const colorGlow = `${color}40`;
 
   return (
-    <div className="opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center justify-center gap-1 rounded-xl border border-ink-border bg-ink-dark p-3 overflow-hidden">
+    <div className="opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center justify-center gap-1 rounded-xl border border-line bg-surface p-3 overflow-hidden">
       {/* Top color accent strip */}
       <div
         className="absolute top-0 left-0 right-0 h-0.5"
@@ -37,10 +37,10 @@ export default function MiniPlayerCard({
 
       <Avatar avatarName={avatarName} color={color} size={28} />
 
-      <span className="max-w-full truncate text-xs font-medium text-star-silver">{name}</span>
+      <span className="max-w-full truncate text-xs font-medium text-fg-muted">{name}</span>
 
       {isHost && (
-        <span className="text-[10px] font-bold uppercase tracking-wider text-gold">Host</span>
+        <span className="text-[10px] font-bold uppercase tracking-wider text-clay">Host</span>
       )}
 
       <span
@@ -55,14 +55,14 @@ export default function MiniPlayerCard({
           <button
             onClick={onDecrement}
             disabled={locked || score === 0}
-            className="flex h-11 w-11 items-center justify-center rounded-lg border border-ink-border bg-ink-mid text-lg font-bold text-star-silver hover:bg-ink-border transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-raised text-lg font-bold text-fg-muted hover:bg-line transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             −
           </button>
           <button
             onClick={onIncrement}
             disabled={locked}
-            className="flex h-11 w-11 items-center justify-center rounded-lg bg-gold text-lg font-bold text-ink-deep hover:bg-gold-bright transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex h-11 w-11 items-center justify-center rounded-lg bg-clay text-lg font-bold text-base-deep hover:bg-clay-strong transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             +
           </button>

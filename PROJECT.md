@@ -83,9 +83,10 @@ What works today and must keep working:
 
 1. **Client-side first.** v2 is overwhelmingly front-end. Add a server route/event *only*
    when state must be shared between players (Features 05, 08). Everything else is local.
-2. **Design tokens are mandatory.** `globals.css` already defines `--ink-*`, `--gold-*`,
-   `--star-*`, `--error`. New styling references tokens; the cycle also *migrates* the
-   remaining hardcoded `rgba()`/`boxShadow`/`textShadow`/`purple-900` literals onto tokens
+2. **Design tokens are mandatory.** `globals.css` defines the warm Hearthlight ramp —
+   `--base*`, `--surface`, `--raised`, `--line`, `--fg*`, `--clay*`, `--glow`, `--danger`
+   (see `DESIGN.md`). New styling references tokens; the cycle also *migrates* any
+   remaining hardcoded `rgba()`/`boxShadow`/`textShadow` literals onto tokens
    (Feature 03). No new hardcoded color/spacing literals.
 3. **Tailwind only.** No CSS modules, no inline `style` props for anything a token/utility
    can express. (Existing inline `boxShadow` glows are migrated, not extended.)

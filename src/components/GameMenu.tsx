@@ -103,7 +103,7 @@ export default function GameMenu({
 
   function modeButtonClass(active: boolean) {
     return `min-h-[44px] rounded-lg px-4 text-sm font-medium transition-all duration-200 ${
-      active ? 'bg-ink-border text-star-white' : 'text-star-dim hover:text-star-silver'
+      active ? 'bg-line text-fg' : 'text-fg-faint hover:text-fg-muted'
     }`;
   }
 
@@ -116,7 +116,7 @@ export default function GameMenu({
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Game menu"
-        className="game-menu-trigger fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-ink-border bg-ink-mid text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+        className="game-menu-trigger fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-raised text-fg-muted transition-colors duration-200 hover:bg-line hover:text-fg"
       >
         <svg width="4" height="18" viewBox="0 0 4 18" fill="currentColor" aria-hidden="true">
           <circle cx="2" cy="2" r="2" />
@@ -128,7 +128,7 @@ export default function GameMenu({
       {open && (
         <>
           <div
-            className="fixed inset-0 z-40 bg-ink-deep/60"
+            className="fixed inset-0 z-40 bg-base-deep/60"
             aria-hidden="true"
             onClick={handleClose}
           />
@@ -136,15 +136,15 @@ export default function GameMenu({
             ref={drawerRef}
             role="menu"
             aria-label="Game menu"
-            className="game-menu game-menu-drawer fixed right-0 top-0 z-50 flex max-h-[80dvh] w-full max-w-xs flex-col gap-5 overflow-y-auto border-b border-l border-ink-border bg-ink-dark p-5 shadow-card sm:right-4 sm:top-16 sm:rounded-2xl sm:border"
+            className="game-menu game-menu-drawer fixed right-0 top-0 z-50 flex max-h-[80dvh] w-full max-w-xs flex-col gap-5 overflow-y-auto border-b border-l border-line bg-surface p-5 shadow-card sm:right-4 sm:top-16 sm:rounded-2xl sm:border"
           >
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-gold">Menu</h2>
+              <h2 className="text-lg font-semibold text-clay">Menu</h2>
               <button
                 type="button"
                 onClick={handleClose}
                 aria-label="Close menu"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-star-silver transition-colors duration-200 hover:bg-ink-mid hover:text-star-white"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-fg-muted transition-colors duration-200 hover:bg-raised hover:text-fg"
               >
                 ✕
               </button>
@@ -152,7 +152,7 @@ export default function GameMenu({
 
             {/* Session code — mobile only */}
             <section className="game-menu-section flex flex-col items-center gap-2 sm:hidden">
-              <h3 className="self-start text-xs uppercase tracking-widest text-star-dim">
+              <h3 className="self-start text-xs uppercase tracking-widest text-fg-faint">
                 Session
               </h3>
               <GameCode code={gameCode} />
@@ -160,9 +160,9 @@ export default function GameMenu({
 
             {/* Game settings */}
             <section className="game-menu-section flex flex-col gap-2">
-              <h3 className="text-xs uppercase tracking-widest text-star-dim">Game</h3>
+              <h3 className="text-xs uppercase tracking-widest text-fg-faint">Game</h3>
               {isHost ? (
-                <div className="flex flex-col gap-1 rounded-xl border border-ink-border bg-ink-mid p-1">
+                <div className="flex flex-col gap-1 rounded-xl border border-line bg-raised p-1">
                   <button
                     type="button"
                     role="menuitemradio"
@@ -189,7 +189,7 @@ export default function GameMenu({
                   </button>
                 </div>
               ) : (
-                <p className="text-sm text-star-silver">
+                <p className="text-sm text-fg-muted">
                   Scoring:{' '}
                   {controlMode === 'host' ? 'host controls all' : 'players control their own'}
                 </p>
@@ -199,20 +199,20 @@ export default function GameMenu({
             {/* Players — host transfer + delegation */}
             {showPlayersSection && (
               <section className="game-menu-section flex flex-col gap-3">
-                <h3 className="text-xs uppercase tracking-widest text-star-dim">Players</h3>
+                <h3 className="text-xs uppercase tracking-widest text-fg-faint">Players</h3>
 
                 {/* Host transfer */}
                 {isHost && otherPlayers.length > 0 && (
                   <div className="flex flex-col gap-2">
                     {confirmTransferTarget ? (
-                      <div className="rounded-xl border border-gold/30 bg-gold-bg p-4 flex flex-col gap-3">
+                      <div className="rounded-xl border border-clay/30 bg-clay-deep p-4 flex flex-col gap-3">
                         <div className="flex items-center gap-2">
-                          <Avatar avatarName={confirmTarget?.avatarName ?? null} color={confirmTarget?.color ?? '#d4a42a'} size={28} />
+                          <Avatar avatarName={confirmTarget?.avatarName ?? null} color={confirmTarget?.color ?? '#d08458'} size={28} />
                           <div>
-                            <p className="text-sm font-medium text-star-white">
+                            <p className="text-sm font-medium text-fg">
                               Transfer host to {confirmTarget?.name}?
                             </p>
-                            <p className="text-xs text-star-silver mt-0.5">
+                            <p className="text-xs text-fg-muted mt-0.5">
                               You&apos;ll lose host controls for this session.
                             </p>
                           </div>
@@ -224,14 +224,14 @@ export default function GameMenu({
                               onTransferHost(confirmTransferTarget);
                               handleClose();
                             }}
-                            className="flex-1 min-h-[40px] rounded-lg bg-gold px-3 text-sm font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright"
+                            className="flex-1 min-h-[40px] rounded-lg bg-clay px-3 text-sm font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong"
                           >
                             Transfer host
                           </button>
                           <button
                             type="button"
                             onClick={() => setConfirmTransferTarget(null)}
-                            className="flex-1 min-h-[40px] rounded-lg border border-ink-border bg-ink-mid px-3 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border"
+                            className="flex-1 min-h-[40px] rounded-lg border border-line bg-raised px-3 text-sm text-fg-muted transition-colors duration-200 hover:bg-line"
                           >
                             Cancel
                           </button>
@@ -239,13 +239,13 @@ export default function GameMenu({
                       </div>
                     ) : (
                       <div className="flex flex-col gap-1">
-                        <p className="text-xs text-star-silver">Transfer host to:</p>
+                        <p className="text-xs text-fg-muted">Transfer host to:</p>
                         {otherPlayers.map((p) => (
                           <button
                             key={p.id}
                             type="button"
                             onClick={() => setConfirmTransferTarget(p.id)}
-                            className="flex min-h-[44px] items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                            className="flex min-h-[44px] items-center gap-3 rounded-xl border border-line bg-raised px-4 text-sm text-fg-muted transition-colors duration-200 hover:bg-line hover:text-fg"
                           >
                             <Avatar avatarName={p.avatarName} color={p.color} size={24} />
                             {p.name}
@@ -259,7 +259,7 @@ export default function GameMenu({
                 {/* Delegation — only in self-control mode */}
                 {controlMode === 'self' && isInGame && otherPlayers.length > 0 && (
                   <div className="flex flex-col gap-2">
-                    <p className="text-xs text-star-silver">
+                    <p className="text-xs text-fg-muted">
                       {myDelegateName
                         ? `${myDelegateName} is controlling your score.`
                         : 'Let another player control your score:'}
@@ -271,7 +271,7 @@ export default function GameMenu({
                           onDelegate(null);
                           handleClose();
                         }}
-                        className="flex min-h-[44px] items-center justify-center rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                        className="flex min-h-[44px] items-center justify-center rounded-xl border border-line bg-raised px-4 text-sm text-fg-muted transition-colors duration-200 hover:bg-line hover:text-fg"
                       >
                         Reclaim control
                       </button>
@@ -285,7 +285,7 @@ export default function GameMenu({
                               onDelegate(p.id);
                               handleClose();
                             }}
-                            className="flex min-h-[44px] items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                            className="flex min-h-[44px] items-center gap-3 rounded-xl border border-line bg-raised px-4 text-sm text-fg-muted transition-colors duration-200 hover:bg-line hover:text-fg"
                           >
                             <Avatar avatarName={p.avatarName} color={p.color} size={24} />
                             {p.name}
@@ -301,7 +301,7 @@ export default function GameMenu({
             {/* Haptics */}
             {hapticsSupported() && (
               <section className="game-menu-section flex flex-col gap-2">
-                <h3 className="text-xs uppercase tracking-widest text-star-dim">Feedback</h3>
+                <h3 className="text-xs uppercase tracking-widest text-fg-faint">Feedback</h3>
                 <button
                   type="button"
                   role="menuitemcheckbox"
@@ -312,20 +312,20 @@ export default function GameMenu({
                     setHapticsEnabled(next);
                     if (next) vibrate(10);
                   }}
-                  className="flex min-h-[44px] items-center justify-between rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border"
+                  className="flex min-h-[44px] items-center justify-between rounded-xl border border-line bg-raised px-4 text-sm text-fg-muted transition-colors duration-200 hover:bg-line"
                 >
                   <span>Haptic feedback</span>
-                  <span className={hapticsOn ? 'font-semibold text-gold' : 'text-star-dim'}>
+                  <span className={hapticsOn ? 'font-semibold text-clay' : 'text-fg-faint'}>
                     {hapticsOn ? 'On' : 'Off'}
                   </span>
                 </button>
               </section>
             )}
 
-            <section className="game-menu-section flex flex-col gap-2 border-t border-ink-border pt-4">
+            <section className="game-menu-section flex flex-col gap-2 border-t border-line pt-4">
               <Link
                 href="/"
-                className="flex min-h-[44px] items-center rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
+                className="flex min-h-[44px] items-center rounded-xl border border-line bg-raised px-4 text-sm text-fg-muted transition-colors duration-200 hover:bg-line hover:text-fg"
               >
                 Leave game
               </Link>
