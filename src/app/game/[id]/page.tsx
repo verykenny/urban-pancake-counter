@@ -1,6 +1,7 @@
 'use client';
 
 import { use, useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import confetti from 'canvas-confetti';
 import { usePlayerId } from '@/lib/usePlayerId';
 import { useWakeLock } from '@/lib/useWakeLock';
@@ -47,20 +48,32 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   const prevWinner = useRef<string | null>(null);
   const pendingDeltas = useRef<Record<string, number>>({});
   const debounceTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
+  const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const winner = gameState?.winner ?? null;
   useEffect(() => {
     if (winner && !prevWinner.current) {
-      confetti({
-        particleCount: 140,
-        spread: 80,
-        origin: { y: 0.4 },
-        colors: ['#d4a42a', '#f0c040', '#ede8ff'],
-      });
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        confetti({
+          particleCount: 140,
+          spread: 80,
+          origin: { y: 0.4 },
+          colors: ['#d4a42a', '#f0c040', '#ede8ff'],
+        });
+      }
       vibrate([60, 40, 60]);
     }
     prevWinner.current = winner;
   }, [winner]);
+
+  useEffect(() => {
+    if (!error || !gameState) return;
+    if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+    errorTimerRef.current = setTimeout(() => setError(''), 5000);
+    return () => {
+      if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+    };
+  }, [error, gameState]);
 
   useEffect(() => {
     if (!id) return;
@@ -235,7 +248,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId: id, playerId: targetPlayerId, requestingPlayerId: playerId, delta: totalDelta }),
       });
-      if (!res.ok) setError('Score update failed.');
+      if (!res.ok) setError('Score update failed — tap +/− to retry.');
     }, 400);
   }
 
@@ -271,6 +284,24 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     <p role="status" aria-live="polite" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
       Reconnecting…
     </p>
+  ) : null;
+
+  const errorBanner = error ? (
+    <div
+      role="alert"
+      aria-live="assertive"
+      className="fixed top-4 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error"
+    >
+      <span>{error}</span>
+      <button
+        type="button"
+        onClick={() => setError('')}
+        aria-label="Dismiss error"
+        className="flex-shrink-0 rounded p-0.5 opacity-60 transition-opacity duration-150 hover:opacity-100"
+      >
+        ✕
+      </button>
+    </div>
   ) : null;
 
   if (gameState.phase === 'playing') {
@@ -355,14 +386,24 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
                 Play again
               </button>
             ) : (
-              <div className="mt-4 flex flex-col items-center gap-3">
-                <p className="text-sm text-star-dim animate-pulse">Waiting for host to start a new game…</p>
-                <a href="/" className="text-xs text-star-dim hover:text-star-silver underline underline-offset-2 transition-colors duration-200">
+              <div className="mt-6 flex flex-col items-center gap-4">
+                <p className="text-sm text-star-silver">Waiting for host to start a new game.</p>
+                <Link
+                  href="/"
+                  className="rounded-xl border border-ink-border px-5 py-2 text-sm font-medium text-star-silver transition-colors duration-200 hover:border-gold/40 hover:text-star-white"
+                >
                   Leave game
-                </a>
+                </Link>
               </div>
             )}
           </div>
+        )}
+
+        {/* Control mode indicator — mobile only; explains disabled +/− to non-host players */}
+        {!gameState.winner && gameState.controlMode === 'host' && (
+          <p className="sm:hidden z-10 rounded-full border border-ink-border bg-ink-mid px-3 py-0.5 text-xs text-star-silver">
+            {playerId === gameState.hostPlayerId ? 'You\'re scoring for everyone' : 'Host is scoring'}
+          </p>
         )}
 
         <div className="z-10 flex w-full max-w-2xl flex-1 flex-col sm:flex-none">
@@ -377,11 +418,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           />
         </div>
 
-        {error && (
-          <p role="alert" aria-live="assertive" className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
-            {error}
-          </p>
-        )}
+        {errorBanner}
         {reconnectingBanner}
       </main>
     );
@@ -389,11 +426,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
   return (
     <>
-      {error && (
-        <p role="alert" aria-live="assertive" className="fixed top-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error">
-          {error}
-        </p>
-      )}
+      {errorBanner}
       <LobbyView
         gameCode={id}
         players={gameState.players}

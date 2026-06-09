@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 import { hapticsEnabled, hapticsSupported, setHapticsEnabled, vibrate } from '@/lib/haptics';
 import GameCode from '@/components/GameCode';
 import Avatar from '@/components/Avatar';
@@ -138,7 +139,7 @@ export default function GameMenu({
             className="game-menu game-menu-drawer fixed right-0 top-0 z-50 flex max-h-[80dvh] w-full max-w-xs flex-col gap-5 overflow-y-auto border-b border-l border-ink-border bg-ink-dark p-5 shadow-card sm:right-4 sm:top-16 sm:rounded-2xl sm:border"
           >
             <div className="flex items-center justify-between">
-              <h2 className="font-[family-name:var(--font-display)] text-lg text-gold">Menu</h2>
+              <h2 className="text-lg font-semibold text-gold">Menu</h2>
               <button
                 type="button"
                 onClick={handleClose}
@@ -212,7 +213,7 @@ export default function GameMenu({
                               Transfer host to {confirmTarget?.name}?
                             </p>
                             <p className="text-xs text-star-silver mt-0.5">
-                              You'll lose host controls for this session.
+                              You&apos;ll lose host controls for this session.
                             </p>
                           </div>
                         </div>
@@ -322,12 +323,12 @@ export default function GameMenu({
             )}
 
             <section className="game-menu-section flex flex-col gap-2 border-t border-ink-border pt-4">
-              <a
+              <Link
                 href="/"
                 className="flex min-h-[44px] items-center rounded-xl border border-ink-border bg-ink-mid px-4 text-sm text-star-silver transition-colors duration-200 hover:bg-ink-border hover:text-star-white"
               >
                 Leave game
-              </a>
+              </Link>
             </section>
           </div>
         </>
