@@ -29,13 +29,13 @@ export default function PlayerCard({
   isHost,
   delegateName,
 }: PlayerCardProps) {
-  const colorGlow = `${color}66`;
+  const colorGlow = `${color}40`;
 
   return (
-    <div className={`player-card relative flex flex-col items-center gap-4 rounded-2xl border border-ink-border bg-ink-dark p-6 shadow-card ${className ?? ''}`}>
-      {/* Top color accent strip */}
+    <div className={`player-card relative flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-ink-border bg-ink-dark p-6 shadow-card ${className ?? ''}`}>
+      {/* Top color accent strip — clipped by the card's rounded corners (overflow-hidden) */}
       <div
-        className="absolute top-0 left-0 right-0 h-1 rounded-t-2xl"
+        className="absolute inset-x-0 top-0 h-1"
         style={{ background: color }}
       />
 
@@ -60,7 +60,7 @@ export default function PlayerCard({
       {/* Score */}
       <span
         className="text-[length:var(--score-size-hero)] sm:text-7xl font-extrabold tabular-nums leading-none"
-        style={{ color, textShadow: `0 0 24px ${colorGlow}` }}
+        style={{ color, textShadow: `0 0 16px ${colorGlow}` }}
       >
         {score}
       </span>
@@ -77,7 +77,7 @@ export default function PlayerCard({
         <button
           onClick={onIncrement}
           disabled={disabled}
-          className={`flex items-center justify-center rounded-xl bg-gold font-bold text-ink-deep hover:bg-gold-bright hover:shadow-glow transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
+          className={`flex items-center justify-center rounded-xl bg-gold font-bold text-ink-deep hover:bg-gold-bright transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >
           +
         </button>

@@ -63,7 +63,7 @@ export default function LobbyView({
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
+        <div className="h-96 w-96 rounded-full bg-ambient/12 blur-3xl" />
       </div>
 
       <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase z-10 text-shadow-glow">
@@ -143,7 +143,7 @@ export default function LobbyView({
               </div>
             ))}
             {players.length < 4 && (
-              <p className="text-center text-sm text-star-silver animate-pulse">
+              <p className="text-center text-sm text-star-silver">
                 Waiting for players… ({players.length}/4)
               </p>
             )}
@@ -202,7 +202,7 @@ export default function LobbyView({
               </button>
             </div>
           ) : (
-            <p className="text-star-silver text-sm animate-pulse">Waiting for host to start the game…</p>
+            <p className="text-star-silver text-sm">Waiting for host to start the game…</p>
           )}
         </div>
       )}

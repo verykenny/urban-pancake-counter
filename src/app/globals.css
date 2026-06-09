@@ -79,7 +79,7 @@
   --shadow-glow-strong: 0 0 18px rgba(212, 164, 42, 0.5);
 
   /* Text-shadow glow utilities */
-  --text-shadow-glow: 0 0 24px rgba(212, 164, 42, 0.45);
+  --text-shadow-glow: 0 0 16px rgba(212, 164, 42, 0.28);
   --text-shadow-glow-strong: 0 0 20px rgba(212, 164, 42, 0.5);
 }
 
