@@ -63,10 +63,10 @@ export default function LobbyView({
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-ambient/12 blur-3xl" />
+        <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
       </div>
 
-      <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase z-10 text-shadow-glow">
+      <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-clay uppercase z-10 text-shadow-glow">
         Lorcana Lore Tracker
       </h1>
 
@@ -75,7 +75,7 @@ export default function LobbyView({
 
       {!isInLobby ? (
         <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
-          <p className="text-star-silver text-sm">Enter your name to join the lobby.</p>
+          <p className="text-fg-muted text-sm">Enter your name to join the lobby.</p>
           <div className="flex w-full flex-col gap-3 sm:flex-row">
             <input
               type="text"
@@ -84,18 +84,18 @@ export default function LobbyView({
               placeholder="Your name"
               maxLength={20}
               autoFocus
-              className="w-full min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
+              className="w-full min-h-[44px] rounded-xl border border-line bg-raised px-4 py-2.5 text-fg placeholder:text-fg-faint focus:outline-none focus:ring-2 focus:ring-clay/40 focus:border-clay/60 transition-all duration-200"
             />
             <button
               type="submit"
               disabled={joining || !name.trim()}
-              className="min-h-[44px] rounded-xl bg-gold px-5 py-2.5 font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
+              className="min-h-[44px] rounded-xl bg-clay px-5 py-2.5 font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
             >
               {joining ? 'Joining…' : 'Join'}
             </button>
           </div>
 
-          <p className="mt-2 text-xs uppercase tracking-widest text-star-silver">Choose your ink</p>
+          <p className="mt-2 text-xs uppercase tracking-widest text-fg-muted">Choose your ink</p>
           <div className="grid w-full grid-cols-6 gap-3">
             {INK_COLORS.map((ink) => (
               <button
@@ -104,11 +104,11 @@ export default function LobbyView({
                 onClick={() => setChampion((prev) => (prev === ink.key ? null : ink.key))}
                 title={ink.label}
                 className={`flex flex-col items-center gap-1 rounded-xl p-2 transition-all duration-150 ${
-                  champion === ink.key ? 'ring-2 ring-gold bg-ink-mid' : 'opacity-70 hover:opacity-100'
+                  champion === ink.key ? 'ring-2 ring-clay bg-raised' : 'opacity-70 hover:opacity-100'
                 }`}
               >
                 <Avatar avatarName={ink.key} color={ink.hex} size={48} />
-                <span className="text-[10px] text-star-dim">{ink.label}</span>
+                <span className="text-[10px] text-fg-faint">{ink.label}</span>
               </button>
             ))}
           </div>
@@ -119,7 +119,7 @@ export default function LobbyView({
             {players.map((p) => (
               <div
                 key={p.id}
-                className="relative flex items-center gap-3 rounded-xl border border-ink-border bg-ink-mid px-4 py-3 overflow-hidden"
+                className="relative flex items-center gap-3 rounded-xl border border-line bg-raised px-4 py-3 overflow-hidden"
               >
                 {/* Top color accent strip — matches PlayerCard pattern */}
                 <div
@@ -127,15 +127,15 @@ export default function LobbyView({
                   style={{ background: p.color }}
                 />
                 <Avatar avatarName={p.avatarName} color={p.color} size={32} />
-                <span className="font-medium flex-1 text-star-white">{p.name}</span>
+                <span className="font-medium flex-1 text-fg">{p.name}</span>
                 {p.id === hostPlayerId && (
-                  <span className="text-xs font-bold uppercase tracking-widest text-gold">host</span>
+                  <span className="text-xs font-bold uppercase tracking-widest text-clay">host</span>
                 )}
                 {isHost && p.id !== localPlayerId && (
                   <button
                     type="button"
                     onClick={() => onTransferHost(p.id)}
-                    className="min-h-[44px] inline-flex items-center text-xs text-star-dim hover:text-gold underline underline-offset-2 transition-colors duration-200"
+                    className="min-h-[44px] inline-flex items-center text-xs text-fg-faint hover:text-clay underline underline-offset-2 transition-colors duration-200"
                   >
                     Make host
                   </button>
@@ -143,7 +143,7 @@ export default function LobbyView({
               </div>
             ))}
             {players.length < 4 && (
-              <p className="text-center text-sm text-star-silver">
+              <p className="text-center text-sm text-fg-muted">
                 Waiting for players… ({players.length}/4)
               </p>
             )}
@@ -152,14 +152,14 @@ export default function LobbyView({
           {isHost ? (
             <div className="flex flex-col items-center gap-4">
               {/* Pill-switcher control mode */}
-              <div className="flex flex-col sm:flex-row bg-ink-mid rounded-xl p-1 gap-1 border border-ink-border">
+              <div className="flex flex-col sm:flex-row bg-raised rounded-xl p-1 gap-1 border border-line">
                 <button
                   type="button"
                   onClick={() => setControlMode('self')}
                   className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
                     controlMode === 'self'
-                      ? 'bg-ink-border text-star-white shadow-sm'
-                      : 'text-star-dim hover:text-star-silver'
+                      ? 'bg-line text-fg shadow-sm'
+                      : 'text-fg-faint hover:text-fg-muted'
                   }`}
                 >
                   Players control own
@@ -169,15 +169,15 @@ export default function LobbyView({
                   onClick={() => setControlMode('host')}
                   className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-all duration-200 ${
                     controlMode === 'host'
-                      ? 'bg-ink-border text-star-white shadow-sm'
-                      : 'text-star-dim hover:text-star-silver'
+                      ? 'bg-line text-fg shadow-sm'
+                      : 'text-fg-faint hover:text-fg-muted'
                   }`}
                 >
                   Host controls all
                 </button>
               </div>
 
-              <label className="flex items-center gap-3 text-sm text-star-silver">
+              <label className="flex items-center gap-3 text-sm text-fg-muted">
                 Lore target
                 <input
                   type="number"
@@ -186,23 +186,23 @@ export default function LobbyView({
                   value={loreTarget}
                   onChange={handleLoreTargetChange}
                   onBlur={handleLoreTargetBlur}
-                  className="w-20 min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-3 py-2 text-center text-star-white focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  className="w-20 min-h-[44px] rounded-xl border border-line bg-raised px-3 py-2 text-center text-fg focus:outline-none focus:ring-2 focus:ring-clay/40 focus:border-clay/60 transition-all duration-200 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
                 {loreTarget === 20 && (
-                  <span className="text-xs text-star-dim">(standard)</span>
+                  <span className="text-xs text-fg-faint">(standard)</span>
                 )}
               </label>
 
               <button
                 onClick={() => onStart(controlMode, loreTarget)}
                 disabled={!canStart || starting}
-                className="rounded-xl bg-gold px-8 py-3 font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
+                className="rounded-xl bg-clay px-8 py-3 font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {starting ? 'Starting…' : 'Start game'}
               </button>
             </div>
           ) : (
-            <p className="text-star-silver text-sm">Waiting for host to start the game…</p>
+            <p className="text-fg-muted text-sm">Waiting for host to start the game…</p>
           )}
         </div>
       )}

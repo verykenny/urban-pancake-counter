@@ -58,7 +58,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           particleCount: 140,
           spread: 80,
           origin: { y: 0.4 },
-          colors: ['#d4a42a', '#f0c040', '#ede8ff'],
+          colors: ['#d08458', '#e29a6e', '#ece5db'],
         });
       }
       vibrate([60, 40, 60]);
@@ -205,7 +205,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   if (error && !gameState) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
-        <p className="text-error">{error}</p>
+        <p className="text-danger">{error}</p>
       </main>
     );
   }
@@ -213,7 +213,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   if (!gameState || !playerId) {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center p-8">
-        <p className="text-star-dim animate-pulse">Loading…</p>
+        <p className="text-fg-faint animate-pulse">Loading…</p>
       </main>
     );
   }
@@ -281,7 +281,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
   const reconnecting = connectionState === 'unavailable' || connectionState === 'disconnected';
   const reconnectingBanner = reconnecting ? (
-    <p role="status" aria-live="polite" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-ink-border bg-ink-dark px-4 py-2 text-sm text-star-silver animate-pulse">
+    <p role="status" aria-live="polite" className="fixed bottom-4 left-1/2 z-50 -translate-x-1/2 rounded-xl border border-line bg-surface px-4 py-2 text-sm text-fg-muted animate-pulse">
       Reconnecting…
     </p>
   ) : null;
@@ -290,7 +290,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     <div
       role="alert"
       aria-live="assertive"
-      className="fixed top-4 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-xl border border-error/30 bg-ink-dark px-4 py-2 text-sm text-error"
+      className="fixed top-4 left-1/2 z-50 -translate-x-1/2 flex items-center gap-3 rounded-xl border border-danger/30 bg-surface px-4 py-2 text-sm text-danger"
     >
       <span>{error}</span>
       <button
@@ -311,7 +311,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       <main className="relative flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-96 w-96 rounded-full bg-ambient/12 blur-3xl" />
+          <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
         </div>
 
         {/* Mobile compact header — code chip replaces title + subtitle */}
@@ -326,23 +326,23 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
                 setTimeout(() => setCodeCopied(false), 1500);
               } catch { /* clipboard unavailable */ }
             }}
-            className="flex items-center gap-3 rounded-xl border border-gold/30 bg-ink-dark px-4 py-2.5 shadow-code transition-opacity duration-150 active:opacity-70"
+            className="flex items-center gap-3 rounded-xl border border-clay/30 bg-surface px-4 py-2.5 shadow-code transition-opacity duration-150 active:opacity-70"
             aria-label={`Game code: ${id}. Tap to copy.`}
           >
             <div className="text-left">
-              <p className="text-[10px] uppercase tracking-widest text-star-silver leading-none">Game code</p>
-              <p className="font-mono text-base font-bold tracking-[0.2em] text-gold leading-tight mt-0.5">
+              <p className="text-[10px] uppercase tracking-widest text-fg-muted leading-none">Game code</p>
+              <p className="font-mono text-base font-bold tracking-[0.2em] text-clay leading-tight mt-0.5">
                 {codeCopied ? '✓ Copied' : id}
               </p>
             </div>
           </button>
-          <p className="text-[10px] uppercase tracking-widest text-star-dim pl-1">
+          <p className="text-[10px] uppercase tracking-widest text-fg-faint pl-1">
             First to {gameState.loreTarget} lore
           </p>
         </div>
 
         {/* Desktop: full title */}
-        <h1 className="z-10 hidden sm:block text-center font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-gold uppercase text-shadow-glow">
+        <h1 className="z-10 hidden sm:block text-center font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-clay uppercase text-shadow-glow">
           Lorcana Lore Tracker
         </h1>
 
@@ -350,7 +350,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         <div className="hidden flex-col items-center gap-3 sm:flex">
           <GameCode code={id} />
         </div>
-        <p className="z-10 hidden sm:block text-xs uppercase tracking-widest text-star-dim sm:-mt-4">
+        <p className="z-10 hidden sm:block text-xs uppercase tracking-widest text-fg-faint sm:-mt-4">
           First to {gameState.loreTarget} lore
         </p>
 
@@ -369,25 +369,25 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Winner overlay */}
         {gameState.winner && (
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-gold/40 bg-gold-bg px-8 py-8 text-center overflow-hidden shadow-winner">
-            <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold text-shadow-glow-strong">
+          <div className="relative z-10 w-full max-w-md rounded-2xl border border-clay/40 bg-clay-deep px-8 py-8 text-center overflow-hidden shadow-winner">
+            <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-clay text-shadow-glow-strong">
               {winnerPlayer?.name ?? 'Someone'} wins!
             </p>
-            <p className="mt-1 text-sm text-star-silver">Reached {gameState.loreTarget} lore</p>
+            <p className="mt-1 text-sm text-fg-muted">Reached {gameState.loreTarget} lore</p>
 
             {playerId === gameState.hostPlayerId ? (
               <button
                 onClick={handlePlayAgain}
-                className="mt-6 rounded-xl bg-gold px-6 py-2.5 text-sm font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow"
+                className="mt-6 rounded-xl bg-clay px-6 py-2.5 text-sm font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong hover:shadow-glow"
               >
                 Play again
               </button>
             ) : (
               <div className="mt-6 flex flex-col items-center gap-4">
-                <p className="text-sm text-star-silver">Waiting for host to start a new game.</p>
+                <p className="text-sm text-fg-muted">Waiting for host to start a new game.</p>
                 <Link
                   href="/"
-                  className="rounded-xl border border-ink-border px-5 py-2 text-sm font-medium text-star-silver transition-colors duration-200 hover:border-gold/40 hover:text-star-white"
+                  className="rounded-xl border border-line px-5 py-2 text-sm font-medium text-fg-muted transition-colors duration-200 hover:border-clay/40 hover:text-fg"
                 >
                   Leave game
                 </Link>
@@ -398,7 +398,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Control mode indicator — mobile only; explains disabled +/− to non-host players */}
         {!gameState.winner && gameState.controlMode === 'host' && (
-          <p className="sm:hidden z-10 rounded-full border border-ink-border bg-ink-mid px-3 py-0.5 text-xs text-star-silver">
+          <p className="sm:hidden z-10 rounded-full border border-line bg-raised px-3 py-0.5 text-xs text-fg-muted">
             {playerId === gameState.hostPlayerId ? 'You\'re scoring for everyone' : 'Host is scoring'}
           </p>
         )}

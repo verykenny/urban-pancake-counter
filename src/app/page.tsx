@@ -50,22 +50,22 @@ export default function Home() {
     <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-ambient/12 blur-3xl" />
+        <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
       </div>
 
-      <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-gold uppercase z-10 text-shadow-glow">
+      <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-clay uppercase z-10 text-shadow-glow">
         Lorcana Lore Tracker
       </h1>
 
       <button
         onClick={handleCreate}
         disabled={loading}
-        className="z-10 rounded-xl bg-gold px-6 py-3 font-bold text-ink-deep transition-all duration-200 hover:bg-gold-bright hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
+        className="z-10 rounded-xl bg-clay px-6 py-3 font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Create game
       </button>
 
-      <p className="z-10 text-xs text-star-dim tracking-wider">or join with a code</p>
+      <p className="z-10 text-xs text-fg-faint tracking-wider">or join with a code</p>
 
       <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
         <div className="flex w-full flex-col gap-3 sm:flex-row">
@@ -75,17 +75,17 @@ export default function Home() {
             onChange={(e) => setJoinCode(e.target.value)}
             placeholder="Game code"
             maxLength={6}
-            className="w-full min-h-[44px] rounded-xl border border-ink-border bg-ink-mid px-4 py-2.5 uppercase text-star-white placeholder:text-star-dim focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/60 transition-all duration-200"
+            className="w-full min-h-[44px] rounded-xl border border-line bg-raised px-4 py-2.5 uppercase text-fg placeholder:text-fg-faint focus:outline-none focus:ring-2 focus:ring-clay/40 focus:border-clay/60 transition-all duration-200"
           />
           <button
             type="submit"
             disabled={loading}
-            className="min-h-[44px] rounded-xl border border-gold px-5 py-2.5 font-semibold text-gold hover:bg-gold/10 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
+            className="min-h-[44px] rounded-xl border border-clay px-5 py-2.5 font-semibold text-clay hover:bg-clay/10 transition-all duration-200 disabled:opacity-40 disabled:cursor-not-allowed"
           >
             Join
           </button>
         </div>
-        {error && <p className="text-sm text-error">{error}</p>}
+        {error && <p className="text-sm text-danger">{error}</p>}
       </form>
     </main>
   );

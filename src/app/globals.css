@@ -1,36 +1,36 @@
 @import "tailwindcss";
 
 :root {
-  --ink-deep: #0d0a1a;
-  --ink-dark: #16102b;
-  --ink-mid: #241a40;
-  --ink-border: #3a2a60;
+  /* Warm tinted neutrals — espresso/taupe ramp (hue ~55, low chroma).
+     Never pure black; the body sits at L 0.18–0.22, surfaces step up from there. */
+  --base-deep: oklch(0.175 0.009 55);
+  --base: oklch(0.215 0.012 55);
+  --surface: oklch(0.245 0.013 55);
+  --raised: oklch(0.295 0.015 55);
+  --line: oklch(0.355 0.016 55);
 
-  --gold: #d4a42a;
-  --gold-bright: #f0c040;
-  --gold-muted: #6e5214;
-  --gold-bg: #1f1508;
+  /* Foreground — warm off-white (hue ~75). Never pure white. */
+  --fg: oklch(0.93 0.012 80);
+  --fg-muted: oklch(0.74 0.014 70);
+  --fg-faint: oklch(0.7 0.013 65);
 
-  --star-white: #ede8ff;
-  --star-silver: #9d91c0;
-  --star-dim: #8d84b2;
+  /* Brand accent — terracotta / clay (hue ~45). The single saturated color. */
+  --clay: oklch(0.66 0.13 45);
+  --clay-strong: oklch(0.73 0.13 50);
+  --clay-soft: oklch(0.5 0.08 48);
+  --clay-deep: oklch(0.3 0.055 45);
 
-  --error: #e05070;
+  --danger: oklch(0.66 0.15 25);
 
-  /* Decorative purple wash (was the literal `purple-900`); exact Tailwind value
-     so the migration is pixel-stable. */
-  --ambient: oklch(38.1% 0.176 304.987);
+  /* Warm ambient glow — large blurred radial only; never an interactive surface. */
+  --glow: oklch(0.6 0.1 50);
 
-  /* Semantic aliases — Features 10 & 11 (Phase 3) theme by overriding these,
-     never the concrete ink/gold palette values. */
-  --surface: var(--ink-dark);
-  --surface-raised: var(--ink-mid);
-  --border: var(--ink-border);
-  --text: var(--star-white);
-  --text-muted: var(--star-silver);
-  --accent: var(--gold);
-  --accent-strong: var(--gold-bright);
-  --danger: var(--error);
+  /* Semantic aliases — Features 10 & 11 (Phase 3) theme by overriding these. */
+  --accent: var(--clay);
+  --accent-strong: var(--clay-strong);
+  --text: var(--fg);
+  --text-muted: var(--fg-muted);
+  --border: var(--line);
 
   /* Radius scale */
   --radius-sm: 0.5rem;
@@ -48,46 +48,48 @@
 }
 
 @theme inline {
-  --color-background: var(--ink-deep);
-  --color-foreground: var(--star-white);
+  --color-background: var(--base);
+  --color-foreground: var(--fg);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-cinzel);
 
-  --color-ink-deep: var(--ink-deep);
-  --color-ink-dark: var(--ink-dark);
-  --color-ink-mid: var(--ink-mid);
-  --color-ink-border: var(--ink-border);
+  --color-base-deep: var(--base-deep);
+  --color-base: var(--base);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
 
-  --color-gold: var(--gold);
-  --color-gold-bright: var(--gold-bright);
-  --color-gold-muted: var(--gold-muted);
-  --color-gold-bg: var(--gold-bg);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-faint: var(--fg-faint);
 
-  --color-star-white: var(--star-white);
-  --color-star-silver: var(--star-silver);
-  --color-star-dim: var(--star-dim);
+  --color-clay: var(--clay);
+  --color-clay-strong: var(--clay-strong);
+  --color-clay-soft: var(--clay-soft);
+  --color-clay-deep: var(--clay-deep);
 
-  --color-error: var(--error);
-  --color-ambient: var(--ambient);
+  --color-danger: var(--danger);
+  --color-glow: var(--glow);
 
-  /* Box-shadow / glow utilities (migrated from inline rgba literals) */
-  --shadow-card: 0 4px 32px rgba(74, 44, 138, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  --shadow-code: 0 0 24px rgba(212, 164, 42, 0.08);
-  --shadow-winner: 0 0 48px rgba(212, 164, 42, 0.25);
-  --shadow-glow: 0 0 14px rgba(212, 164, 42, 0.4);
-  --shadow-glow-strong: 0 0 18px rgba(212, 164, 42, 0.5);
+  /* Box-shadow / glow utilities — warm shadow + terracotta emission */
+  --shadow-card: 0 8px 32px rgba(20, 14, 8, 0.45), inset 0 1px 0 rgba(255, 244, 232, 0.05);
+  --shadow-code: 0 0 24px rgba(208, 132, 88, 0.1);
+  --shadow-winner: 0 0 48px rgba(208, 132, 88, 0.3);
+  --shadow-glow: 0 0 16px rgba(208, 132, 88, 0.4);
+  --shadow-glow-strong: 0 0 20px rgba(208, 132, 88, 0.5);
 
   /* Text-shadow glow utilities */
-  --text-shadow-glow: 0 0 16px rgba(212, 164, 42, 0.28);
-  --text-shadow-glow-strong: 0 0 20px rgba(212, 164, 42, 0.5);
+  --text-shadow-glow: 0 0 16px rgba(208, 132, 88, 0.3);
+  --text-shadow-glow-strong: 0 0 20px rgba(208, 132, 88, 0.5);
 }
 
 body {
-  background: radial-gradient(ellipse at center, var(--ink-dark) 0%, var(--ink-deep) 70%);
+  background: radial-gradient(ellipse at center, var(--base) 0%, var(--base-deep) 75%);
   min-height: 100vh;
-  color: var(--star-white);
+  color: var(--fg);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  color-scheme: dark;
 }
 
 /* Narrow landscape phones (<640px wide): the tall 60/40 split has no vertical

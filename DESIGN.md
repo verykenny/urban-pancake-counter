@@ -1,20 +1,21 @@
 ---
 name: Lorcana Lore Tracker
-description: Real-time competitive lore score tracker for Lorcana card game sessions.
+description: Real-time lore score tracker for Lorcana card game sessions.
 colors:
-  ink-deep: "#0d0a1a"
-  ink-dark: "#16102b"
-  ink-mid: "#241a40"
-  ink-border: "#3a2a60"
-  gold: "#d4a42a"
-  gold-bright: "#f0c040"
-  gold-muted: "#6e5214"
-  gold-bg: "#1f1508"
-  star-white: "#ede8ff"
-  star-silver: "#9d91c0"
-  star-dim: "#5a4f78"
-  ambient: "#4a2c8a"
-  error: "#e05070"
+  base-deep: "#14100d"
+  base: "#1e1814"
+  surface: "#261f1b"
+  raised: "#332b26"
+  line: "#433a34"
+  clay: "#d2764a"
+  clay-strong: "#e88e59"
+  clay-soft: "#7a5037"
+  clay-deep: "#442415"
+  fg: "#ece7df"
+  fg-muted: "#b1a9a2"
+  fg-faint: "#a49d96"
+  glow: "#9c6a47"
+  danger: "#df6862"
 typography:
   display:
     fontFamily: "Cinzel, Georgia, serif"
@@ -45,45 +46,45 @@ rounded:
   2xl: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.gold}"
-    textColor: "{colors.ink-deep}"
+    backgroundColor: "{colors.clay}"
+    textColor: "{colors.base-deep}"
     rounded: "{rounded.lg}"
     padding: "12px 24px"
   button-primary-hover:
-    backgroundColor: "{colors.gold-bright}"
-    textColor: "{colors.ink-deep}"
+    backgroundColor: "{colors.clay-strong}"
+    textColor: "{colors.base-deep}"
     rounded: "{rounded.lg}"
     padding: "12px 24px"
   button-ghost:
     backgroundColor: "transparent"
-    textColor: "{colors.gold}"
+    textColor: "{colors.clay}"
     rounded: "{rounded.lg}"
     padding: "10px 20px"
   button-score-increment:
-    backgroundColor: "{colors.gold}"
-    textColor: "{colors.ink-deep}"
+    backgroundColor: "{colors.clay}"
+    textColor: "{colors.base-deep}"
     rounded: "{rounded.lg}"
     width: "112px"
     height: "80px"
   button-score-decrement:
-    backgroundColor: "{colors.ink-mid}"
-    textColor: "{colors.star-silver}"
+    backgroundColor: "{colors.raised}"
+    textColor: "{colors.fg-muted}"
     rounded: "{rounded.lg}"
     width: "112px"
     height: "80px"
   input-game-code:
-    backgroundColor: "{colors.ink-mid}"
-    textColor: "{colors.star-white}"
+    backgroundColor: "{colors.raised}"
+    textColor: "{colors.fg}"
     rounded: "{rounded.lg}"
     padding: "10px 16px"
   card-player:
-    backgroundColor: "{colors.ink-dark}"
-    textColor: "{colors.star-white}"
+    backgroundColor: "{colors.surface}"
+    textColor: "{colors.fg}"
     rounded: "{rounded.2xl}"
     padding: "24px"
   chip-badge:
     backgroundColor: "transparent"
-    textColor: "{colors.gold}"
+    textColor: "{colors.clay}"
     rounded: "9999px"
     padding: "2px 12px"
 ---
@@ -92,140 +93,136 @@ components:
 
 ## 1. Overview
 
-**Creative North Star: "The Enchanted Ledger"**
+**Creative North Star: "Hearthlight"**
 
-This is a record-keeper's instrument from inside the Lorcana world. Every design decision stems from a single premise: a player should be able to glance at the screen mid-game, read the scores immediately, and look away. The darkness is not atmosphere for its own sake; it is the condition under which this app is actually used: dim rooms, card-game tables, ambient light from above. Gold on void is the highest-contrast pairing available, and that is why it is the only pairing that matters here.
+This is a record-keeper that belongs at the table, not on a broadcast screen. A player should be able to glance mid-game, read the scores immediately, and look away. The interface is used in low ambient light around a card-game table, so it stays dark, but the darkness is warm: an espresso-and-taupe room lit by a single ember, not a cold void. The feeling we are after is clean, trustworthy, and warm, the way a well-made wooden game box feels in the hand.
 
-The design rejects warmth, friendliness, and decoration. There are no gradients for pleasure, no rounded-corner cuteness, no animation that doesn't mark a meaningful event. The interface earns the word "enchanted" through restraint, not through effect: the score numerals float in darkness, massive and immediate, and the controls are exactly large enough to hit without looking. Everything else disappears.
-
-The "Void and Flame" palette character is the emotional spine. The ink palette is cold and deep, purple-shifted rather than warm-black. Gold cuts through it like fire; it is not an accent but a primary signal — every time it appears it means "this matters." The system holds this polarity without compromise.
+There are no neon accents, no pure black, no pure white. The neutral ramp is a tinted warm-dark (hue ~55), and the single saturated color is terracotta clay (hue ~45). Clay is not decoration; it is the one deliberate brand accent. Every time it appears it carries meaning: a primary action, the current selection, a focus ring, or a win. The per-player Lorcana ink colors (Amber, Amethyst, Emerald, Ruby, Sapphire, Steel) are the only other saturated colors on screen, and they are reserved strictly for player identity (score numeral, accent strip, avatar), never for chrome.
 
 **Key Characteristics:**
-- Scores dominate at all breakpoints; layout subordinates everything else to the numeral
-- Single accent color (gold) used exclusively for primary actions and winner states
-- Typography pairing: Cinzel (display/ceremonial) + Geist (UI/data); never mixed within a functional element
-- Elevation through glow and shadow, not raised surfaces or blur
-- Motion marks state, not decoration; 200ms maximum on all transitions
-- Tap targets are oversized for own-card controls, recognizing the use context (glancing, distracted)
+- Scores dominate at all breakpoints; layout subordinates everything else to the numeral.
+- Single brand accent (terracotta clay) for primary actions, current selection, focus, and winner states.
+- Warm tinted-neutral surface ramp; never pure black, never warm-near-white "paper".
+- Typography pairing: Cinzel (display) + Geist (UI/data); never mixed within a functional element.
+- Depth through warm shadow plus terracotta glow, not raised flat surfaces or blur.
+- Motion marks state, not decoration; 150–250 ms on transitions.
+- Tap targets are oversized for own-card controls, recognizing the use context (glancing, distracted).
 
-## 2. Colors: The Void and Flame Palette
+## 2. Colors: The Hearthlight Palette
 
-The palette is a polarity. Deep cold void; single flame accent. No warmth, no third hue.
+A warm tinted-neutral ramp carries the surface; a single terracotta accent carries meaning. This is a Restrained strategy: the accent stays well under 10% of any screen. All values are authored in OKLCH; the hex values below are the resolved sRGB and the contrast figures are measured against the rendered output.
 
-### Primary
-- **Void Flame** (`#d4a42a` / oklch(70% 0.14 85)): The only saturated color in the system. Used exclusively for the primary increment button, winner-state borders, the game title glyph, and the active focus ring. Its rarity is the point. If it appears somewhere new, a previous use should be reconsidered.
-- **Bright Flame** (`#f0c040` / oklch(82% 0.13 85)): Hover state for gold elements only. Never used at rest.
+### Brand Accent
+- **Clay** (`#d2764a` / `oklch(0.66 0.13 45)`): The single saturated brand color. Primary increment / create / submit buttons, the game title, the game code, winner state, host badge, focus rings. Contrast 4.97:1 on `surface`, 5.38:1 on `base` (passes AA for text). Dark `base-deep` text on a clay fill measures 5.8:1.
+- **Clay Strong** (`#e88e59` / `oklch(0.73 0.13 50)`): Hover state for clay elements only. Never used at rest.
+- **Clay Soft** (`#7a5037` / `oklch(0.5 0.08 48)`): Low-chroma accent for subtle dividers and washes. Never used for text.
+- **Clay Deep** (`#442415` / `oklch(0.3 0.055 45)`): Deep terracotta wash behind the winner card and glowing elements.
 
-### Secondary
-- **Gold Muted** (`#6e5214`): Decorative dividers, separator lines, the background of gold-wash surfaces. Never used for text.
-- **Gold Bg** (`#1f1508`): Deep amber shadow used behind gold-glowing elements.
+### Neutral (warm, tinted toward hue ~55)
+- **Base Deep** (`#14100d` / `oklch(0.175 0.009 55)`): Darkest tone; the outer edge of the body radial gradient and the modal backdrop. Never pure black.
+- **Base** (`#1e1814` / `oklch(0.215 0.012 55)`): Body background center. The page is a radial gradient from `base` at center to `base-deep` at the edges, so the screen never reads flat.
+- **Surface** (`#261f1b` / `oklch(0.245 0.013 55)`): Card and drawer surface. One step up from the body.
+- **Raised** (`#332b26` / `oklch(0.295 0.015 55)`): Raised elements — secondary buttons, input backgrounds, chips, segmented controls.
+- **Line** (`#433a34` / `oklch(0.355 0.016 55)`): All border values, and the hover fill for raised controls.
 
-### Neutral
-- **Void Deep** (`#0d0a1a`): The body background. Nearly black, faint purple undertone. Not warm. Rendered as a radial gradient that lightens slightly toward center (`ink-dark` at center, `ink-deep` at edges) to prevent the screen from reading as flat.
-- **Void Dark** (`#16102b`): Card and panel surface. One step lighter than the body; the distinction is enough to define hierarchy without using shadows.
-- **Void Mid** (`#241a40`): Raised elements — secondary buttons, input backgrounds, chips, dividers.
-- **Void Border** (`#3a2a60`): All border values. Not visible as a contrast separator on hover; it marks boundary, not hierarchy.
-- **Ambient** (`oklch(38.1% 0.176 305)` / approx `#4a2c8a`): The ambient purple glow. Used exclusively as a large blurred radial on the body background. Not a surface color; not used on any interactive element.
-- **Star White** (`#ede8ff`): Primary text. Not pure white; carries a faint violet undertone that aligns with the ink palette. Contrast on `ink-dark` exceeds 12:1.
-- **Star Silver** (`#9d91c0`): Secondary text, muted labels, placeholder text. Contrast on `ink-dark` is approximately 5.5:1 — passes AA.
-- **Star Dim** (`#5a4f78`): Decorative text only. Micro-labels, "or" dividers, tertiary affordances. Does not pass AA for body text; only permitted at 14px+ bold labels where the ≥3:1 threshold applies.
-- **Error** (`#e05070`): Destructive states, validation errors. Contrast on `ink-dark` passes AA.
+### Foreground (warm off-white, hue ~75)
+- **Fg** (`#ece7df` / `oklch(0.93 0.012 80)`): Primary text. Not pure white; a faint warm undertone. Contrast 13.2:1 on `surface`.
+- **Fg Muted** (`#b1a9a2` / `oklch(0.74 0.014 70)`): Secondary text, labels, placeholders. Contrast 7.0:1 on `surface`, 6.0:1 on `raised` — passes AA at body sizes.
+- **Fg Faint** (`#a49d96` / `oklch(0.7 0.013 65)`): De-emphasized labels, section headers, inactive toggle text, micro-hints. Contrast 6.1:1 on `surface`, 5.2:1 on `raised` — passes AA.
+
+### Signal
+- **Danger** (`#df6862` / `oklch(0.66 0.15 25)`): Destructive states and validation errors. Contrast 4.86:1 on `surface` — passes AA.
+- **Glow** (`#9c6a47` / `oklch(0.6 0.1 50)`): The warm ambient glow. Used only as a large blurred radial behind the layout (`bg-glow/12`). Never a surface or interactive color.
 
 ### Named Rules
-**The One Flame Rule.** Gold (`#d4a42a`) appears on ≤15% of any screen surface. Its high chroma is its signal value; saturation everywhere is signal nowhere. If a design iteration adds gold to a new element, an existing gold use should be removed or dimmed.
+**The One Ember Rule.** Clay is the only brand-saturated color and stays under ~10% of any screen surface. Its rarity is its signal value. If an iteration adds clay to a new element, an existing clay use should be removed or dimmed. Player ink colors are exempt — they are identity data, not brand.
 
-**The Cold Void Rule.** Background surfaces are never warm. No amber, cream, or brown tones in the neutral ramp. The only warmth in the palette is gold; the contrast between cold dark and warm gold is the entire emotional register.
+**The Warm Neutral Rule.** Surfaces are warm tinted neutrals (hue ~55), never pure black and never a warm-near-white "paper/cream/sand". The warmth lives in the whole ramp plus the clay accent, not in a bright bg. The contrast between warm-dark and ember is the emotional register.
 
 ## 3. Typography
 
 **Display Font:** Cinzel (400, 600, 700) with Georgia, serif fallback
 **Body/UI Font:** Geist Sans with system-ui, sans-serif fallback
-**Mono Font:** Geist Mono (available; used sparingly for game codes)
+**Mono Font:** Geist Mono (game codes only)
 
-**Character:** Cinzel is a Roman-inscribed serif: stately, precise, carved rather than printed. It carries the Lorcana world register — it appears only on titles and the game heading, never on UI labels, buttons, or data. Geist is the counterpart: a modern neutral sans that disappears behind the data it displays. The pairing works because it is never competing: Cinzel owns ceremony, Geist owns function.
+**Character:** Cinzel is a Roman-inscribed serif: stately, precise, carved. It carries the Lorcana world register and appears only on the title and the winner heading, never on UI labels, buttons, or data. Geist is the counterpart: a modern neutral sans that disappears behind the data it displays. The pairing works because the two never compete: Cinzel owns ceremony, Geist owns function.
 
 ### Hierarchy
-- **Display** (700, clamp(1.5rem → 2.5rem), leading 1.1, tracking 0.15em, uppercase): Game title "Lorcana Lore Tracker" only. The tracking is wide because Cinzel at large sizes needs optical room between its monumental letterforms.
-- **Score** (800, clamp(4.5rem 22vw → 9rem), leading 1, tracking -0.02em): The score numeral. Uses Geist, not Cinzel. The score must read as data, not as decoration; a serif score would look ornate, not competitive.
-- **Headline** (600, 1.125rem, leading 1.25): Player names inside cards. Medium weight Geist; needs to be distinct from body but not shout.
+- **Display** (700, clamp(1.5rem → 2.5rem), leading 1.1, tracking 0.15em, uppercase): Game title and winner heading. Tracking is wide because Cinzel needs optical room between its monumental letterforms.
+- **Score** (800, clamp(4.5rem → 9rem), leading 1, tracking -0.02em): The score numeral, in Geist. A serif score would read ornate, not immediate.
+- **Headline** (600, 1.125rem, leading 1.25): Player names inside cards.
 - **Body** (400, 1rem, leading 1.5): Instruction text, status messages, lobby copy. Max 65ch.
-- **Label** (700, 0.75rem, tracking 0.1em, uppercase): Badge text ("HOST"), control affordance labels ("DELEGATE TO"). Short uppercase is permitted here because these are ≤2-word identifiers, not sentences.
+- **Label** (700, 0.75rem, tracking 0.1em, uppercase): Badge text ("HOST"), section headers. Short uppercase only (≤2 words), never sentences.
 
 ### Named Rules
-**The Cinzel Quarantine Rule.** Cinzel is the game-world font. Geist is the UI font. They must not appear in the same functional element. A player name is Geist; the game title is Cinzel. A score is Geist; a decorative section marker could be Cinzel. If the two fonts appear inside the same interactive component, one is wrong.
+**The Cinzel Quarantine Rule.** Cinzel is the game-world font; Geist is the UI font. They must not appear in the same functional element. A player name is Geist; the title is Cinzel; a score is Geist.
 
-**The Score Primacy Rule.** The score numeral is the largest typographic element on the game screen at all times. No heading, badge, or label may visually compete with it. If a new element is larger than the score, it should not exist.
+**The Score Primacy Rule.** The score numeral is the largest typographic element on the game screen at all times. Nothing may visually compete with it.
 
 ## 4. Elevation
 
-This system uses glow and shadow, not raised flat surfaces. There is no tonal layering in the Material sense; depth is created through light emission, not surface separation.
-
-The background is the darkest element. Cards are one step lighter. Raised controls (buttons, inputs) are one step lighter still. No element is "elevated" by its own shadow; instead, key elements emit a colored glow that marks importance or state.
+Depth comes from warm shadow plus emitted glow, not raised flat surfaces. The body is the darkest element; cards step up one tone; raised controls step up again. Key elements emit a terracotta glow that marks importance or state.
 
 ### Shadow Vocabulary
-- **Card ambient** (`0 4px 32px rgba(74, 44, 138, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.04)`): Applied to all PlayerCard surfaces. The purple-tinted outer shadow separates card from background; the white inset top edge lifts the card's top surface into the light.
-- **Gold glow** (`0 0 14px rgba(212, 164, 42, 0.4)`): Applied to primary buttons on hover and to score numerals of the winning player. Marks "this matters" through warmth.
-- **Gold glow strong** (`0 0 18px rgba(212, 164, 42, 0.5)`): Winner state, final score CTA. More intense; used sparingly.
-- **Code ambient** (`0 0 24px rgba(212, 164, 42, 0.08)`): Very low-intensity gold wash behind the game code display. Barely visible; creates warmth without competing with foreground elements.
-- **Winner halo** (`0 0 48px rgba(212, 164, 42, 0.25)`): The largest glow; used on the winning player's card at end-of-game. Extended radius, lower opacity for a diffuse halo effect.
+- **Card** (`0 8px 32px rgba(20,14,8,0.45), inset 0 1px 0 rgba(255,244,232,0.05)`): All card surfaces. A warm brown outer shadow separates card from background; a warm inset top edge catches the light.
+- **Glow** (`0 0 16px rgba(208,132,88,0.4)`): Primary buttons on hover; winning score numerals.
+- **Glow strong** (`0 0 20px rgba(208,132,88,0.5)`): Winner heading and final CTA. Used sparingly.
+- **Code** (`0 0 24px rgba(208,132,88,0.1)`): Low-intensity clay wash behind the game code. Barely visible warmth.
+- **Winner halo** (`0 0 48px rgba(208,132,88,0.3)`): The largest glow, on the winner card at end-of-game. Wide radius, diffuse.
 
-### Named Rules
-**The Emit, Don't Raise Rule.** Shadows mark light emission, not physical elevation. A button does not cast a shadow because it sits above the surface; it glows because it is active and important. Flat-colored drop shadows are prohibited.
+### Named Rule
+**The Emit, Don't Raise Rule.** Shadows mark light emission and warmth, not physical elevation. A button glows because it is active and important, not because it floats. Flat gray drop shadows are prohibited.
 
 ## 5. Components
 
 ### Buttons
-Elemental and simple: two variants, clear color assignment, no intermediate states that feel designed.
-
-- **Shape:** Gently curved (12px radius, `rounded-xl`). Not pill, not sharp. The radius is functional, not decorative.
-- **Primary (increment / create / submit):** Gold fill (`#d4a42a`), ink-deep text (`#0d0a1a`), 12px/24px padding. On own-card score controls: oversized (112×80px on mobile, 64×64px at sm+) to hit without looking.
-- **Primary hover:** `#f0c040` fill plus gold glow (`0 0 14px rgba(212,164,42,0.4)`). Transition 200ms.
-- **Secondary (decrement):** `ink-mid` fill, star-silver text. Same radius and sizing as primary. Disabled when score is 0.
-- **Ghost (join / transfer host / delegate links):** Transparent fill, gold border, gold text. Hover: `rgba(gold, 0.1)` background tint. Used for lower-priority actions.
-- **Disabled:** 30% opacity, `cursor-not-allowed`. No other visual change; the dimming is the signal.
+- **Shape:** Gently curved (12px radius, `rounded-xl`). Not pill, not sharp.
+- **Primary (increment / create / submit):** Clay fill, `base-deep` text, 12px/24px padding. Own-card score controls are oversized (112×80px mobile, 64×64px at sm+) to hit without looking.
+- **Primary hover:** `clay-strong` fill plus glow. Transition 200ms.
+- **Secondary (decrement, menu items):** `raised` fill, `fg-muted` text, `line` hover fill. Disabled when score is 0.
+- **Ghost (join / transfer / delegate links):** Transparent fill, clay border, clay text, `clay/10` hover tint.
+- **Disabled:** 30% opacity, `cursor-not-allowed`. The dimming is the only signal.
 
 ### Chips / Badges
-- **Host badge:** `gold/15` background fill, gold text, pill radius (9999px), 7px/12px padding, uppercase label bold 12px. Purpose: identity marker on the PlayerCard, not an interactive element.
-- **Delegate badge:** `ambient/30` tint, star-silver text, ink-border border, pill radius. Indicates delegated control state.
+- **Host badge:** `clay/15` fill, clay text, pill radius, uppercase bold 12px. Identity marker, not interactive.
+- **Delegate badge:** `glow/30` tint, `fg-muted` text, `line` border, pill radius.
 
 ### Cards
-- **Player Card:** `ink-dark` surface, `ink-border` border, 24px radius (`rounded-2xl`), 24px padding. Card ambient shadow. A thin colored strip at the top edge (1px height, full width, player's color) is the only place player-assigned color appears as a surface. Scores render in the player's color with matching text glow.
-- **No nested cards.** The PlayerCard is the single card primitive in the system; nothing nests inside it.
+- **Player Card:** `surface` fill, `line` border, 24px radius, 24px padding, card shadow. A thin full-width strip at the top edge in the player's color is the only place player color appears as a surface. Scores render in the player's color with matching glow.
+- **No nested cards.** PlayerCard is the single card primitive; nothing nests inside it.
 
 ### Inputs
-- **Game code input:** `ink-mid` background, star-white text, ink-border border, `rounded-xl` (12px). Focus: gold ring (`ring-gold/40`) plus gold border tint. All text uppercase (game code only). Min height 44px for touch. Placeholder text in star-dim; contrast passes AA at bold 14px label threshold.
-- **Focus treatment:** 2px gold-tinted ring, not a border shift. The glow communicates "active" without a hard shape change.
+- **Game code / name / lore target:** `raised` fill, `fg` text, `line` border, `rounded-xl`. Focus: 2px `clay/40` ring plus `clay/60` border tint. Min height 44px. Placeholder in `fg-faint` (passes AA). `color-scheme: dark` is set so the number spinner renders in the dark theme.
+- **Focus treatment:** a clay-tinted ring, not a border shift.
 
 ### Navigation
-No persistent navigation in this product. The landing page has a title + two actions (create / join). The game screen has no nav. Navigation is implicit: the game code is the session; leaving closes it.
+No persistent navigation. Landing has title + two actions; the game screen has a single corner menu trigger (`raised`) opening a fixed drawer. Navigation is implicit: the game code is the session.
 
 ### Score Display (Signature Component)
-The score numeral is the most important element in the product. It renders in the player's assigned color (hex, passed as a prop), with a text-shadow glow matching that color at 40% opacity. Size uses the `--score-size-hero` fluid token (`clamp(4.5rem, 22vw, 9rem)`) on mobile and collapses to `4.5rem` at `sm` breakpoint. The numeral is tabular-nums weight 800 to prevent width shifts during score changes. This is not a chart, not a widget — it is a numeral in darkness.
+The score numeral is the most important element. It renders in the player's assigned color with a text-shadow glow matching that color at 40% opacity. Size uses `--score-size-hero` (`clamp(4.5rem, 22vw, 9rem)`), collapsing to `4.5rem` at `sm`. Weight 800, `tabular-nums` to prevent width shift. A numeral in warm darkness, not a chart.
 
 ### Avatar
-A circular badge (48px default) with an ink-mid background, a 2px border in the player's color, and a soft glow of the same color at 33% opacity. Contains the Lorcana inkwell SVG icon in the player's color. The icon is not decorative; it is the player identifier when the name is too long to scan.
+A circular badge (48px default) with a `raised` background, a 2px border in the player's color, and a soft glow of the same color at ~33%. Contains the Lorcana ink SVG glyph in the player's color — the player identifier when names are too long to scan.
 
 ## 6. Do's and Don'ts
 
 ### Do:
-- **Do** size own-card score buttons at 112×80px (mobile) so they can be hit with a thumb during play without looking at the screen.
-- **Do** use `tabular-nums` on every score numeral to prevent layout shift when numbers change.
-- **Do** use `--score-size-hero` (`clamp(4.5rem, 22vw, 9rem)`) for scores so they remain dominant across all screen widths.
-- **Do** use player-assigned colors exclusively for the score numeral, the top accent strip on PlayerCard, and the Avatar border/glow. Nowhere else.
-- **Do** apply `prefers-reduced-motion` alternatives to all score animations and state transitions. The reduced-motion fallback is a crossfade or instant switch; never remove the state change entirely.
-- **Do** use Cinzel only for the game title. All other UI text uses Geist.
-- **Do** verify contrast on star-silver text against ink-dark at every new use; it passes AA at 5.5:1 and must not be used at smaller sizes where that ratio drops below threshold.
-- **Do** keep gold to ≤15% of screen surface area. Its rarity is its signal value.
-- **Do** use `position: fixed` or the popover API for any dropdown (delegate picker, host transfer menu) to escape overflow clipping on card containers.
+- **Do** size own-card score buttons at 112×80px (mobile) so they can be hit with a thumb without looking.
+- **Do** use `tabular-nums` and `--score-size-hero` on every score numeral.
+- **Do** use player-assigned colors exclusively for the score numeral, the top accent strip, and the Avatar border/glow. Nowhere else.
+- **Do** apply `prefers-reduced-motion` alternatives to all motion (confetti, score change, winner reveal). The fallback is a crossfade or instant switch, never removing the state change.
+- **Do** use Cinzel only for the game title and winner heading. All other text is Geist.
+- **Do** keep clay (the brand accent) under ~10% of screen surface. Its rarity is its signal.
+- **Do** verify contrast when introducing text on a new surface; `fg-muted` and `fg-faint` both pass AA on `surface`/`raised`/`base`, but re-check on any tinted fill.
+- **Do** use `position: fixed` or the popover API for any dropdown to escape overflow clipping.
 
 ### Don't:
-- **Don't** use warm neutral backgrounds. The whole warm-neutral band (cream, sand, paper, parchment) is prohibited. The app is used in dim rooms; a warm bg would look washed out and read as a different product entirely.
-- **Don't** use gradient text (`background-clip: text`). The score and title carry enough presence on their own. Gradient text on the title is the saturated AI move; a solid gold on void is harder.
-- **Don't** add a colored `border-left` or `border-right` stripe greater than 1px as an accent on cards or list items. The top-strip on PlayerCard (1px height, full width) is the one accent stroke; replicating it as a side stripe is prohibited.
-- **Don't** use Cinzel for labels, button text, badge text, or score numbers. It is a display font; it is unreadable at small sizes and strange at medium sizes outside titles.
-- **Don't** use glassmorphism or backdrop-blur as a default surface treatment. If blur is used, it must mark a specific modal or overlay state with a clear reason.
-- **Don't** build decorative animations. No page-load choreography, no staggered card entrances. Motion is reserved for score changes, winner reveal, and state feedback.
-- **Don't** build the interface to look like a generic SaaS dashboard: white cards, metric grids, clean serif headings, soft drop shadows. This is the primary anti-reference from PRODUCT.md and the single most common failure mode for this category.
-- **Don't** make the UI feel like a mobile game: neon fills, aggressive gradients, casino-style reward animations, full-saturation accent colors on every element.
-- **Don't** use `star-dim` (`#5a4f78`) for any body text or labeling that needs to pass AA. It is a decorative color only; its contrast ratio on ink-dark does not meet 4.5:1.
-- **Don't** place interactive controls where the score numeral belongs. The score is the most important element; layout decisions should never subordinate it to navigation or secondary information.
+- **Don't** use pure black or pure white, and don't use a warm-near-white "paper/cream/sand" background. Surfaces are warm tinted-darks; brightness is not the source of warmth.
+- **Don't** introduce neon or full-saturation chrome. Clay is the one brand-saturated color; player inks are identity data, not decoration.
+- **Don't** use gradient text (`background-clip: text`). The title and score carry presence on their own; solid clay is the harder, better choice.
+- **Don't** add a colored `border-left`/`border-right` stripe as an accent. The 1px full-width top strip on cards is the one accent stroke.
+- **Don't** use Cinzel for labels, buttons, badges, or score numbers.
+- **Don't** use glassmorphism/backdrop-blur as a default surface. Reserve blur for a specific overlay with a clear reason.
+- **Don't** build decorative animations or page-load choreography. Motion is for score changes, winner reveal, and state feedback only.
+- **Don't** build a generic SaaS dashboard look (white cards, metric grids, soft gray shadows) or a mobile-game look (neon fills, casino reward animations).
+- **Don't** place interactive controls where the score numeral belongs.
