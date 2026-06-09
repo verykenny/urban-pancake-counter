@@ -311,7 +311,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       <main className="relative flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
         {/* Ambient glow */}
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-96 w-96 rounded-full bg-ambient/20 blur-3xl" />
+          <div className="h-96 w-96 rounded-full bg-ambient/12 blur-3xl" />
         </div>
 
         {/* Mobile compact header — code chip replaces title + subtitle */}
@@ -370,9 +370,6 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         {/* Winner overlay */}
         {gameState.winner && (
           <div className="relative z-10 w-full max-w-md rounded-2xl border border-gold/40 bg-gold-bg px-8 py-8 text-center overflow-hidden shadow-winner">
-            {/* Animated pulse ring */}
-            <div className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-gold/25 animate-pulse" />
-
             <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-gold text-shadow-glow-strong">
               {winnerPlayer?.name ?? 'Someone'} wins!
             </p>

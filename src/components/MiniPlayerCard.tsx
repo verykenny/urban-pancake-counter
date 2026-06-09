@@ -25,7 +25,7 @@ export default function MiniPlayerCard({
   onIncrement,
   onDecrement,
 }: MiniPlayerCardProps) {
-  const colorGlow = `${color}66`;
+  const colorGlow = `${color}40`;
 
   return (
     <div className="opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center justify-center gap-1 rounded-xl border border-ink-border bg-ink-dark p-3 overflow-hidden">
