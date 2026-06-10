@@ -62,13 +62,8 @@ export default function LobbyView({
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
-      </div>
-
-      <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-clay uppercase z-10 text-shadow-glow">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
+      <h1 className="font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-clay uppercase">
         Lorcana Lore Tracker
       </h1>
 
@@ -76,7 +71,7 @@ export default function LobbyView({
       <GameCode code={gameCode} />
 
       {!isInLobby ? (
-        <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
+        <form onSubmit={handleJoin} className="flex w-full max-w-xs flex-col items-center gap-3">
           <p className="text-fg-muted text-sm">Enter your name to join the lobby.</p>
 
           <p className="mt-2 text-xs uppercase tracking-widest text-fg-muted">Choose your ink</p>
@@ -126,7 +121,7 @@ export default function LobbyView({
           </div>
         </form>
       ) : (
-        <div className="z-10 flex flex-col items-center gap-6">
+        <div className="flex flex-col items-center gap-6">
           <div className="flex flex-col gap-2 w-64">
             {players.map((p) => (
               <div

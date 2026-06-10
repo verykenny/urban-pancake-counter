@@ -307,15 +307,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     const winnerPlayer = gameState.players.find((p) => p.id === gameState.winner);
 
     return (
-      <main className="relative flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8 overflow-hidden">
-        {/* Ambient glow */}
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
-        </div>
-
+      <main className="flex min-h-[100dvh] flex-col items-center justify-center gap-4 p-4 sm:gap-8 sm:p-8">
         {/* Compact header — scores own the screen during play; the full code
             card (copy + QR) lives in the menu drawer */}
-        <div className="z-10 w-full max-w-2xl flex flex-col items-start gap-1.5">
+        <div className="w-full max-w-2xl flex flex-col items-start gap-1.5">
           <button
             type="button"
             onClick={async () => {
@@ -326,7 +321,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
                 setTimeout(() => setCodeCopied(false), 1500);
               } catch { /* clipboard unavailable */ }
             }}
-            className="flex items-center gap-3 rounded-xl border border-clay/30 bg-surface px-4 py-2.5 shadow-code transition-opacity duration-150 active:opacity-70"
+            className="flex items-center gap-3 rounded-xl border border-clay/30 bg-surface px-4 py-2.5 transition-opacity duration-150 active:opacity-70"
             aria-label={`Game code: ${id}. Tap to copy.`}
           >
             <div className="text-left">
@@ -356,7 +351,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Winner overlay */}
         {gameState.winner && (
-          <div className="relative z-10 w-full max-w-md rounded-2xl border border-clay/40 bg-clay-deep px-8 py-8 text-center overflow-hidden shadow-winner">
+          <div className="relative w-full max-w-md rounded-2xl border border-clay/40 bg-clay-deep px-8 py-8 text-center overflow-hidden shadow-winner">
             <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-clay text-shadow-glow-strong">
               {winnerPlayer?.name ?? 'Someone'} wins!
             </p>
@@ -385,12 +380,12 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
 
         {/* Control mode indicator — mobile only; explains disabled +/− to non-host players */}
         {!gameState.winner && gameState.controlMode === 'host' && (
-          <p className="sm:hidden z-10 rounded-full border border-line bg-raised px-3 py-0.5 text-xs text-fg-muted">
+          <p className="sm:hidden rounded-full border border-line bg-raised px-3 py-0.5 text-xs text-fg-muted">
             {playerId === gameState.hostPlayerId ? 'You\'re scoring for everyone' : 'Host is scoring'}
           </p>
         )}
 
-        <div className="z-10 flex w-full max-w-2xl flex-1 flex-col sm:flex-none">
+        <div className="flex w-full max-w-2xl flex-1 flex-col sm:flex-none">
           <ScoreBoard
             players={gameState.players}
             onScoreChange={handleScoreChange}

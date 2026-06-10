@@ -37,7 +37,6 @@ export default function Avatar({ avatarName, color, size }: AvatarProps) {
         width: size,
         height: size,
         border: `2px solid ${pipColor}`,
-        boxShadow: `0 0 12px ${pipColor}55`,
       }}
     >
       <svg
