@@ -1,4 +1,5 @@
 import { generateCode } from './generateCode';
+import { assignInk } from './inkColors';
 import redis from './redis';
 
 export interface Player {
@@ -26,7 +27,6 @@ function clampLoreTarget(value: unknown): number {
   if (typeof value !== 'number' || !Number.isFinite(value)) return WIN_SCORE;
   return Math.min(200, Math.max(1, Math.round(value)));
 }
-const COLORS = ['#6366f1', '#f59e0b', '#10b981', '#ef4444'];
 const SESSION_TTL = 86400; // 24 hours in seconds
 
 function key(code: string): string {
@@ -69,12 +69,13 @@ export async function addPlayer(
   if (!session) return { ok: false, reason: 'not_found' };
   if (session.players.some((p) => p.id === playerId)) return { ok: false, reason: 'already_joined' };
   if (session.players.length >= 4) return { ok: false, reason: 'full' };
+  const ink = assignInk(avatarName, session.players.map((p) => p.avatarName));
   const player: Player = {
     id: playerId,
     name,
     score: 0,
-    color: COLORS[session.players.length],
-    avatarName,
+    color: ink.hex,
+    avatarName: ink.key,
   };
   session.players.push(player);
   await redis.set(key(code), session, { ex: SESSION_TTL });

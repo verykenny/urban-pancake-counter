@@ -43,11 +43,13 @@ export default function LobbyView({
   const isInLobby = players.some((p) => p.id === localPlayerId);
   const isHost = localPlayerId === hostPlayerId;
   const canStart = isHost && players.length >= 2;
+  const takenInks = new Set(players.map((p) => p.avatarName));
+  const selectedInk = champion && !takenInks.has(champion) ? champion : null;
 
   function handleJoin(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = name.trim();
-    if (trimmed) onJoin(trimmed, champion);
+    if (trimmed) onJoin(trimmed, selectedInk);
   }
 
   function handleLoreTargetChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -76,6 +78,34 @@ export default function LobbyView({
       {!isInLobby ? (
         <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
           <p className="text-fg-muted text-sm">Enter your name to join the lobby.</p>
+
+          <p className="mt-2 text-xs uppercase tracking-widest text-fg-muted">Choose your ink</p>
+          <div className="grid w-full grid-cols-6 gap-3">
+            {INK_COLORS.map((ink) => {
+              const taken = takenInks.has(ink.key);
+              return (
+                <button
+                  key={ink.key}
+                  type="button"
+                  disabled={taken}
+                  onClick={() => setChampion((prev) => (prev === ink.key ? null : ink.key))}
+                  title={taken ? `${ink.label} (taken)` : ink.label}
+                  aria-pressed={selectedInk === ink.key}
+                  className={`flex flex-col items-center gap-1 rounded-xl p-2 transition-all duration-150 ${
+                    selectedInk === ink.key
+                      ? 'ring-2 ring-clay bg-raised'
+                      : taken
+                        ? 'opacity-30 cursor-not-allowed'
+                        : 'opacity-70 hover:opacity-100'
+                  }`}
+                >
+                  <Avatar avatarName={ink.key} color={ink.hex} size={48} />
+                  <span className="text-[10px] text-fg-faint">{ink.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
           <div className="flex w-full flex-col gap-3 sm:flex-row">
             <input
               type="text"
@@ -93,24 +123,6 @@ export default function LobbyView({
             >
               {joining ? 'Joining…' : 'Join'}
             </button>
-          </div>
-
-          <p className="mt-2 text-xs uppercase tracking-widest text-fg-muted">Choose your ink</p>
-          <div className="grid w-full grid-cols-6 gap-3">
-            {INK_COLORS.map((ink) => (
-              <button
-                key={ink.key}
-                type="button"
-                onClick={() => setChampion((prev) => (prev === ink.key ? null : ink.key))}
-                title={ink.label}
-                className={`flex flex-col items-center gap-1 rounded-xl p-2 transition-all duration-150 ${
-                  champion === ink.key ? 'ring-2 ring-clay bg-raised' : 'opacity-70 hover:opacity-100'
-                }`}
-              >
-                <Avatar avatarName={ink.key} color={ink.hex} size={48} />
-                <span className="text-[10px] text-fg-faint">{ink.label}</span>
-              </button>
-            ))}
           </div>
         </form>
       ) : (

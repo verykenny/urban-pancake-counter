@@ -150,8 +150,9 @@ export default function GameMenu({
               </button>
             </div>
 
-            {/* Session code — mobile only */}
-            <section className="game-menu-section flex flex-col items-center gap-2 sm:hidden">
+            {/* Session code — the game screen only shows the compact chip,
+                so the full card (copy + QR) lives here */}
+            <section className="game-menu-section flex flex-col items-center gap-2">
               <h3 className="self-start text-xs uppercase tracking-widest text-fg-faint">
                 Session
               </h3>
