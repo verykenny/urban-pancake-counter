@@ -14,6 +14,7 @@ interface MiniPlayerCardProps {
   locked?: boolean;
   onIncrement: () => void;
   onDecrement: () => void;
+  loreTarget: number;
 }
 
 export default function MiniPlayerCard({
@@ -27,6 +28,7 @@ export default function MiniPlayerCard({
   locked,
   onIncrement,
   onDecrement,
+  loreTarget,
 }: MiniPlayerCardProps) {
   const colorGlow = `${color}40`;
   const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta);
@@ -78,7 +80,7 @@ export default function MiniPlayerCard({
           </button>
           <button
             onClick={onIncrement}
-            disabled={locked}
+            disabled={locked || score + pendingDelta >= loreTarget}
             aria-label={`Add lore for ${name}`}
             className="flex h-11 w-11 items-center justify-center rounded-lg bg-clay text-lg font-bold text-base-deep hover:bg-clay-strong transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >

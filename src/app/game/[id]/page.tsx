@@ -261,14 +261,13 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   }
 
   function handleScoreChange(targetPlayerId: string, delta: number) {
-    // The − button disables at effective 0, but rapid taps can land before the
-    // re-render; refs are always current, so re-check here.
-    if (delta < 0) {
-      const confirmed = gameState?.players.find((p) => p.id === targetPlayerId)?.score ?? 0;
-      const inFlightSum = (inFlightBatches.current[targetPlayerId] ?? []).reduce((a, b) => a + b, 0);
-      const pendingNow = (unsentDeltas.current[targetPlayerId] ?? 0) + inFlightSum;
-      if (confirmed + pendingNow + delta < 0) return;
-    }
+    // The buttons disable at effective 0 and at the lore target, but rapid taps
+    // can land before the re-render; refs are always current, so re-check here.
+    const confirmed = gameState?.players.find((p) => p.id === targetPlayerId)?.score ?? 0;
+    const inFlightSum = (inFlightBatches.current[targetPlayerId] ?? []).reduce((a, b) => a + b, 0);
+    const pendingNow = (unsentDeltas.current[targetPlayerId] ?? 0) + inFlightSum;
+    const next = confirmed + pendingNow + delta;
+    if (next < 0 || next > (gameState?.loreTarget ?? 20)) return;
     vibrate(10);
     unsentDeltas.current[targetPlayerId] = (unsentDeltas.current[targetPlayerId] ?? 0) + delta;
     setPendingDeltas((prev) => ({
@@ -447,6 +446,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             controlMode={gameState.controlMode}
             delegations={gameState.delegations}
             locked={!!gameState.winner}
+            loreTarget={gameState.loreTarget}
           />
         </div>
 

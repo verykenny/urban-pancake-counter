@@ -17,6 +17,7 @@ Lorcana ends when a player reaches 20 lore. The app should handle this moment cl
 - **Board lock** — scores are frozen on win. No corrections allowed; the board lock is strict.
 - **Restart** — "Play again" is host-only and resets to 0 without re-entering the lobby.
 - **Lore target** — fixed at 20 for now. Configurable target (P3 enhancement) deferred — some play to different numbers but it's an edge case.
+- **Score cap** — scores are clamped to the lore target server-side; a batched update that crosses the target lands exactly at the target. The + buttons disable once score plus pending taps reach the target, mirroring the − buttons at 0.
 
 ## P3 Enhancements (shipped)
 
