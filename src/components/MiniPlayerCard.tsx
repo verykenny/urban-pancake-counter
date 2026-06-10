@@ -55,6 +55,7 @@ export default function MiniPlayerCard({
           <button
             onClick={onDecrement}
             disabled={locked || score === 0}
+            aria-label={`Remove lore for ${name}`}
             className="flex h-11 w-11 items-center justify-center rounded-lg border border-line bg-raised text-lg font-bold text-fg-muted hover:bg-line transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             −
@@ -62,6 +63,7 @@ export default function MiniPlayerCard({
           <button
             onClick={onIncrement}
             disabled={locked}
+            aria-label={`Add lore for ${name}`}
             className="flex h-11 w-11 items-center justify-center rounded-lg bg-clay text-lg font-bold text-base-deep hover:bg-clay-strong transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed"
           >
             +

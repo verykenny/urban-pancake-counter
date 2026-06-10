@@ -142,6 +142,7 @@ export default function LobbyView({
                   <button
                     type="button"
                     onClick={() => onTransferHost(p.id)}
+                    aria-label={`Make ${p.name} host`}
                     className="min-h-[44px] inline-flex items-center text-xs text-fg-faint hover:text-clay underline underline-offset-2 transition-colors duration-200"
                   >
                     Make host

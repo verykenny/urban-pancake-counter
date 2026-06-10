@@ -113,7 +113,7 @@ export default function GameMenu({
         ref={triggerRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
-        aria-haspopup="menu"
+        aria-haspopup="dialog"
         aria-expanded={open}
         aria-label="Game menu"
         className="game-menu-trigger fixed right-4 top-4 z-50 flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-raised text-fg-muted transition-colors duration-200 hover:bg-line hover:text-fg"
@@ -134,7 +134,8 @@ export default function GameMenu({
           />
           <div
             ref={drawerRef}
-            role="menu"
+            role="dialog"
+            aria-modal="true"
             aria-label="Game menu"
             className="game-menu game-menu-drawer fixed right-0 top-0 z-50 flex max-h-[80dvh] w-full max-w-xs flex-col gap-5 overflow-y-auto border-b border-l border-line bg-surface p-5 shadow-card sm:right-4 sm:top-16 sm:rounded-2xl sm:border"
           >
@@ -144,7 +145,7 @@ export default function GameMenu({
                 type="button"
                 onClick={handleClose}
                 aria-label="Close menu"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-fg-muted transition-colors duration-200 hover:bg-raised hover:text-fg"
+                className="flex h-11 w-11 -m-1 items-center justify-center rounded-lg text-fg-muted transition-colors duration-200 hover:bg-raised hover:text-fg"
               >
                 ✕
               </button>
@@ -163,10 +164,14 @@ export default function GameMenu({
             <section className="game-menu-section flex flex-col gap-2">
               <h3 className="text-xs uppercase tracking-widest text-fg-faint">Game</h3>
               {isHost ? (
-                <div className="flex flex-col gap-1 rounded-xl border border-line bg-raised p-1">
+                <div
+                  role="radiogroup"
+                  aria-label="Scoring mode"
+                  className="flex flex-col gap-1 rounded-xl border border-line bg-raised p-1"
+                >
                   <button
                     type="button"
-                    role="menuitemradio"
+                    role="radio"
                     aria-checked={controlMode === 'self'}
                     onClick={() => {
                       onModeChange('self');
@@ -178,7 +183,7 @@ export default function GameMenu({
                   </button>
                   <button
                     type="button"
-                    role="menuitemradio"
+                    role="radio"
                     aria-checked={controlMode === 'host'}
                     onClick={() => {
                       onModeChange('host');
@@ -305,7 +310,7 @@ export default function GameMenu({
                 <h3 className="text-xs uppercase tracking-widest text-fg-faint">Feedback</h3>
                 <button
                   type="button"
-                  role="menuitemcheckbox"
+                  role="switch"
                   aria-checked={hapticsOn}
                   onClick={() => {
                     const next = !hapticsOn;

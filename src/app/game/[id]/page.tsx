@@ -296,7 +296,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         type="button"
         onClick={() => setError('')}
         aria-label="Dismiss error"
-        className="flex-shrink-0 rounded p-0.5 opacity-60 transition-opacity duration-150 hover:opacity-100"
+        className="flex h-11 w-11 -my-3 -mr-3 flex-shrink-0 items-center justify-center rounded opacity-60 transition-opacity duration-150 hover:opacity-100"
       >
         ✕
       </button>
@@ -352,7 +352,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         {/* Winner overlay */}
         {gameState.winner && (
           <div className="relative w-full max-w-md rounded-2xl border border-clay/40 bg-clay-deep px-8 py-8 text-center overflow-hidden shadow-winner">
-            <p className="font-[family-name:var(--font-display)] text-2xl font-bold text-clay text-shadow-glow-strong">
+            <p role="status" className="font-[family-name:var(--font-display)] text-2xl font-bold text-clay text-shadow-glow-strong">
               {winnerPlayer?.name ?? 'Someone'} wins!
             </p>
             <p className="mt-1 text-sm text-fg-muted">Reached {gameState.loreTarget} lore</p>
