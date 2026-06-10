@@ -70,6 +70,7 @@ export default function PlayerCard({
         <button
           onClick={onDecrement}
           disabled={disabled || score === 0}
+          aria-label={`Remove lore for ${name}`}
           className={`flex items-center justify-center rounded-xl border border-line bg-raised font-bold text-fg-muted hover:bg-line transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >
           −
@@ -77,6 +78,7 @@ export default function PlayerCard({
         <button
           onClick={onIncrement}
           disabled={disabled}
+          aria-label={`Add lore for ${name}`}
           className={`flex items-center justify-center rounded-xl bg-clay font-bold text-base-deep hover:bg-clay-strong transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >
           +
