@@ -75,8 +75,10 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
       {/* Mobile portrait — own card hero (~60%) + opponents row (~40%) */}
       {ownPlayer ? (
         <div className="score-stack flex flex-1 flex-col gap-4 sm:hidden">
-          <div className="score-panel flex min-h-0 flex-[3]">
-            {fullCard(ownPlayer, 'h-full w-full justify-center')}
+          {/* flex-1 (not h-full): the height chain above is indefinite
+              (min-h-[100dvh] + flex-1), so percentage heights collapse */}
+          <div className="score-panel flex flex-col min-h-0 flex-[3]">
+            {fullCard(ownPlayer, 'min-h-0 flex-1 justify-center')}
           </div>
           {opponentCards.length > 0 && (
             <div className="opponents-row flex min-h-0 flex-[2] gap-3 overflow-x-auto snap-x snap-mandatory">
