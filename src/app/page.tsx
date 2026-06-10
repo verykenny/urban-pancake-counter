@@ -47,27 +47,22 @@ export default function Home() {
   }
 
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center gap-8 p-8 overflow-hidden">
-      {/* Ambient glow */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
-      </div>
-
-      <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-clay uppercase z-10 text-shadow-glow">
+    <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
+      <h1 className="font-[family-name:var(--font-display)] text-4xl font-bold tracking-widest text-clay uppercase">
         Lorcana Lore Tracker
       </h1>
 
       <button
         onClick={handleCreate}
         disabled={loading}
-        className="z-10 rounded-xl bg-clay px-6 py-3 font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
+        className="rounded-xl bg-clay px-6 py-3 font-bold text-base-deep transition-all duration-200 hover:bg-clay-strong hover:shadow-glow disabled:opacity-40 disabled:cursor-not-allowed"
       >
         Create game
       </button>
 
-      <p className="z-10 text-xs text-fg-faint tracking-wider">or join with a code</p>
+      <p className="text-xs text-fg-faint tracking-wider">or join with a code</p>
 
-      <form onSubmit={handleJoin} className="z-10 flex w-full max-w-xs flex-col items-center gap-3">
+      <form onSubmit={handleJoin} className="flex w-full max-w-xs flex-col items-center gap-3">
         <div className="flex w-full flex-col gap-3 sm:flex-row">
           <input
             type="text"

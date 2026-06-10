@@ -104,7 +104,7 @@ There are no neon accents, no pure black, no pure white. The neutral ramp is a t
 - Single brand accent (terracotta clay) for primary actions, current selection, focus, and winner states.
 - Warm tinted-neutral surface ramp; never pure black, never warm-near-white "paper".
 - Typography pairing: Cinzel (display) + Geist (UI/data); never mixed within a functional element.
-- Depth through warm shadow plus terracotta glow, not raised flat surfaces or blur.
+- Depth through warm shadow, not raised flat surfaces or blur; terracotta glow marks state (hover, win), never rest.
 - Motion marks state, not decoration; 150–250 ms on transitions.
 - Tap targets are oversized for own-card controls, recognizing the use context (glancing, distracted).
 
@@ -132,7 +132,7 @@ A warm tinted-neutral ramp carries the surface; a single terracotta accent carri
 
 ### Signal
 - **Danger** (`#df6862` / `oklch(0.66 0.15 25)`): Destructive states and validation errors. Contrast 4.86:1 on `surface` — passes AA.
-- **Glow** (`#9c6a47` / `oklch(0.6 0.1 50)`): The warm ambient glow. Used only as a large blurred radial behind the layout (`bg-glow/12`). Never a surface or interactive color.
+- **Glow** (`#9c6a47` / `oklch(0.6 0.1 50)`): Warm tint for low-alpha washes (the delegate badge). Never a surface, an interactive color, or an ambient backdrop.
 
 ### Named Rules
 **The One Ember Rule.** Clay is the only brand-saturated color and stays under ~10% of any screen surface. Its rarity is its signal value. If an iteration adds clay to a new element, an existing clay use should be removed or dimmed. Player ink colors are exempt — they are identity data, not brand.
@@ -161,17 +161,16 @@ A warm tinted-neutral ramp carries the surface; a single terracotta accent carri
 
 ## 4. Elevation
 
-Depth comes from warm shadow plus emitted glow, not raised flat surfaces. The body is the darkest element; cards step up one tone; raised controls step up again. Key elements emit a terracotta glow that marks importance or state.
+Depth comes from warm shadow, not raised flat surfaces. The body is the darkest element; cards step up one tone; raised controls step up again. Terracotta glow exists in the vocabulary but only ever marks state: a hover, a live score, a win. Nothing glows at rest.
 
 ### Shadow Vocabulary
 - **Card** (`0 8px 32px rgba(20,14,8,0.45), inset 0 1px 0 rgba(255,244,232,0.05)`): All card surfaces. A warm brown outer shadow separates card from background; a warm inset top edge catches the light.
 - **Glow** (`0 0 16px rgba(208,132,88,0.4)`): Primary buttons on hover; winning score numerals.
-- **Glow strong** (`0 0 20px rgba(208,132,88,0.5)`): Winner heading and final CTA. Used sparingly.
-- **Code** (`0 0 24px rgba(208,132,88,0.1)`): Low-intensity clay wash behind the game code. Barely visible warmth.
+- **Glow strong** (`0 0 20px rgba(208,132,88,0.5)`): Winner heading only. Used sparingly.
 - **Winner halo** (`0 0 48px rgba(208,132,88,0.3)`): The largest glow, on the winner card at end-of-game. Wide radius, diffuse.
 
 ### Named Rule
-**The Emit, Don't Raise Rule.** Shadows mark light emission and warmth, not physical elevation. A button glows because it is active and important, not because it floats. Flat gray drop shadows are prohibited.
+**The Emit, Don't Raise Rule.** Shadows mark light emission and warmth, not physical elevation. A button glows because it is being used or has just won something, never because it is merely present. No ambient glow blobs, no resting glows on chrome, no permanent text-shadows. If everything glows, nothing is the ember. Flat gray drop shadows are prohibited.
 
 ## 5. Components
 
@@ -202,14 +201,14 @@ No persistent navigation. Landing has title + two actions; the game screen has a
 The score numeral is the most important element. It renders in the player's assigned color with a text-shadow glow matching that color at 40% opacity. Size uses `--score-size-hero` (`clamp(4.5rem, 22vw, 9rem)`), collapsing to `4.5rem` at `sm`. Weight 800, `tabular-nums` to prevent width shift. A numeral in warm darkness, not a chart.
 
 ### Avatar
-A circular badge (48px default) with a `raised` background, a 2px border in the player's color, and a soft glow of the same color at ~33%. Contains the Lorcana ink SVG glyph in the player's color — the player identifier when names are too long to scan.
+A circular badge (48px default) with a `raised` background and a 2px border in the player's color. Contains the Lorcana ink SVG glyph in the player's color — the player identifier when names are too long to scan. No resting glow.
 
 ## 6. Do's and Don'ts
 
 ### Do:
 - **Do** size own-card score buttons at 112×80px (mobile) so they can be hit with a thumb without looking.
 - **Do** use `tabular-nums` and `--score-size-hero` on every score numeral.
-- **Do** use player-assigned colors exclusively for the score numeral, the top accent strip, and the Avatar border/glow. Nowhere else.
+- **Do** use player-assigned colors exclusively for the score numeral, the top accent strip, and the Avatar border. Nowhere else.
 - **Do** apply `prefers-reduced-motion` alternatives to all motion (confetti, score change, winner reveal). The fallback is a crossfade or instant switch, never removing the state change.
 - **Do** use Cinzel only for the game title and winner heading. All other text is Geist.
 - **Do** keep clay (the brand accent) under ~10% of screen surface. Its rarity is its signal.
