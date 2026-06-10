@@ -45,7 +45,13 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   const [connectionState, setConnectionState] = useState('connected');
   const prevConn = useRef('connected');
   const prevWinner = useRef<string | null>(null);
-  const pendingDeltas = useRef<Record<string, number>>({});
+  // Score taps are never applied optimistically: gameState holds server-confirmed
+  // scores only, taps accumulate in pendingDeltas (state — drives the +/−N badge),
+  // unsentDeltas holds the not-yet-POSTed portion, and inFlightBatches queues the
+  // amounts awaiting their Pusher echo so the badge can be reconciled exactly.
+  const [pendingDeltas, setPendingDeltas] = useState<Record<string, number>>({});
+  const unsentDeltas = useRef<Record<string, number>>({});
+  const inFlightBatches = useRef<Record<string, number[]>>({});
   const debounceTimers = useRef<Record<string, ReturnType<typeof setTimeout>>>({});
   const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -77,6 +83,16 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   useEffect(() => {
     if (!id) return;
 
+    // Any full-state resync makes queued taps unaccountable (their echo may have
+    // already landed in the snapshot) — drop them so no stale badge survives.
+    const clearPendingScoreState = () => {
+      unsentDeltas.current = {};
+      inFlightBatches.current = {};
+      Object.values(debounceTimers.current).forEach(clearTimeout);
+      debounceTimers.current = {};
+      setPendingDeltas({});
+    };
+
     fetch(`/api/game/${id}`)
       .then((r) => {
         if (!r.ok) {
@@ -86,7 +102,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         return r.json();
       })
       .then((data: GameState | null) => {
-        if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null, loreTarget: data.loreTarget ?? 20 });
+        if (data) {
+          clearPendingScoreState();
+          setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null, loreTarget: data.loreTarget ?? 20 });
+        }
       })
       .catch(() => setError('Failed to load game.'));
 
@@ -100,7 +119,10 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         fetch(`/api/game/${id}`)
           .then((r) => (r.ok ? r.json() : null))
           .then((data: GameState | null) => {
-            if (data) setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null, loreTarget: data.loreTarget ?? 20 });
+            if (data) {
+              clearPendingScoreState();
+              setGameState({ ...data, delegations: data.delegations ?? {}, winner: data.winner ?? null, loreTarget: data.loreTarget ?? 20 });
+            }
           })
           .catch(() => {});
       }
@@ -126,7 +148,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       setGameState((prev) => (prev ? { ...prev, controlMode: data.controlMode } : prev));
     });
 
-    channel.bind('score-update', (data: { playerId: string; score: number }) => {
+    channel.bind('score-update', (data: { playerId: string; score: number; requestingPlayerId?: string }) => {
       setGameState((prev) => {
         if (!prev) return prev;
         return {
@@ -136,6 +158,17 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           ),
         };
       });
+      if (data.requestingPlayerId === playerId) {
+        // Our own echo — retire the oldest in-flight batch. Both setState calls
+        // land in one render so the card merges the badge instead of flashing.
+        const batch = inFlightBatches.current[data.playerId]?.shift() ?? 0;
+        if (batch !== 0) {
+          setPendingDeltas((prev) => ({
+            ...prev,
+            [data.playerId]: (prev[data.playerId] ?? 0) - batch,
+          }));
+        }
+      }
     });
 
     channel.bind('delegation-updated', (data: { playerId: string; delegatePlayerId: string | null }) => {
@@ -151,6 +184,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
     });
 
     channel.bind('game-reset', (data: { players: Player[] }) => {
+      clearPendingScoreState();
       setGameState((prev) => (prev ? { ...prev, winner: null, players: data.players } : prev));
     });
 
@@ -163,7 +197,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
       channel.unbind_all();
       pusher.unsubscribe(`game-${id}`);
     };
-  }, [id]);
+  }, [id, playerId]);
 
   async function handleJoin(name: string, avatarName: string | null) {
     setJoining(true);
@@ -227,27 +261,45 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
   }
 
   function handleScoreChange(targetPlayerId: string, delta: number) {
+    // The − button disables at effective 0, but rapid taps can land before the
+    // re-render; refs are always current, so re-check here.
+    if (delta < 0) {
+      const confirmed = gameState?.players.find((p) => p.id === targetPlayerId)?.score ?? 0;
+      const inFlightSum = (inFlightBatches.current[targetPlayerId] ?? []).reduce((a, b) => a + b, 0);
+      const pendingNow = (unsentDeltas.current[targetPlayerId] ?? 0) + inFlightSum;
+      if (confirmed + pendingNow + delta < 0) return;
+    }
     vibrate(10);
-    setGameState((prev) => {
-      if (!prev) return prev;
-      return {
-        ...prev,
-        players: prev.players.map((p) =>
-          p.id === targetPlayerId ? { ...p, score: p.score + delta } : p
-        ),
-      };
-    });
-    pendingDeltas.current[targetPlayerId] = (pendingDeltas.current[targetPlayerId] ?? 0) + delta;
+    unsentDeltas.current[targetPlayerId] = (unsentDeltas.current[targetPlayerId] ?? 0) + delta;
+    setPendingDeltas((prev) => ({
+      ...prev,
+      [targetPlayerId]: (prev[targetPlayerId] ?? 0) + delta,
+    }));
     clearTimeout(debounceTimers.current[targetPlayerId]);
     debounceTimers.current[targetPlayerId] = setTimeout(async () => {
-      const totalDelta = pendingDeltas.current[targetPlayerId];
-      pendingDeltas.current[targetPlayerId] = 0;
+      const totalDelta = unsentDeltas.current[targetPlayerId] ?? 0;
+      unsentDeltas.current[targetPlayerId] = 0;
+      if (totalDelta === 0) return;
+      (inFlightBatches.current[targetPlayerId] ??= []).push(totalDelta);
       const res = await fetch('/api/score', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ gameId: id, playerId: targetPlayerId, requestingPlayerId: playerId, delta: totalDelta }),
       });
-      if (!res.ok) setError('Score update failed — tap +/− to retry.');
+      if (!res.ok) {
+        // No echo will come for this batch — remove it (by value, so an
+        // out-of-order failure can't desync the FIFO) and roll the badge back.
+        const queue = inFlightBatches.current[targetPlayerId];
+        const idx = queue?.indexOf(totalDelta) ?? -1;
+        if (queue && idx !== -1) {
+          queue.splice(idx, 1);
+          setPendingDeltas((prev) => ({
+            ...prev,
+            [targetPlayerId]: (prev[targetPlayerId] ?? 0) - totalDelta,
+          }));
+        }
+        setError('Score update failed — tap +/− to retry.');
+      }
     }, 400);
   }
 
@@ -388,6 +440,7 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
         <div className="flex w-full max-w-2xl flex-1 flex-col sm:flex-none">
           <ScoreBoard
             players={gameState.players}
+            pendingDeltas={pendingDeltas}
             onScoreChange={handleScoreChange}
             localPlayerId={playerId}
             hostPlayerId={gameState.hostPlayerId}

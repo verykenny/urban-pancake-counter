@@ -20,7 +20,7 @@ export async function POST(req: NextRequest): Promise<Response> {
     return Response.json({ error: result.reason }, { status });
   }
 
-  await pusher.trigger(`game-${gameId}`, 'score-update', { playerId, score: result.score });
+  await pusher.trigger(`game-${gameId}`, 'score-update', { playerId, score: result.score, requestingPlayerId });
 
   if (result.winner !== null) {
     await pusher.trigger(`game-${gameId}`, 'game-won', { winnerId: result.winner });
