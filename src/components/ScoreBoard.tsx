@@ -13,6 +13,7 @@ interface Player {
 
 interface ScoreBoardProps {
   players: Player[];
+  pendingDeltas: Record<string, number>;
   onScoreChange: (playerId: string, delta: number) => void;
   localPlayerId: string;
   hostPlayerId: string;
@@ -21,7 +22,7 @@ interface ScoreBoardProps {
   locked?: boolean;
 }
 
-export default function ScoreBoard({ players, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, locked = false }: ScoreBoardProps) {
+export default function ScoreBoard({ players, pendingDeltas, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, locked = false }: ScoreBoardProps) {
   function canControl(player: Player) {
     return controlMode === 'host'
       ? localPlayerId === hostPlayerId
@@ -35,6 +36,7 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
         className={extraClass}
         name={player.name}
         score={player.score}
+        pendingDelta={pendingDeltas[player.id] ?? 0}
         color={player.color}
         avatarName={player.avatarName}
         onIncrement={() => onScoreChange(player.id, 1)}
@@ -55,6 +57,7 @@ export default function ScoreBoard({ players, onScoreChange, localPlayerId, host
       key={player.id}
       name={player.name}
       score={player.score}
+      pendingDelta={pendingDeltas[player.id] ?? 0}
       color={player.color}
       avatarName={player.avatarName}
       isHost={player.id === hostPlayerId}

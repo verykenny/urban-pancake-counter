@@ -1,10 +1,12 @@
 "use client";
 
 import Avatar from "@/components/Avatar";
+import { useScoreReveal } from "@/lib/useScoreReveal";
 
 interface PlayerCardProps {
   name: string;
   score: number;
+  pendingDelta: number;
   color: string;
   avatarName: string | null;
   onIncrement: () => void;
@@ -19,6 +21,7 @@ interface PlayerCardProps {
 export default function PlayerCard({
   name,
   score,
+  pendingDelta,
   color,
   avatarName,
   onIncrement,
@@ -30,6 +33,7 @@ export default function PlayerCard({
   delegateName,
 }: PlayerCardProps) {
   const colorGlow = `${color}40`;
+  const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta);
 
   return (
     <div className={`player-card relative flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-line bg-surface p-6 shadow-card ${className ?? ''}`}>
@@ -57,19 +61,32 @@ export default function PlayerCard({
         </span>
       )}
 
-      {/* Score */}
+      {/* Pending / incoming delta — fixed-height slot so the card never reflows */}
+      <div className="flex h-7 items-center">
+        {badge && (
+          <span
+            className={`rounded-full border border-line bg-raised px-3 py-0.5 text-sm font-bold tabular-nums ${badge.merging ? 'motion-safe:animate-delta-merge' : ''}`}
+            style={{ color }}
+          >
+            {badge.value > 0 ? `+${badge.value}` : badge.value}
+          </span>
+        )}
+      </div>
+
+      {/* Score — confirmed values only; taps accumulate in the badge above */}
       <span
-        className="text-[length:var(--score-size-hero)] sm:text-7xl font-extrabold tabular-nums leading-none"
+        key={popKey}
+        className={`text-[length:var(--score-size-hero)] sm:text-7xl font-extrabold tabular-nums leading-none ${popKey > 0 ? 'motion-safe:animate-score-pop' : ''}`}
         style={{ color, textShadow: `0 0 16px ${colorGlow}` }}
       >
-        {score}
+        {displayedScore}
       </span>
 
       {/* Score controls */}
       <div className="flex gap-3">
         <button
           onClick={onDecrement}
-          disabled={disabled || score === 0}
+          disabled={disabled || score + pendingDelta <= 0}
           aria-label={`Remove lore for ${name}`}
           className={`flex items-center justify-center rounded-xl border border-line bg-raised font-bold text-fg-muted hover:bg-line transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >
