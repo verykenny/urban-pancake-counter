@@ -16,6 +16,7 @@ interface PlayerCardProps {
   isOwnCard?: boolean;
   isHost?: boolean;
   delegateName: string | null;
+  loreTarget: number;
 }
 
 export default function PlayerCard({
@@ -31,6 +32,7 @@ export default function PlayerCard({
   isOwnCard,
   isHost,
   delegateName,
+  loreTarget,
 }: PlayerCardProps) {
   const colorGlow = `${color}40`;
   const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta);
@@ -94,7 +96,7 @@ export default function PlayerCard({
         </button>
         <button
           onClick={onIncrement}
-          disabled={disabled}
+          disabled={disabled || score + pendingDelta >= loreTarget}
           aria-label={`Add lore for ${name}`}
           className={`flex items-center justify-center rounded-xl bg-clay font-bold text-base-deep hover:bg-clay-strong transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed ${isOwnCard ? 'h-20 w-28 text-3xl sm:h-16 sm:w-16 sm:text-2xl' : 'h-16 w-16 sm:h-14 sm:w-14 text-2xl'}`}
         >

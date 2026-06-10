@@ -20,9 +20,10 @@ interface ScoreBoardProps {
   controlMode: 'host' | 'self';
   delegations: Record<string, string | null>;
   locked?: boolean;
+  loreTarget: number;
 }
 
-export default function ScoreBoard({ players, pendingDeltas, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, locked = false }: ScoreBoardProps) {
+export default function ScoreBoard({ players, pendingDeltas, onScoreChange, localPlayerId, hostPlayerId, controlMode, delegations = {}, locked = false, loreTarget }: ScoreBoardProps) {
   function canControl(player: Player) {
     return controlMode === 'host'
       ? localPlayerId === hostPlayerId
@@ -45,6 +46,7 @@ export default function ScoreBoard({ players, pendingDeltas, onScoreChange, loca
         isOwnCard={localPlayerId === player.id}
         isHost={player.id === hostPlayerId}
         delegateName={players.find((p) => p.id === delegations[player.id])?.name ?? null}
+        loreTarget={loreTarget}
       />
     );
   }
@@ -65,6 +67,7 @@ export default function ScoreBoard({ players, pendingDeltas, onScoreChange, loca
       locked={locked}
       onIncrement={() => onScoreChange(player.id, 1)}
       onDecrement={() => onScoreChange(player.id, -1)}
+      loreTarget={loreTarget}
     />
   ));
 

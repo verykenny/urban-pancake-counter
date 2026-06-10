@@ -135,7 +135,7 @@ export async function updateScore(
         session.delegations[targetPlayerId] === requestingPlayerId;
   if (!authorized) return { ok: false, reason: 'unauthorized' };
 
-  player.score = Math.max(0, player.score + delta);
+  player.score = Math.min(session.loreTarget ?? WIN_SCORE, Math.max(0, player.score + delta));
   if (player.score >= (session.loreTarget ?? WIN_SCORE)) {
     session.winner = player.id;
   }
