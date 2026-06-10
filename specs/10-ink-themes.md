@@ -14,7 +14,8 @@ up to **2** to theme the app's background gradient and accents.
 
 - **Builds directly on Feature 03 tokens.** The theme overrides the semantic accent tokens
   (`--accent`, `--accent-strong`, `--glow-accent`) and a background gradient variable; it must
-  **not** touch the per-player `COLORS` in `gameStore` (those identify players and stay).
+  **not** touch per-player identity colors (each player's `color` in `gameStore` derives from
+  their chosen ink via `src/lib/inkColors.ts`; those identify players and stay).
 - **Device-local preference** — stored in `localStorage`, applied as a `data-ink` attribute
   on `<html>`. It does **not** sync over Pusher and does **not** enter `GameState`. Each
   player themes their own device.
@@ -50,6 +51,6 @@ up to **2** to theme the app's background gradient and accents.
   - `localStorage` unavailable (private mode) → default theme, no crash.
   - Interaction with Feature 11: **high-contrast mode wins** — when high-contrast is on, ink
     gradients are suppressed (flat high-contrast surfaces) to preserve legibility.
-  - Player accent colors on cards remain the `gameStore` `COLORS`, independent of ink theme,
-    so players stay distinguishable regardless of theme.
+  - Player accent colors on cards remain the per-player ink colors assigned in `gameStore`,
+    independent of ink theme, so players stay distinguishable regardless of theme.
 - **DOM/attr hooks:** `<html data-ink="amber-amethyst">`, `.ink-picker`, `.ink-swatch`.

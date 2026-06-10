@@ -9,7 +9,6 @@ import { vibrate } from '@/lib/haptics';
 import { getPusherClient } from '@/lib/pusherClient';
 import LobbyView from '@/components/LobbyView';
 import ScoreBoard from '@/components/ScoreBoard';
-import GameCode from '@/components/GameCode';
 import GameMenu from '@/components/GameMenu';
 
 interface Player {
@@ -314,8 +313,9 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
           <div className="h-96 w-96 rounded-full bg-glow/12 blur-3xl" />
         </div>
 
-        {/* Mobile compact header — code chip replaces title + subtitle */}
-        <div className="z-10 w-full sm:hidden flex flex-col items-start gap-1.5">
+        {/* Compact header — scores own the screen during play; the full code
+            card (copy + QR) lives in the menu drawer */}
+        <div className="z-10 w-full max-w-2xl flex flex-col items-start gap-1.5">
           <button
             type="button"
             onClick={async () => {
@@ -340,19 +340,6 @@ export default function GamePage({ params }: { params: Promise<{ id: string }> }
             First to {gameState.loreTarget} lore
           </p>
         </div>
-
-        {/* Desktop: full title */}
-        <h1 className="z-10 hidden sm:block text-center font-[family-name:var(--font-display)] text-3xl font-bold tracking-widest text-clay uppercase text-shadow-glow">
-          Lorcana Lore Tracker
-        </h1>
-
-        {/* Desktop: game code chip with copy + QR */}
-        <div className="hidden flex-col items-center gap-3 sm:flex">
-          <GameCode code={id} />
-        </div>
-        <p className="z-10 hidden sm:block text-xs uppercase tracking-widest text-fg-faint sm:-mt-4">
-          First to {gameState.loreTarget} lore
-        </p>
 
         {/* Secondary actions live in the menu (host control mode, players, future toggles) */}
         <GameMenu
