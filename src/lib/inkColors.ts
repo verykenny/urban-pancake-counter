@@ -21,6 +21,10 @@ export function inkHex(key: string | null): string | null {
   return INK_COLORS.find((c) => c.key === key)?.hex ?? null;
 }
 
+export function inkLabel(key: string | null): string {
+  return INK_COLORS.find((c) => c.key === key)?.label ?? 'Player';
+}
+
 export function assignInk(
   requested: string | null,
   taken: (string | null)[]

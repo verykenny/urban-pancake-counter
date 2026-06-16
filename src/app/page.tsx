@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { usePlayerId } from '@/lib/usePlayerId';
 
@@ -82,6 +83,18 @@ export default function Home() {
         </div>
         {error && <p className="text-sm text-danger">{error}</p>}
       </form>
+
+      <div className="flex w-full max-w-xs flex-col items-center gap-2 border-t border-line pt-6">
+        <Link
+          href="/table"
+          className="min-h-[44px] inline-flex items-center rounded-xl border border-clay px-5 py-2.5 font-semibold text-clay hover:bg-clay/10 transition-all duration-200"
+        >
+          Table mode
+        </Link>
+        <p className="text-xs text-fg-faint tracking-wider text-center">
+          One phone on the table — everyone scores from it
+        </p>
+      </div>
     </main>
   );
 }

@@ -12,7 +12,8 @@ export interface ScoreBadge {
 
 export function useScoreReveal(
   score: number,
-  pendingDelta: number
+  pendingDelta: number,
+  instant = false
 ): { displayedScore: number; badge: ScoreBadge | null; popKey: number } {
   const [displayedScore, setDisplayedScore] = useState(score);
   const [popKey, setPopKey] = useState(0);
@@ -27,6 +28,9 @@ export function useScoreReveal(
   const mergeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
+    // Single-device (table) mode commits the score directly in render (no network
+    // echo to reconcile), so the reveal effect has nothing to synchronize.
+    if (instant) return;
     scoreRef.current = score;
     const scoreChanged = score !== prevScore.current;
     const pendingDropped = Math.abs(pendingDelta) < Math.abs(prevPending.current);
@@ -64,7 +68,7 @@ export function useScoreReveal(
         mergeTimer.current = setTimeout(() => setMergingValue(null), MERGE_MS);
       }, FLASH_MS);
     }
-  }, [score, pendingDelta]);
+  }, [score, pendingDelta, instant]);
 
   useEffect(
     () => () => {
@@ -73,6 +77,12 @@ export function useScoreReveal(
     },
     []
   );
+
+  if (instant) {
+    // Show the live score immediately; re-key on the value so each change
+    // replays the pop. No badge in this mode.
+    return { displayedScore: score, badge: null, popKey: score };
+  }
 
   const badge: ScoreBadge | null =
     mergingValue !== null
