@@ -133,6 +133,10 @@ PRs. **Phase 1 shipped to `main` on 2026-06-07; Phases 2–4 pending.**
 - [ ] **13 — Local Match History & Ink Statistics** → [`specs/13-match-history.md`](specs/13-match-history.md)
 - [ ] **14 — Discord Webhook Integration** → [`specs/14-discord-integration.md`](specs/14-discord-integration.md)
 
+### Phase 5 — Single-Device Play (net-new)
+
+- [ ] **15 — Table Mode** → [`specs/15-table-mode.md`](specs/15-table-mode.md) — single-device, pure-local (no code/Pusher/Redis); one phone laid flat, 2–4 auto-assigned players in a rotated two-sided equal-space layout, host scores everyone. _(Implemented on `feat/table-mode`, pending PR/merge.)_
+
 ---
 
 ## 4. Overlap with the v1 Baseline (important)

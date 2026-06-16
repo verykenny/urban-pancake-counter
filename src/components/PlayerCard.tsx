@@ -17,6 +17,7 @@ interface PlayerCardProps {
   isHost?: boolean;
   delegateName: string | null;
   loreTarget: number;
+  instant?: boolean;
 }
 
 export default function PlayerCard({
@@ -33,9 +34,10 @@ export default function PlayerCard({
   isHost,
   delegateName,
   loreTarget,
+  instant,
 }: PlayerCardProps) {
   const colorGlow = `${color}40`;
-  const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta);
+  const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta, instant);
 
   return (
     <div className={`player-card relative flex flex-col items-center gap-4 overflow-hidden rounded-2xl border border-line bg-surface p-6 shadow-card ${className ?? ''}`}>
@@ -63,17 +65,20 @@ export default function PlayerCard({
         </span>
       )}
 
-      {/* Pending / incoming delta — fixed-height slot so the card never reflows */}
-      <div className="flex h-7 items-center">
-        {badge && (
-          <span
-            className={`rounded-full border border-line bg-raised px-3 py-0.5 text-sm font-bold tabular-nums ${badge.merging ? 'motion-safe:animate-delta-merge' : ''}`}
-            style={{ color }}
-          >
-            {badge.value > 0 ? `+${badge.value}` : badge.value}
-          </span>
-        )}
-      </div>
+      {/* Pending / incoming delta — fixed-height slot so the card never reflows.
+          Instant (table) mode never badges, so drop the slot to reclaim height. */}
+      {!instant && (
+        <div className="flex h-7 items-center">
+          {badge && (
+            <span
+              className={`rounded-full border border-line bg-raised px-3 py-0.5 text-sm font-bold tabular-nums ${badge.merging ? 'motion-safe:animate-delta-merge' : ''}`}
+              style={{ color }}
+            >
+              {badge.value > 0 ? `+${badge.value}` : badge.value}
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Score — confirmed values only; taps accumulate in the badge above */}
       <span
