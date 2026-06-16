@@ -15,6 +15,7 @@ interface MiniPlayerCardProps {
   onIncrement: () => void;
   onDecrement: () => void;
   loreTarget: number;
+  instant?: boolean;
 }
 
 export default function MiniPlayerCard({
@@ -29,9 +30,10 @@ export default function MiniPlayerCard({
   onIncrement,
   onDecrement,
   loreTarget,
+  instant,
 }: MiniPlayerCardProps) {
   const colorGlow = `${color}40`;
-  const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta);
+  const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta, instant);
 
   return (
     <div className="opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center justify-center gap-1 rounded-xl border border-line bg-surface p-3 overflow-hidden">
@@ -49,16 +51,18 @@ export default function MiniPlayerCard({
         <span className="text-[10px] font-bold uppercase tracking-wider text-clay">Host</span>
       )}
 
-      <div className="flex h-5 items-center">
-        {badge && (
-          <span
-            className={`rounded-full border border-line bg-raised px-2 py-px text-xs font-bold tabular-nums ${badge.merging ? 'motion-safe:animate-delta-merge' : ''}`}
-            style={{ color }}
-          >
-            {badge.value > 0 ? `+${badge.value}` : badge.value}
-          </span>
-        )}
-      </div>
+      {!instant && (
+        <div className="flex h-5 items-center">
+          {badge && (
+            <span
+              className={`rounded-full border border-line bg-raised px-2 py-px text-xs font-bold tabular-nums ${badge.merging ? 'motion-safe:animate-delta-merge' : ''}`}
+              style={{ color }}
+            >
+              {badge.value > 0 ? `+${badge.value}` : badge.value}
+            </span>
+          )}
+        </div>
+      )}
 
       <span
         key={popKey}
