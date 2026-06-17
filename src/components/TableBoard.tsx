@@ -13,7 +13,7 @@ import type { TablePlayer } from '@/lib/tableMode';
 // needs the cast TS doesn't model on CSSProperties.
 const miniCellStyle = {
   containerType: 'inline-size',
-  '--score-size-mini': 'clamp(2rem, 26cqi, 3.5rem)',
+  '--score-size-mini': 'clamp(3rem, 38cqi, 4.5rem)',
 } as CSSProperties;
 
 interface TableBoardProps {
@@ -42,7 +42,7 @@ export default function TableBoard({ players, loreTarget, locked, onScoreChange 
           delegateName={null}
           loreTarget={loreTarget}
           instant
-          className="min-h-0 flex-1 justify-center"
+          className="min-h-0 flex-1 justify-between"
         />
       </div>
     );

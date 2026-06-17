@@ -36,20 +36,26 @@ export default function MiniPlayerCard({
   const { displayedScore, badge, popKey } = useScoreReveal(score, pendingDelta, instant);
 
   return (
-    <div className="opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center justify-center gap-1 rounded-xl border border-line bg-surface p-3 overflow-hidden">
+    <div
+      className={`opponent-card relative flex flex-1 min-w-0 snap-center flex-col items-center rounded-xl border border-line bg-surface p-3 overflow-hidden ${
+        instant ? 'justify-between gap-2' : 'justify-center gap-1'
+      }`}
+    >
       {/* Top color accent strip */}
       <div
         className="absolute top-0 left-0 right-0 h-0.5"
         style={{ background: color }}
       />
 
-      <Avatar avatarName={avatarName} color={color} size={28} />
-
-      <span className="max-w-full truncate text-xs font-medium text-fg-muted">{name}</span>
-
-      {isHost && (
-        <span className="text-[10px] font-bold uppercase tracking-wider text-clay">Host</span>
-      )}
+      {/* Identity zone — anchored to the top edge in table mode so each card
+          reads as the player's own panel. */}
+      <div className="flex w-full min-w-0 flex-col items-center gap-1">
+        <Avatar avatarName={avatarName} color={color} size={28} />
+        <span className="max-w-full truncate text-xs font-medium text-fg-muted">{name}</span>
+        {isHost && (
+          <span className="text-[10px] font-bold uppercase tracking-wider text-clay">Host</span>
+        )}
+      </div>
 
       {!instant && (
         <div className="flex h-5 items-center">
